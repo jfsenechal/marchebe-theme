@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --font-montserrat: Montserrat, sans-serif;
+    --font-montserrat-medium: Montserrat, sans-serif;
+    --font-montserrat-thin: Montserrat, sans-serif;
+    --font-montserrat-light: Montserrat, sans-serif;
+    --font-montserrat-extra-light: Montserrat, sans-serif;
+    --font-montserrat-regular: Montserrat, sans-serif;
+    --font-montserrat-bold: Montserrat, sans-serif;
+    --font-montserrat-semi-bold: Montserrat, sans-serif;
+    --font-montserrat-extra-bold: Montserrat, sans-serif;
+    --color-midnight: #121063;
+    --color-black-base: #585656;
+    --color-administration: #82786FFF;
+    --color-citoyen: #FF7200FF;
+    --color-citoyen-100: rgba(255, 114, 0, 0.9);
+    --color-regal-blue: #243c5a;
+    --color-culture: #002F2FFF;
+    --color-economie: #0098DBFF;
+    --color-enfance: #00B092FF;
+    --color-sante: #D71F85FF;
+    --color-sport: #98C02DFF;
+    --color-social: #CB0044FF;
+    --color-tourisme: #8A5A9DFF;
+    --color-cta-light: #4ae0c7;
+    --color-cta-dark: #487F89FF;
+    --color-grey-dark: #232222;
+    --color-grey-light: #dee2e6;
+    --color-grey-lighter: #ededec;
+    --color-pistache: #93c572;
+    --color-bleu: #c8dbe3;
+    --object-top-center: "top center";
+    --object-center-center: "center center";
+    --object-bottom-center: "bottom center";
+}
+
+html {
+    @apply scroll-pt-3 scroll-smooth font-montserrat text-base;
+    /* see https://www.getrevue.co/profile/shrutibalasa/issues/did-you-know-about-scroll-padding-easy-solution-to-fixed-header-problem-1325973 */
+}
+
+body {
+    @apply antialiased text-cta-dark;
+}
+
+img, video, iframe {
+    /*@apply object-cover max-w-full object-top-center;*/ /* todo object-top-center */
+    @apply object-cover max-w-full ;
+    /* see https://web.dev/learn/design/responsive-"/images/ */
+}
+
+#app {
+    @apply grid min-h-screen;
+    grid-template-rows: auto 1fr auto;
+}
+
+/** animation **/
+
+/* Hero image subtle zoom animation */
+@keyframes subtleZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.05);
+    }
+}
+
+.hero-image-zoom {
+    animation: subtleZoom 15s ease-in-out alternate infinite;
+}
+
+/* Initial state for scroll-triggered animations */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Final state for scroll-triggered animations */
+.fade-in-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Simple fade-in-down for header elements */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 0.8s ease-out forwards;
+}
+
+.animate-fade-in-down-delay {
+    animation: fadeInDown 0.8s ease-out 0.2s forwards;
+    opacity: 0; /* Start hidden */
+}
