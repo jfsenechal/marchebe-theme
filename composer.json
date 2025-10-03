@@ -8,6 +8,7 @@
   ],
   "require": {
     "php": ">=8.2",
+    "guzzlehttp/guzzle": "^7.10",
     "meilisearch/meilisearch-php": "^v1.16.0",
     "symfony/cache": "^7.3",
     "symfony/console": "^7.3",
@@ -25,7 +26,10 @@
   },
   "config": {
     "optimize-autoloader": true,
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
   },
   "extra": {
     "symfony": {
