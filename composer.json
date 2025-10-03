@@ -1,0 +1,40 @@
+{
+  "name": "acmarche/themewp",
+  "authors": [
+    {
+      "name": "jfsenechal",
+      "email": "jfsenechal@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "meilisearch/meilisearch-php": "^v1.16.0",
+    "symfony/cache": "^7.3",
+    "symfony/console": "^7.3",
+    "symfony/dotenv": "^7.3",
+    "symfony/finder": "^7.3",
+    "symfony/http-client": "^7.3",
+    "symfony/http-foundation": "^7.3",
+    "symfony/mailer": "^7.3",
+    "twig/twig": "^v3.8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "AcMarche\\Theme\\": "wp-content/themes/marchebe/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": true,
+      "require": "7.3.*",
+      "docker": false
+    }
+  },
+  "require-dev": {
+    "symfony/error-handler": "7.3.*"
+  }
+}
