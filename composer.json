@@ -8,6 +8,7 @@
   ],
   "require": {
     "php": ">=8.2",
+    "ext-intl": "*",
     "guzzlehttp/guzzle": "^7.10",
     "meilisearch/meilisearch-php": "^v1.16.0",
     "symfony/cache": "^7.3",
@@ -17,6 +18,8 @@
     "symfony/http-client": "^7.3",
     "symfony/http-foundation": "^7.3",
     "symfony/mailer": "^7.3",
+    "twig/intl-extra": "^v3.8.0",
+    "twig/string-extra": "^v3.8.0",
     "twig/twig": "^v3.8.0"
   },
   "autoload": {

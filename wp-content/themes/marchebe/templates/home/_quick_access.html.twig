@@ -1,0 +1,19 @@
+<section class="bg-blue-50 py-12">
+    <div class="container mx-auto px-4 md:px-6 -mt-8 relative z-20">
+        <div class="grid grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,300px))] gap-2 lg:gap-4 justify-center align-center">
+            {% for shortcut in shortcuts %}
+                <a
+                        href="{{ shortcut.url }}"
+                        class="group bg-white p-2 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center text-center md:rounded-xl">
+                    <div
+                            class="rounded-none md:rounded-full {{ shortcut.bgcolorhover }} group-hover:text-white transition-colors  flex items-center justify-center w-12 h-12 md:w-18 md:h-18">
+                        <!-- Icon size is now responsive! -->
+                        <i class="{{ shortcut.icon }} text-citoyen text-3xl md:text-4xl transition-transform group-hover:text-white group-hover:scale-110"></i>
+                    </div>
+                    <!-- Title size is now responsive! -->
+                    <h3 class="font-bold text-sm text-black-base md:text-xl md:mb-1">{{ shortcut.name }}</h3>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
