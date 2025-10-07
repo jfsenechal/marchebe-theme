@@ -20,6 +20,18 @@ class HttpApi
      * @return ResponseInterface
      * @throws TransportExceptionInterface
      */
+    public function loadMenu(): ResponseInterface
+    {
+        return $this->client->request(
+            'GET',
+            'https://www.marche.be/nuxt/menu.php'
+        );
+    }
+
+    /**
+     * @return ResponseInterface
+     * @throws TransportExceptionInterface
+     */
     public function loadEvents(): ResponseInterface
     {
         return $this->client->request(

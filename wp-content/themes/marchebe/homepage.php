@@ -14,9 +14,7 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 get_header();
-?>
-    <h3 class="text-3xl">Hi home</h3>
-    <?php
+
 $apiRepository = new ApiRepository();
 $events = $apiRepository->getEvents();
 $news = $apiRepository->getNews();

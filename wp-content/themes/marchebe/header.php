@@ -1,6 +1,12 @@
 <?php
+
 namespace AcMarche\Theme;
+
 use AcMarche\Theme\Lib\Twig;
+use AcMarche\Theme\Repository\ApiRepository;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 $twig = Twig::loadTwig();
 ?>
@@ -23,3 +29,16 @@ $twig = Twig::loadTwig();
     <body class="bg-white">
     <?php
 wp_body_open();
+
+$apiRepository = new ApiRepository();
+$menu = $apiRepository->getMenu();
+
+$twig = Twig::loadTwig();
+
+try {
+    echo $twig->render('@AcMarche/_header.html.twig', [
+            'menu' => $menu,
+    ]);
+} catch (LoaderError|RuntimeError|SyntaxError $e) {
+    echo $e->getMessage();
+}

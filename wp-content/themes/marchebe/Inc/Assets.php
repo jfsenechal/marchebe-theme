@@ -18,7 +18,7 @@ class Assets
         );
         wp_enqueue_style(
             'marchebe-primary',
-            get_parent_theme_file_uri('assets/css/tailwind.css'),
+            get_parent_theme_file_uri('assets/css/marchebe.css'),
             [],
             wp_get_theme()->get('Version')
         );

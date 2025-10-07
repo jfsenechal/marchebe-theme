@@ -18,6 +18,17 @@ class ApiRepository
         $this->httpApi = new HttpApi();
     }
 
+    public function getMenu(): array
+    {
+        try {
+            $content = $this->httpApi->loadMenu();
+
+            return $content->toArray();
+        } catch (TransportExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|DecodingExceptionInterface|ClientExceptionInterface $e) {
+            return ['error' => $e->getMessage()];
+        }
+    }
+
     public function getEvents(): array
     {
         try {

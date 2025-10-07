@@ -86,3 +86,4 @@ package-lock.json
 *.bak
 *.old
 *.sql
+node_modules
