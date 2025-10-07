@@ -1,5 +1,7 @@
 <?php
+
 namespace AcMarche\Theme;
+
 use AcMarche\Theme\Lib\Twig;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -13,3 +15,8 @@ try {
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();
 }
+wp_footer();
+?>
+    </body>
+    </html>
+<?php

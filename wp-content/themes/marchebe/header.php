@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme;
 
+use AcMarche\Theme\Data\Data;
 use AcMarche\Theme\Lib\Twig;
 use AcMarche\Theme\Repository\ApiRepository;
 use Twig\Error\LoaderError;
@@ -26,7 +27,7 @@ $twig = Twig::loadTwig();
         wp_head();
         ?>
     </head>
-    <body class="bg-white">
+    <body class="bg-white" id="app">
     <?php
 wp_body_open();
 
@@ -37,7 +38,8 @@ $twig = Twig::loadTwig();
 
 try {
     echo $twig->render('@AcMarche/_header.html.twig', [
-            'menu' => $menu,
+            'menu_data' => json_encode($menu),
+            'menuItems' => Data::menuItems,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();

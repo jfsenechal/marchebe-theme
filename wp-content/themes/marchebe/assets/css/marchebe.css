@@ -8,7 +8,11 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-50: oklch(97.1% 0.013 17.38);
+    --color-red-100: oklch(93.6% 0.032 17.717);
     --color-red-500: oklch(63.7% 0.237 25.331);
+    --color-red-600: oklch(57.7% 0.245 27.325);
+    --color-red-700: oklch(50.5% 0.213 27.518);
     --color-blue-50: oklch(97% 0.014 254.604);
     --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-blue-500: oklch(62.3% 0.214 259.815);
@@ -28,6 +32,7 @@
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-sm: 24rem;
+    --container-md: 28rem;
     --container-xl: 36rem;
     --container-2xl: 42rem;
     --text-sm: 0.875rem;
@@ -66,7 +71,16 @@
     --default-mono-font-family: var(--font-mono);
     --font-montserrat: Montserrat, sans-serif;
     --color-black-base: #585656;
+    --color-administration: #82786FFF;
     --color-citoyen: #FF7200FF;
+    --color-citoyen-100: rgba(255, 114, 0, 0.9);
+    --color-culture: #002F2FFF;
+    --color-economie: #0098DBFF;
+    --color-enfance: #00B092FF;
+    --color-sante: #D71F85FF;
+    --color-sport: #98C02DFF;
+    --color-social: #CB0044FF;
+    --color-tourisme: #8A5A9DFF;
     --color-cta-light: #4ae0c7;
     --color-cta-dark: #487F89FF;
   }
@@ -285,6 +299,9 @@
   .col-span-2 {
     grid-column: span 2 / span 2;
   }
+  .float-right {
+    float: right;
+  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -302,6 +319,9 @@
     @media (width >= 96rem) {
       max-width: 96rem;
     }
+  }
+  .m-4 {
+    margin: calc(var(--spacing) * 4);
   }
   .-mx-2 {
     margin-inline: calc(var(--spacing) * -2);
@@ -429,6 +449,9 @@
   .max-w-2xl {
     max-width: var(--container-2xl);
   }
+  .max-w-md {
+    max-width: var(--container-md);
+  }
   .max-w-sm {
     max-width: var(--container-sm);
   }
@@ -461,6 +484,9 @@
   }
   .cursor-pointer {
     cursor: pointer;
+  }
+  .list-disc {
+    list-style-type: disc;
   }
   .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -497,6 +523,9 @@
   }
   .gap-8 {
     gap: calc(var(--spacing) * 8);
+  }
+  .gap-12 {
+    gap: calc(var(--spacing) * 12);
   }
   .space-y-1 {
     :where(& > :not(:last-child)) {
@@ -575,6 +604,9 @@
   .overflow-y-auto {
     overflow-y: auto;
   }
+  .rounded {
+    border-radius: 0.25rem;
+  }
   .rounded-2xl {
     border-radius: var(--radius-2xl);
   }
@@ -610,14 +642,24 @@
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 3px;
   }
+  .border-l-4 {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 4px;
+  }
   .border-gray-200 {
     border-color: var(--color-gray-200);
   }
   .border-gray-700 {
     border-color: var(--color-gray-700);
   }
+  .border-red-500 {
+    border-color: var(--color-red-500);
+  }
   .border-transparent {
     border-color: transparent;
+  }
+  .bg-black {
+    background-color: var(--color-black);
   }
   .bg-black\/50 {
     background-color: color-mix(in srgb, #000 50%, transparent);
@@ -631,6 +673,9 @@
   .bg-citoyen {
     background-color: var(--color-citoyen);
   }
+  .bg-citoyen-100 {
+    background-color: var(--color-citoyen-100);
+  }
   .bg-cta-dark {
     background-color: var(--color-cta-dark);
   }
@@ -639,6 +684,12 @@
   }
   .bg-gray-800 {
     background-color: var(--color-gray-800);
+  }
+  .bg-red-50 {
+    background-color: var(--color-red-50);
+  }
+  .bg-red-100 {
+    background-color: var(--color-red-100);
   }
   .bg-slate-50 {
     background-color: var(--color-slate-50);
@@ -670,6 +721,9 @@
   .p-8 {
     padding: calc(var(--spacing) * 8);
   }
+  .p-10 {
+    padding: calc(var(--spacing) * 10);
+  }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
   }
@@ -690,6 +744,9 @@
   }
   .py-4 {
     padding-block: calc(var(--spacing) * 4);
+  }
+  .py-6 {
+    padding-block: calc(var(--spacing) * 6);
   }
   .py-10 {
     padding-block: calc(var(--spacing) * 10);
@@ -714,6 +771,9 @@
   }
   .pl-4 {
     padding-left: calc(var(--spacing) * 4);
+  }
+  .pl-5 {
+    padding-left: calc(var(--spacing) * 5);
   }
   .pl-12 {
     padding-left: calc(var(--spacing) * 12);
@@ -776,6 +836,9 @@
     --tw-tracking: var(--tracking-wider);
     letter-spacing: var(--tracking-wider);
   }
+  .text-administration {
+    color: var(--color-administration);
+  }
   .text-black-base {
     color: var(--color-black-base);
   }
@@ -787,6 +850,15 @@
   }
   .text-cta-dark {
     color: var(--color-cta-dark);
+  }
+  .text-culture {
+    color: var(--color-culture);
+  }
+  .text-economie {
+    color: var(--color-economie);
+  }
+  .text-enfance {
+    color: var(--color-enfance);
   }
   .text-gray-300 {
     color: var(--color-gray-300);
@@ -805,6 +877,24 @@
   }
   .text-red-500 {
     color: var(--color-red-500);
+  }
+  .text-red-600 {
+    color: var(--color-red-600);
+  }
+  .text-red-700 {
+    color: var(--color-red-700);
+  }
+  .text-sante {
+    color: var(--color-sante);
+  }
+  .text-social {
+    color: var(--color-social);
+  }
+  .text-sport {
+    color: var(--color-sport);
+  }
+  .text-tourisme {
+    color: var(--color-tourisme);
   }
   .text-white {
     color: var(--color-white);
@@ -1024,10 +1114,24 @@
       }
     }
   }
+  .hover\:text-administration {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-administration);
+      }
+    }
+  }
   .hover\:text-blue-400 {
     &:hover {
       @media (hover: hover) {
         color: var(--color-blue-400);
+      }
+    }
+  }
+  .hover\:text-citoyen {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-citoyen);
       }
     }
   }
@@ -1038,10 +1142,59 @@
       }
     }
   }
+  .hover\:text-culture {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-culture);
+      }
+    }
+  }
+  .hover\:text-economie {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-economie);
+      }
+    }
+  }
+  .hover\:text-enfance {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-enfance);
+      }
+    }
+  }
   .hover\:text-gray-600 {
     &:hover {
       @media (hover: hover) {
         color: var(--color-gray-600);
+      }
+    }
+  }
+  .hover\:text-sante {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-sante);
+      }
+    }
+  }
+  .hover\:text-social {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-social);
+      }
+    }
+  }
+  .hover\:text-sport {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-sport);
+      }
+    }
+  }
+  .hover\:text-tourisme {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-tourisme);
       }
     }
   }
@@ -1237,6 +1390,11 @@
       padding-inline: calc(var(--spacing) * 6);
     }
   }
+  .md\:py-16 {
+    @media (width >= 48rem) {
+      padding-block: calc(var(--spacing) * 16);
+    }
+  }
   .md\:pr-32 {
     @media (width >= 48rem) {
       padding-right: calc(var(--spacing) * 32);
@@ -1264,6 +1422,11 @@
     @media (width >= 48rem) {
       font-size: var(--text-xl);
       line-height: var(--tw-leading, var(--text-xl--line-height));
+    }
+  }
+  .lg\:grid-cols-2 {
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   .lg\:grid-cols-\[repeat\(3\,minmax\(0\,300px\)\)\] {
