@@ -14,8 +14,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-get_header();
-
 $codeCgt = get_query_var(RouterMarche::PARAM_EVENT);
 
 get_header();
