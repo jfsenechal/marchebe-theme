@@ -1,0 +1,49 @@
+<h3 class="font-montserrat-semi-bold text-cta-light text-md border-bottom">
+    Dates
+</h3>
+<div class="flex flex-col gap-2 mb-2">
+    {% for dateEvent in event.datesEvent %}
+        <span class="font-montserrat-semi-bold text-cta-dark">
+
+            {% if dateEvent.dateBegin %}
+                {{ dateEvent.dateBegin.date|format_date('full') }}
+            {% endif %}
+
+            {% if dateEvent.dateRealBegin %}
+                Du {{ dateEvent.dateRealBegin.date|format_date('full') }}
+            {% endif %}
+
+            {% if dateEvent.dateEnd %}
+                au {{ dateEvent.dateEnd.date|format_date('full') }}
+            {% endif %}
+
+          <br>
+
+            {% if dateEvent.dateRange %}
+                {{ dateEvent.dateRange }}
+            {% endif %}
+
+            {% if dateEvent.ouvertureHeure1 %}
+                {{ dateEvent.ouvertureHeure1 }}
+            {% endif %}
+
+            {% if dateEvent.fermetureHeure1 %}
+                {{ dateEvent.fermetureHeure1 }}
+            {% endif %}
+
+            {% if dateEvent.ouvertureHeure2 %}
+                {{ dateEvent.ouvertureHeure2 }}
+            {% endif %}
+
+            {% if dateEvent.fermetureHeure2 %}
+                {{ dateEvent.fermetureHeure2 }}
+            {% endif %}
+
+            {% if dateEvent.ouvertureDetails %}
+                {{ dateEvent.ouvertureDetails|raw }}
+            {% endif %}
+
+
+    </span>
+    {% endfor %}
+</div>

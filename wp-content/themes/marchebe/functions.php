@@ -3,6 +3,7 @@
 namespace AcMarche\Theme;
 
 use AcMarche\Theme\Inc\Assets;
+use AcMarche\Theme\Inc\RouterMarche;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 
@@ -32,3 +33,4 @@ function marche_post_format_setup()
 }
 
 new Assets();
+new RouterMarche();

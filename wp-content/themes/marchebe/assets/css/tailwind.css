@@ -110,7 +110,7 @@ img, video, iframe {
 }
 
 /**
-* Agenda page
+ * Agenda index page
  */
 @keyframes fadeInUp {
     0% {
@@ -131,4 +131,55 @@ img, video, iframe {
 .animate-card-in {
     animation: fadeInUp 0.6s ease-out forwards;
     opacity: 0; /* Start as invisible */
+}
+
+/**
+ * Agenda show page
+ */
+/* Hero image subtle zoom animation */
+@keyframes subtleZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.05);
+    }
+}
+
+.hero-image-zoom {
+    animation: subtleZoom 15s ease-in-out alternate infinite;
+}
+
+/* Initial state for scroll-triggered animations */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Final state for scroll-triggered animations */
+.fade-in-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Simple fade-in-down for header elements */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 0.8s ease-out forwards;
+}
+
+.animate-fade-in-down-delay {
+    animation: fadeInDown 0.8s ease-out 0.2s forwards;
+    opacity: 0; /* Start hidden */
 }

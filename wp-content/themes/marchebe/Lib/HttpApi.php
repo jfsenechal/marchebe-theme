@@ -41,6 +41,19 @@ class HttpApi
     }
 
     /**
+     * @param string $codeCgt
+     * @return ResponseInterface
+     * @throws TransportExceptionInterface
+     */
+    public function loadOneEvent(string $codeCgt): ResponseInterface
+    {
+        return $this->client->request(
+            'GET',
+            'https://www.visitmarche.be/api/event.php?code='.$codeCgt
+        );
+    }
+
+    /**
      * @return ResponseInterface
      * @throws TransportExceptionInterface
      */
