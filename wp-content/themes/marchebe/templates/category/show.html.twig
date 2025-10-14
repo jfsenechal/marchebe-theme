@@ -1,0 +1,20 @@
+<section x-data="
+{
+  categorySelected: 0,
+  categoryName: '',
+  handleCategorySelected(category) {
+    this.categorySelected = category.cat_ID;
+    this.categoryName = category.name;
+  },
+  selectCategory(categoryId, categoryName) {
+    this.categorySelected = categoryId;
+    this.categoryName = categoryName;
+  },
+  isSelected(categoryId){
+    return this.categorySelected === categoryId;
+  },
+  posts: {{postsSerialized}}
+}">
+    {% include '@AcMarche/category/_header.html.twig' %}
+    {% include '@AcMarche/category/_posts.html.twig' %}
+</section>

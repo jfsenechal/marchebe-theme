@@ -68,12 +68,78 @@ class WpRepository
         switch_to_blog(1);
         wp_reset_postdata();
 
-       // $news = AcSort::trieNews($news);
+        // $news = AcSort::trieNews($news);
 
         if (count($news) > $max) {
             $news = array_slice($news, 0, $max);
         }
 
         return $news;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return array<int,WP_Post>
+     */
+    public function getPosts(int $categoryId): array
+    {
+        $args = array(
+            'cat' => $categoryId,
+            'numberposts' => 5000,
+            'orderby' => 'post_title',
+            'order' => 'ASC',
+            'post_status' => 'publish',
+        );
+
+        $querynews = new WP_Query($args);
+        $posts = [];
+        while ($querynews->have_posts()) {
+            $post = $querynews->next_post();
+            $post->excerpt = $post->post_excerpt;
+            $post->url = get_permalink($post->ID);
+            $posts[] = $post;
+        }
+
+        return $posts;
+    }
+
+    /**
+     * @param int $categoryId
+     *
+     * @return \WP_Term|\WP_Error|array|null
+     */
+    public function getParentCategory(int $categoryId): \WP_Term|\WP_Error|array|null
+    {
+        $category = get_category($categoryId);
+
+        if ($category) {
+            if ($category->parent < 1) {
+                return null;
+            }
+
+            return get_category($category->parent);
+        }
+
+        return null;
+
+    }
+
+    /**
+     * @param int $cat_ID The ID of the parent category.
+     * @return array<int,\WP_Term> Array of child categories with additional properties like URL and ID.
+     */
+    public function getChildrenOfCategory(int $cat_ID): array
+    {
+        $args = ['parent' => $cat_ID, 'hide_empty' => false];
+        $children = get_categories($args);
+        array_map(
+            function ($category) {
+                $category->url = get_category_link($category->term_id);
+                $category->id = $category->term_id;
+            },
+            $children
+        );
+
+        return $children;
     }
 }

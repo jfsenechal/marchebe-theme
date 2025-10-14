@@ -4,6 +4,9 @@ namespace AcMarche\Theme;
 
 use AcMarche\Theme\Inc\Assets;
 use AcMarche\Theme\Inc\RouterMarche;
+use AcMarche\Theme\Inc\SecurityConfig;
+use AcMarche\Theme\Inc\SetupTheme;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 
@@ -17,20 +20,7 @@ if (WP_DEBUG === false) {
 } else {
     Debug::enable();
 }
-// Adds theme support for post formats.
-/**
- * Adds theme support for post formats.
- *
- * @return void
- *
- */
-function marche_post_format_setup()
-{
-    add_theme_support(
-        'post-formats',
-        array('aside', 'audio', 'chat', 'gallery', 'image', 'link', 'quote', 'status', 'video')
-    );
-}
-
+new SetupTheme();
 new Assets();
 new RouterMarche();
+new SecurityConfig();
