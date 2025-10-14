@@ -1,0 +1,20 @@
+<!-- https://tailwindui.com/components/application-ui/navigation/breadcrumbs -->
+<nav aria-label="Breadcrumb" class="">
+    <ol class="flex items-center space-x-2 text-slate-500">
+        <li>
+            <a href="/" class="hover:text-blue-600 hover:underline">Accueil</a>
+        </li>
+        <li><span class="select-none">/</span></li>
+        {% for item in paths %}
+            <li class="space-x-2">
+                <a href="#" class="hover:text-blue-600 hover:underline">
+                    {{ item.name }}
+                </a>
+                <span class="select-none">/</span>
+            </li>
+        {% endfor %}
+        <li aria-current="page" class="font-medium text-slate-700 truncate max-w-[200px] sm:max-w-none">
+            {{ title }}
+        </li>
+    </ol>
+</nav>

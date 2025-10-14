@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+
 @plugin "@tailwindcss/typography";
-@source "../../templates/"
+@source "../../templates/";
 
 @theme {
     --font-montserrat: Montserrat, sans-serif;
@@ -106,4 +107,28 @@ img, video, iframe {
 .animate-fade-in-down-delay {
     animation: fadeInDown 0.8s ease-out 0.2s forwards;
     opacity: 0; /* Start hidden */
+}
+
+/**
+* Agenda page
+ */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* We could also define the animation here using @theme */
+.animate-card-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0; /* Start as invisible */
 }
