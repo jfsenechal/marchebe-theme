@@ -11,6 +11,7 @@
     "ext-intl": "*",
     "guzzlehttp/guzzle": "^7.10",
     "meilisearch/meilisearch-php": "^v1.16.0",
+    "nesbot/carbon": "^3.10.0",
     "symfony/cache": "^7.3",
     "symfony/console": "^7.3",
     "symfony/dotenv": "^7.3",

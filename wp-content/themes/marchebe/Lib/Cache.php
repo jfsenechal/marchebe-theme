@@ -11,38 +11,53 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 class Cache
 {
-    final public const MENU_NAME = 'menu-top';
-    final public const ICONES_NAME = 'icones-home';
-    final public const EVENTS = 'events';
-    final public const OFFRES = 'offres';
-    final public const OFFRE = 'offre';
-    final public const SEE_ALSO_OFFRES = 'see_also_offre';
-    final public const FETCH_OFFRES = 'fetch_offres';
-    final public const DURATION = 64800;//18heures
-    final public const TAG = ['pivot'];
-    private ?CacheInterface $cache;
-    private SluggerInterface $slugger;
+    private static ?CacheInterface $cache = null;
+    private static ?SluggerInterface $slugger = null;
 
-    public function __construct()
+    private function __construct()
     {
-        $this->slugger = new AsciiSlugger();
-        $this->cache = null;
     }
 
-    public function instance(): CacheInterface|RedisTagAwareAdapter
+    public static function instance(): CacheInterface|RedisTagAwareAdapter
     {
-        if (!$this->cache) {
+        if (!self::$cache) {
             $client = RedisAdapter::createConnection('redis://localhost');
-            $this->cache = new RedisTagAwareAdapter($client);
+            self::$cache = new RedisTagAwareAdapter($client);
         }
 
-        return $this->cache;
+        return self::$cache;
     }
 
-    public function generateKey(string $cacheKey): string
+    public static function generateKey(string $cacheKey): string
     {
+        if (!self::$slugger) {
+            self::$slugger = new AsciiSlugger();
+        }
+
         $keyUnicode = new UnicodeString($cacheKey);
 
-        return $this->slugger->slug($keyUnicode->ascii()->toString());
+        return self::$slugger->slug($keyUnicode->ascii()->toString());
+    }
+
+    // Helper method to get an item from cache
+    public static function get(string $key, callable $callback, ?float $beta = null, ?array $tags = null)
+    {
+        $cacheKey = self::generateKey($key);
+
+        return self::instance()->get($cacheKey, $callback, $beta, $tags);
+    }
+
+    // Helper method to delete an item from cache
+    public static function delete(string $key): bool
+    {
+        $cacheKey = self::generateKey($key);
+
+        return self::instance()->delete($cacheKey);
+    }
+
+    // Helper method to invalidate tags
+    public static function invalidateTags(array $tags): bool
+    {
+        return self::instance()->invalidateTags($tags);
     }
 }

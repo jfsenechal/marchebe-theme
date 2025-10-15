@@ -87,3 +87,5 @@ package-lock.json
 *.old
 *.sql
 node_modules
+
+/var
