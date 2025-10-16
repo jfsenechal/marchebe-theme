@@ -2,11 +2,13 @@
 
 namespace AcMarche\Theme\Lib\Pivot\Entity;
 
-readonly class RelOffre
+class RelOffre
 {
+    public Event $offre;
+
     public function __construct(
         public string $urn,
         public ?string $label,
-        public array $offre
-    ) {}
+    ) {
+    }
 }

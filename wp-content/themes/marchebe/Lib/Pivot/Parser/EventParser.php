@@ -10,16 +10,18 @@ use AcMarche\Theme\Lib\Pivot\Entity\Spec;
 use AcMarche\Theme\Lib\Pivot\Entity\TypeOffre;
 use AcMarche\Theme\Lib\Pivot\Entity\User;
 use AcMarche\Theme\Lib\Pivot\Entity\UserGlobal;
+use AcMarche\Theme\Lib\Pivot\Enums\TypeEnum;
 
 class EventParser
 {
-    use DatesParserTrait;
+    use DatesParserTrait, ImagesParserTrait;
 
     /**
      * @param string $jsonContent
+     * @param int $max
      * @return array<Event>
      */
-    public function parseJsonFile(string $jsonContent): array
+    public function parseJsonFile(string $jsonContent, int $max = 5): array
     {
         $data = json_decode($jsonContent, true);
 
@@ -28,12 +30,14 @@ class EventParser
         }
 
         $events = [];
-
+        $i = 0;
         foreach ($data['offre'] as $item) {
-            // Filter only events with idTypeOffre = 9
-            if (isset($item['typeOffre']['idTypeOffre']) &&
-                $item['typeOffre']['idTypeOffre'] === 9) {
+            if (isset($item['typeOffre']['idTypeOffre']) && $item['typeOffre']['idTypeOffre'] === TypeEnum::Event->value) {
                 $events[] = $this->parseEvent($item);
+                $i++;
+                if ($i > $max) {
+                    break;
+                }
             }
         }
 
@@ -61,7 +65,11 @@ class EventParser
             relOffre: array_map(fn($r) => $this->parseRelOffre($r), $data['relOffre'] ?? []),
             relOffreTgt: $data['relOffreTgt'] ?? [],
         );
-        $this->parseDates($event);
+        if ($event->typeOffre->idTypeOffre === TypeEnum::Event->value) {
+            $this->parseDates($event);
+        }
+
+        //$this->parseImages($event);
 
         return $event;
     }
@@ -137,10 +145,25 @@ class EventParser
 
     private function parseRelOffre(array $data): RelOffre
     {
-        return new RelOffre(
+        $relOffre = new RelOffre(
             urn: $data['urn'],
             label: $data['label'],
-            offre: $data['offre']
         );
+        if ($data['offre']) {
+            $relOffre->offre = $this->parseEvent($data['offre']);
+        }
+
+        return $relOffre;
+    }
+
+    public function findByUrn(Event $event, string $urnName, bool $returnValue = false): mixed
+    {
+        foreach ($event->spec as $specification) {
+            if ($specification->urn === $urnName) {
+                return $specification->value;
+            }
+        }
+
+        return null;
     }
 }

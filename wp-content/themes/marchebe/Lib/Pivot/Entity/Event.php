@@ -4,9 +4,20 @@ namespace AcMarche\Theme\Lib\Pivot\Entity;
 
 class Event
 {
-    public \DateTimeInterface $dateDebValid;
-    public \DateTimeInterface $dateFinValid;
+    public ?\DateTimeInterface $dateDebValid = null;
+    public ?\DateTimeInterface $dateFinValid = null;
+    /**
+     * @var array<EventDate>
+     */
     public array $dates = [];
+    /**
+     * @var array<string>
+     */
+    public array $images = [];
+    /**
+     * @var array<string>
+     */
+    public array $documents = [];
 
     public function __construct(
         public string $codeCgt,

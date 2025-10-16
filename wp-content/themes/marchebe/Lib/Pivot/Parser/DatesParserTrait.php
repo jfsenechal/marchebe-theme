@@ -15,12 +15,7 @@ trait DatesParserTrait
         foreach ($event->spec as $spec) {
             $dateEvent = new EventDate();
             foreach ($spec->spec as $specData) {
-                if ($data = $this->getData($specData, UrnEnum::DATE_DEB_VALID->value)) {
-                    $event->dateDebValid = DateHelper::convertStringToDateTime($data);
-                }
-                if ($data = $this->getData($specData, UrnEnum::DATE_FIN_VALID->value)) {
-                    $event->dateFinValid = DateHelper::convertStringToDateTime($data);
-                }
+                $this->parseDatesValidation($event);
                 if ($data = $this->getData($specData, UrnEnum::DATE_DEB->value)) {
                     $dateBegin = DateHelper::convertStringToDateTime($data);
                     $dateEvent->dateRealBegin = $dateBegin;
@@ -61,17 +56,15 @@ trait DatesParserTrait
         $event->dates = $allDates;
     }
 
-
     public function parseDatesValidation(Event $offre): void
     {
-        $format = "d/m/Y";
-        $specData = $this->findByUrn($offre, UrnEnum::DATE_DEB_VALID->value, returnData: true);
-        if (count($specData) > 0) {
-            $offre->dateDebValid = DateHelper::convertStringToDateTime($specData[0]->value, $format);
+        $value = $this->findByUrn($offre, UrnEnum::DATE_DEB_VALID->value, returnValue: true);
+        if ($value) {
+            $offre->dateDebValid = DateHelper::convertStringToDateTime($value);
         }
-        $specData = $this->findByUrn($offre, UrnEnum::DATE_FIN_VALID->value, returnData: true);
-        if (count($specData) > 0) {
-            $offre->dateFinValid = DateHelper::convertStringToDateTime($specData[0]->value, $format);
+        $value = $this->findByUrn($offre, UrnEnum::DATE_FIN_VALID->value, returnValue: true);
+        if ($value) {
+            $offre->dateFinValid = DateHelper::convertStringToDateTime($value);
         }
     }
 

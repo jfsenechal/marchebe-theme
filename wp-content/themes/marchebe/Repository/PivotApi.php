@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Repository;
 
+use AcMarche\Theme\Lib\Pivot\Enums\ContentEnum;
 use Symfony\Component\HttpClient\DecoratorTrait;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -40,7 +41,7 @@ class PivotApi
      * de données. Les requêtes sont accessibles au moyen d’un code identifiant unique (codeCgt).
      * @throws TransportExceptionInterface
      */
-    public function query(int $level = 2): ResponseInterface
+    public function query(int $level = ContentEnum::LVL2->value): ResponseInterface
     {
         return $this->client->request(
             'GET',

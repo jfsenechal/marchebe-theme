@@ -34,7 +34,8 @@ class PivotRepository
     }
 
     /**
-     * @return array
+     * @return \stdClass
+     * @throws TransportExceptionInterface
      */
     public function loadEvents():  \stdClass
     {
