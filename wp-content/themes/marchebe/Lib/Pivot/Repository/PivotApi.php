@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Theme\Repository;
+namespace AcMarche\Theme\Lib\Pivot\Repository;
 
 use AcMarche\Theme\Lib\Pivot\Enums\ContentEnum;
 use Symfony\Component\HttpClient\DecoratorTrait;

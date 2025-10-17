@@ -25,5 +25,20 @@ readonly class Adresse
         public ?bool $noaddress = null,
         public ?array $parcNaturel = null,
         public ?array $organisme = null
-    ) {}
+    ) {
+    }
+
+    public function getLocalityByLanguage(string $languageSelected): ?string
+    {
+        foreach ($this->localite as $attributes) {
+            if (isset($attributes['lang'])) {
+                if ($attributes['lang'] == $languageSelected) {
+                    return $attributes['value'];
+                }
+            }
+        }
+
+        return null;
+    }
+
 }

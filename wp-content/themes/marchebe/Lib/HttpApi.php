@@ -32,31 +32,6 @@ class HttpApi
      * @return ResponseInterface
      * @throws TransportExceptionInterface
      */
-    public function loadEvents(): ResponseInterface
-    {
-        return $this->client->request(
-            'GET',
-            'https://www.marche.be/nuxt/events.php?limit=300'
-        );
-    }
-
-    /**
-     * @param string $codeCgt
-     * @return ResponseInterface
-     * @throws TransportExceptionInterface
-     */
-    public function loadOneEvent(string $codeCgt): ResponseInterface
-    {
-        return $this->client->request(
-            'GET',
-            'https://www.visitmarche.be/api/event.php?code='.$codeCgt
-        );
-    }
-
-    /**
-     * @return ResponseInterface
-     * @throws TransportExceptionInterface
-     */
     public function loadNews(): ResponseInterface
     {
         return $this->client->request(

@@ -4,6 +4,11 @@ namespace AcMarche\Theme\Lib\Pivot\Entity;
 
 class Event
 {
+    public User $userCreation;
+    public UserGlobal $userGlobalCreation;
+    public User $userModification;
+    public UserGlobal $userGlobalModification;
+
     public ?\DateTimeInterface $dateDebValid = null;
     public ?\DateTimeInterface $dateFinValid = null;
     /**
@@ -18,15 +23,12 @@ class Event
      * @var array<string>
      */
     public array $documents = [];
+    public array $tags = [];
 
     public function __construct(
         public string $codeCgt,
         public string $dateCreation,
         public string $dateModification,
-        public User $userCreation,
-        public UserGlobal $userGlobalCreation,
-        public User $userModification,
-        public UserGlobal $userGlobalModification,
         public string $nom,
         public int $estActive,
         public array $estActiveUrn,
@@ -44,5 +46,39 @@ class Event
         public array $relOffre,
         public array $relOffreTgt,
     ) {
+    }
+
+    public function locality(): ?string
+    {
+        return $this->adresse1->getLocalityByLanguage('fr');
+    }
+
+    public function firstDate(): ?\DateTimeInterface
+    {
+        if (count($this->dates) > 0) {
+            return $this->dates[0]->dateBegin;
+        }
+
+        return null;
+    }
+
+    public function shortCutDateEvent(): array
+    {
+        return [
+            'year' => $this->firstDate()?->format('Y'),
+            'month' => $this->firstDate()?->format('m'),
+            'day' => $this->firstDate()?->format('d'),
+        ];
+    }
+
+    public function isEventOnPeriod(): bool
+    {
+        foreach ($this->dates as $date) {
+            if (!$date->isSameDate()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

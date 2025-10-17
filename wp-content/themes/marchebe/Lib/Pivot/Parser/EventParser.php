@@ -18,10 +18,10 @@ class EventParser
 
     /**
      * @param string $jsonContent
-     * @param int $max
+     * @param int $maxIems
      * @return array<Event>
      */
-    public function parseJsonFile(string $jsonContent, int $max = 5): array
+    public function parseJsonFile(string $jsonContent, int $maxIems = 5): array
     {
         $data = json_decode($jsonContent, true);
 
@@ -35,7 +35,7 @@ class EventParser
             if (isset($item['typeOffre']['idTypeOffre']) && $item['typeOffre']['idTypeOffre'] === TypeEnum::Event->value) {
                 $events[] = $this->parseEvent($item);
                 $i++;
-                if ($i > $max) {
+                if ($i > $maxIems) {
                     break;
                 }
             }
@@ -50,10 +50,6 @@ class EventParser
             codeCgt: $data['codeCgt'],
             dateCreation: $data['dateCreation'],
             dateModification: $data['dateModification'],
-            userCreation: $this->parseUser($data['userCreation']),
-            userGlobalCreation: $this->parseUserGlobal($data['userGlobalCreation']),
-            userModification: $this->parseUser($data['userModification']),
-            userGlobalModification: $this->parseUserGlobal($data['userGlobalModification']),
             nom: $data['nom'],
             estActive: $data['estActive'],
             estActiveUrn: $data['estActiveUrn'],
@@ -65,15 +61,17 @@ class EventParser
             relOffre: array_map(fn($r) => $this->parseRelOffre($r), $data['relOffre'] ?? []),
             relOffreTgt: $data['relOffreTgt'] ?? [],
         );
+
         if ($event->typeOffre->idTypeOffre === TypeEnum::Event->value) {
             $this->parseDates($event);
         }
 
-        //$this->parseImages($event);
+        $this->parseImages($event);
 
         return $event;
     }
 
+    //removed for security
     private function parseUser(array $data): User
     {
         return new User(
@@ -84,6 +82,7 @@ class EventParser
         );
     }
 
+    //removed for security
     private function parseUserGlobal(array $data): UserGlobal
     {
         return new UserGlobal(
@@ -139,7 +138,7 @@ class EventParser
             label: $data['label'] ?? null,
             value: $data['value'] ?? null,
             valueLabel: $data['valueLabel'] ?? null,
-            spec: $data['spec'] ?? null
+            spec: $data['spec'] ?? []
         );
     }
 

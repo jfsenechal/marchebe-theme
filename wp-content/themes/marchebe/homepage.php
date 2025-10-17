@@ -7,6 +7,7 @@
 namespace AcMarche\Theme\Templates;
 
 use AcMarche\Theme\Data\Data;
+use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Lib\Twig;
 use AcMarche\Theme\Repository\ApiRepository;
 use Twig\Error\LoaderError;
@@ -16,7 +17,8 @@ use Twig\Error\SyntaxError;
 get_header();
 
 $apiRepository = new ApiRepository();
-$events = $apiRepository->getEvents();
+$pivotRepository = new PivotRepository();
+$events = $pivotRepository->loadEvents();
 $events = array_slice($events, 0, 8);
 $news = $apiRepository->getNews();
 $news = array_slice($news, 0, 6);

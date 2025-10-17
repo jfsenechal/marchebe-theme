@@ -15,6 +15,6 @@ readonly class Spec
         public ?string $label = null,
         public ?string $value = null,
         public ?string $valueLabel = null,
-        public ?array $spec = null
+        public array $spec = []
     ) {}
 }

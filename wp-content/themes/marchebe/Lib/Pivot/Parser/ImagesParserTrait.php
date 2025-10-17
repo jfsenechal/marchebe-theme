@@ -24,12 +24,7 @@ trait ImagesParserTrait
             if (!$relatedOffer instanceof RelOffre) {
                 continue;
             }
-            continue;
-            $codeCgt = $relatedOffer->offre['codeCgt'];
 
-            if ($relatedOffer->urn == UrnEnum::MEDIA_DEFAULT->value) {
-
-            }
             foreach ($relatedOffer->offre->spec as $specData) {
                 if ($specData->urn == UrnEnum::URL->value) {
                     $value = str_replace("http:", "https:", $specData->value);
@@ -38,8 +33,8 @@ trait ImagesParserTrait
                     $document = new Document();
                     $document->extension = $extension->toString();
                     $document->url = $value;
-                    $document->codeCgt = $relatedOffer->codeCgt;
-                    $document->urn = $relatedOffer->url;
+                    $document->codeCgt = $relatedOffer->offre->codeCgt;
+                    $document->urn = $relatedOffer->urn;
                     if (in_array($extension, ['jpg', 'png'])) {
                         if (!array_search($value, $docs['images'])) {
                             $docs['images'][] = $value;

@@ -4,7 +4,7 @@
     <a href="/agenda/{{ event.codeCgt }}" class="block relative">
         <img
                 src="{% if event.images|length > 0 %} {{ event.images[0] }} {% else %} 'https://pivotmedia.tourismewallonie.be/OTH-A0-00UE-0HH1/OTH-A0-00UE-0HH1.jpg' {% endif %}"
-                alt="`Image for ${event.nom}`"
+                alt="Image for {{ event.nom|slug }}"
                 class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
         />
     </a>
@@ -36,7 +36,7 @@
                 <span>{{ event.locality }}</span>
             </div>
             <div class="flex flex-row gap-2 items-center">
-                {% for tag in event.tagsFormatted %}
+                {% for tag in event.tags %}
                     {% if tag.urn != 'urn:fam:9' %}
                         <span>{{ tag.name }}</span>
                     {% endif %}

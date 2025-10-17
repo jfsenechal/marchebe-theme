@@ -29,28 +29,6 @@ class ApiRepository
         }
     }
 
-    public function getEvents(): array
-    {
-        try {
-            $content = $this->httpApi->loadEvents();
-
-            return $content->toArray();
-        } catch (TransportExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|DecodingExceptionInterface|ClientExceptionInterface $e) {
-            return ['error' => $e->getMessage()];
-        }
-    }
-
-    public function getOneEvent(string $codeCgt): array
-    {
-        try {
-            $content = $this->httpApi->loadOneEvent($codeCgt);
-
-            return $content->toArray();
-        } catch (TransportExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|DecodingExceptionInterface|ClientExceptionInterface $e) {
-            return ['error' => $e->getMessage()];
-        }
-    }
-
     public function getNews(): array
     {
         try {
