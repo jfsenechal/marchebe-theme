@@ -40,6 +40,8 @@ class PivotRepository
 
     /**
      * @return array<int,Event>
+     * @throws \JsonException
+     * @throws \Throwable
      */
     public function loadEvents(bool $purgeCache = false): array
     {
@@ -67,14 +69,46 @@ class PivotRepository
 
     /**
      * @param string $codeCgt
-     * @return ResponseInterface
-     * @throws TransportExceptionInterface
+     * @param bool $parse
+     * @param bool $purgeCache
+     * @param int $level
+     * @return Event|string|null
+     * @throws \JsonException
      */
-    public function loadOneEvent(string $codeCgt): ResponseInterface
-    {
-        return $this->client->request(
-            'GET',
-            'https://www.visitmarche.be/api/event.php?code='.$codeCgt
-        );
+    public function loadOneEvent(
+        string $codeCgt,
+        bool $parse = false,
+        bool $purgeCache = false,
+        int $level = ContentEnum::LVL4->value
+    ): Event|string|null {
+        $cacheKey = Cache::generateKey('offer-'.$codeCgt.'-'.$level);
+        if ($purgeCache) {
+            Cache::delete($cacheKey);
+        }
+        $jsonContent = Cache::get($cacheKey, function () use ($codeCgt, $level) {
+            $pivotApi = new PivotApi();
+            try {
+                $response = $pivotApi->loadEvent($codeCgt, $level);
+
+                return $response->getContent();
+            } catch (\Exception $e) {
+                return null;
+            }
+        });
+
+        if (!$jsonContent) {
+            return null;
+        }
+
+        if (!$parse) {
+            return $jsonContent;
+        }
+
+        $parser = new EventParser();
+        $data = json_decode($jsonContent, associative: true, flags: JSON_THROW_ON_ERROR);
+
+        $event = $parser->parseEvent($data['offre'][0]);
+
+        return $event;
     }
 }

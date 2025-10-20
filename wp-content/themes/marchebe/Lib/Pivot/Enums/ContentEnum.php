@@ -8,6 +8,7 @@ enum ContentEnum: int
     case LVL1 = 1;
     case LVL2 = 2;
     case LVL3 = 3;
+    case LVL4 = 4;
 
     public function description(): string
     {
@@ -21,6 +22,11 @@ associé à l’offre.',
 représentées que par leur codeCgt.',
             self::LVL3 => 'produit les offres au contenu complet, avec également un contenu complet pour les
 offres liées.',
+            self::LVL4 =>
+            '4 = génère le contenu OpenData d’offre, ne contenant que le codeCgt, le nom, l’adresse et
+la géolocalisation, les moyens de communication ainsi que le classement, le label Qualité
+Wallonie, le descriptif commercial, la période et horaire d’ouverture, les équipements et
+services et le média par défaut associé à l’offre.'
         };
 
     }

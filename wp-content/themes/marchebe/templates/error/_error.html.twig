@@ -16,6 +16,14 @@
                 </div>
 
             {% endif %}
+
+            {% if statusCode is defined %}
+            statusCode:    {{ statusCode }}
+            {% endif %}
+
+            {% if statusText is defined %}
+             statusText:   {{ statusText }}
+            {% endif %}
         </div>
     </div>
 </section>

@@ -50,6 +50,19 @@ class PivotApi
     }
 
     /**
+     * @param string $codeCgt
+     * @return ResponseInterface
+     * @throws TransportExceptionInterface
+     */
+    public function loadEvent(string $codeCgt,int $level = ContentEnum::LVL4->value): ResponseInterface
+    {
+        return $this->client->request(
+            'GET',
+            $this->base_uri.'/offer/'.$codeCgt.';content='.$level
+        );
+    }
+
+    /**
      * @return ResponseInterface
      * @throws TransportExceptionInterface
      */

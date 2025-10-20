@@ -4,6 +4,7 @@ namespace AcMarche\Theme\Lib\Pivot\Enums;
 
 enum UrnEnum: string
 {
+    case DESCRIPTION = "urn:fld:descmarket";
     case DATE_OBJECT = "urn:obj:date";
     case DATE_DEB_VALID = 'urn:fld:datedebvalid';
     case DATE_FIN_VALID = "urn:fld:datefinvalid";
@@ -21,6 +22,6 @@ enum UrnEnum: string
     case URL = "urn:fld:url";
     case WEB = "urn:fld:urlweb";
     case FACEBOOK = "urn:fld:urlfacebook";
-
-
+    case MAIL1 = "urn:fld:mail1";
+    case MOBI1 = "urn:fld:mobi1";
 }

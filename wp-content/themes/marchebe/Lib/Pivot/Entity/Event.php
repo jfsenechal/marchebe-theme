@@ -24,6 +24,10 @@ class Event
      */
     public array $documents = [];
     public array $tags = [];
+    public ?string $description = null;
+    public ?string $facebook = null;
+    public ?string $mail1 = null;
+    public ?string $website = null;
 
     public function __construct(
         public string $codeCgt,
@@ -35,7 +39,7 @@ class Event
         public int $visibilite,
         public array $visibiliteUrn,
         public TypeOffre $typeOffre,
-        public Adresse $adresse1,
+        public ?Adresse $adresse1 = null,
         /**
          * @var array<Spec>
          */
@@ -50,7 +54,7 @@ class Event
 
     public function locality(): ?string
     {
-        return $this->adresse1->getLocalityByLanguage('fr');
+        return $this->adresse1?->getLocalityByLanguage('fr');
     }
 
     public function firstDate(): ?\DateTimeInterface

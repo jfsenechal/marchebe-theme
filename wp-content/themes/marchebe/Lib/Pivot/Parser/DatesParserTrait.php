@@ -12,6 +12,7 @@ trait DatesParserTrait
     public function parseDates(Event $event): void
     {
         $today = new \DateTime();
+        $allDates = [];
         foreach ($event->spec as $spec) {
             $dateEvent = new EventDate();
             foreach ($spec->spec as $specData) {
@@ -41,7 +42,7 @@ trait DatesParserTrait
                     $dateEvent->fermetureHeure2 = $data;
                 }
                 if ($data = $this->getData($specData, UrnEnum::DATE_DETAIL_OUVERTURE->value)) {
-                    $dateEvent->ouvertureDetails = str_replace('<p>', '<p class="not-prose">', $data);
+                    $dateEvent->ouvertureDetails =  $data;
                 }
                 if ($data = $this->getData($specData, UrnEnum::DATE_RANGE->value)) {
                     $dateEvent->dateRange = $data;

@@ -11,6 +11,7 @@ use AcMarche\Theme\Lib\Pivot\Entity\TypeOffre;
 use AcMarche\Theme\Lib\Pivot\Entity\User;
 use AcMarche\Theme\Lib\Pivot\Entity\UserGlobal;
 use AcMarche\Theme\Lib\Pivot\Enums\TypeEnum;
+use AcMarche\Theme\Lib\Pivot\Enums\UrnEnum;
 
 class EventParser
 {
@@ -20,13 +21,18 @@ class EventParser
      * @param string $jsonContent
      * @param int $maxIems
      * @return array<Event>
+     * @throws \JsonException|\Throwable
      */
     public function parseJsonFile(string $jsonContent, int $maxIems = 5): array
     {
-        $data = json_decode($jsonContent, true);
+        try {
+            $data = json_decode($jsonContent, true, flags: JSON_THROW_ON_ERROR);
+        } catch (\Throwable $e) {
+            throw new \JsonException($e->getMessage());
+        }
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('Invalid JSON: '.json_last_error_msg());
+            throw new \Exception('Invalid JSON: '.json_last_error_msg());
         }
 
         $events = [];
@@ -44,19 +50,19 @@ class EventParser
         return $events;
     }
 
-    private function parseEvent(array $data): Event
+    public function parseEvent(array $data): Event
     {
         $event = new Event(
             codeCgt: $data['codeCgt'],
             dateCreation: $data['dateCreation'],
             dateModification: $data['dateModification'],
             nom: $data['nom'],
-            estActive: $data['estActive'],
-            estActiveUrn: $data['estActiveUrn'],
-            visibilite: $data['visibilite'],
-            visibiliteUrn: $data['visibiliteUrn'],
+            estActive: $data['estActive'] ?? 0,
+            estActiveUrn: $data['estActiveUrn'] ?? [],
+            visibilite: $data['visibilite'] ?? 0,
+            visibiliteUrn: $data['visibiliteUrn'] ?? [],
             typeOffre: $this->parseTypeOffre($data['typeOffre']),
-            adresse1: $this->parseAdresse($data['adresse1']),
+            adresse1: $this->parseAdresse($data['adresse1'] ?? null),
             spec: array_map(fn($s) => $this->parseSpec($s), $data['spec'] ?? []),
             relOffre: array_map(fn($r) => $this->parseRelOffre($r), $data['relOffre'] ?? []),
             relOffreTgt: $data['relOffreTgt'] ?? [],
@@ -67,6 +73,8 @@ class EventParser
         }
 
         $this->parseImages($event);
+        $this->parseCommunication($event);
+        $this->parseDescription($event);
 
         return $event;
     }
@@ -99,8 +107,12 @@ class EventParser
         );
     }
 
-    private function parseAdresse(array $data): Adresse
+    private function parseAdresse(array|null $data): ?Adresse
     {
+        if (!$data) {
+            return null;
+        }
+
         return new Adresse(
             rue: $data['rue'] ?? null,
             numero: $data['numero'] ?? null,
@@ -142,11 +154,23 @@ class EventParser
         );
     }
 
+    private function parseDescription(Event $event): void
+    {
+        $event->description = $this->findByUrn($event, UrnEnum::DESCRIPTION->value);
+    }
+
+    private function parseCommunication(Event $event): void
+    {
+        $event->facebook = $this->findByUrn($event, UrnEnum::FACEBOOK->value);
+        $event->mail1 = $this->findByUrn($event, UrnEnum::MAIL1->value);
+        $event->website = $this->findByUrn($event, UrnEnum::WEB->value);
+    }
+
     private function parseRelOffre(array $data): RelOffre
     {
         $relOffre = new RelOffre(
             urn: $data['urn'],
-            label: $data['label'],
+            label: $data['label'] ?? 'null',
         );
         if ($data['offre']) {
             $relOffre->offre = $this->parseEvent($data['offre']);
