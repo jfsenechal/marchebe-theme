@@ -17,4 +17,17 @@ readonly class TypeOffre
     {
         return $this->idTypeOffre === 9;
     }
+
+    public function getLabelByLanguage(string $languageSelected): ?string
+    {
+        foreach ($this->label as $attributes) {
+            if (isset($attributes['lang'])) {
+                if ($attributes['lang'] == $languageSelected) {
+                    return $attributes['value'];
+                }
+            }
+        }
+
+        return null;
+    }
 }

@@ -83,4 +83,13 @@ class Event
 
         return false;
     }
+
+    public function firstImage(): ?string
+    {
+        if (count($this->images) > 0) {
+            return $this->images[0];
+        }
+
+        return null;
+    }
 }

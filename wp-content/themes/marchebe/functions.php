@@ -6,7 +6,7 @@ use AcMarche\Theme\Inc\Assets;
 use AcMarche\Theme\Inc\RouterMarche;
 use AcMarche\Theme\Inc\SecurityConfig;
 use AcMarche\Theme\Inc\SetupTheme;
-use Symfony\Component\Dotenv\Dotenv;
+use AcMarche\Theme\Lib\Seo;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 
@@ -24,3 +24,4 @@ new SetupTheme();
 new Assets();
 new RouterMarche();
 new SecurityConfig();
+new Seo();
