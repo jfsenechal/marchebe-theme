@@ -10,7 +10,6 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class PivotRepository
 {
@@ -43,21 +42,23 @@ class PivotRepository
      * @throws \JsonException
      * @throws \Throwable
      */
-    public function loadEvents(bool $purgeCache = false): array
+    public function loadEvents(int $level = ContentEnum::LVL4->value, bool $purgeCache = false): array
     {
+        $cacheKey = Cache::generateKey('offers-all-'.$level);
         if ($purgeCache) {
-            Cache::delete('pivot_json_file');
+            Cache::delete($cacheKey);
         }
-        $jsonContent = Cache::get('pivot_json_file', function () {
+        $jsonContent = Cache::get($cacheKey, function () use ($level) {
             $pivotApi = new PivotApi();
             try {
-                $response = $pivotApi->query(ContentEnum::LVL3->value);
+                $response = $pivotApi->query($level);
 
                 return $response->getContent();
             } catch (\Exception $e) {
                 return null;
             }
         });
+
         if (!$jsonContent) {
             return [];
         }

@@ -5,7 +5,6 @@ namespace AcMarche\Theme\Command;
 use AcMarche\Theme\Lib\Cache;
 use AcMarche\Theme\Lib\Pivot\Entity\Event;
 use AcMarche\Theme\Lib\Pivot\Enums\ContentEnum;
-use AcMarche\Theme\Lib\Pivot\Enums\UrnEnum;
 use AcMarche\Theme\Lib\Pivot\Parser\EventParser;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotApi;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
@@ -24,13 +23,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class PivotCommand extends Command
 {
     private SymfonyStyle $io;
-    private bool $purge = false;
     private OutputInterface $output;
+    private bool $purge = false;
+    private bool $parse;
 
     protected function configure(): void
     {
         $this->setDescription('fetch pivot data');
-        $this->addOption('all', "all", InputOption::VALUE_NONE, 'Fetch all');
+        $this->addOption('all', "all", InputOption::VALUE_NONE, 'Fetch all data');
         $this->addOption('parse', "parse", InputOption::VALUE_NONE, 'Parse data');
         $this->addOption('purge', "purge", InputOption::VALUE_NONE, 'Purge cache');
         $this->addOption('codeCgt', "codeCgt", InputOption::VALUE_REQUIRED, 'Dump one event');
@@ -42,16 +42,16 @@ class PivotCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
 
         $all = (bool)$input->getOption('all');
-        $parse = (bool)$input->getOption('parse');
+        $this->parse = (bool)$input->getOption('parse');
         $this->purge = (bool)$input->getOption('purge');
         $codeCgt = (string)$input->getOption('codeCgt');
 
         if ($codeCgt) {
             $pivotRepository = new PivotRepository();
             try {
-                $event = $pivotRepository->loadOneEvent($codeCgt, $parse, $this->purge);
+                $event = $pivotRepository->loadOneEvent($codeCgt, $this->parse, $this->purge);
                 if ($event instanceof Event) {
-                    $this->displayOffer($event);
+                    $this->displayOffers([$event]);
                 } else {
                     $this->io->write($event);
                 }
@@ -65,17 +65,17 @@ class PivotCommand extends Command
         }
 
         if ($all) {
-            $this->allEvents();
+            $this->allData();
+
+            return Command::SUCCESS;
         }
 
-        if ($parse) {
-            $this->parseEvents();
-        }
+        $this->io->section("Usage: php console pivot:query --purge --parse --all --codeCgt EVT-A0-00PI-0TLH");
 
         return Command::SUCCESS;
     }
 
-    private function parseEvents(): void
+    private function allData(): void
     {
         if ($this->purge) {
             Cache::delete('pivot_json_file');
@@ -83,72 +83,44 @@ class PivotCommand extends Command
         $jsonContent = Cache::get('pivot_json_file', function () {
             $pivotApi = new PivotApi();
             $response = $pivotApi->query(ContentEnum::LVL3->value);
-            $jsonContent = $response->getContent();
 
-            return $jsonContent;
+            return $response->getContent();
         });
 
+        if (!$this->parse) {
+            echo $jsonContent;
+
+            return;
+        }
+        $this->parseEvents($jsonContent);
+    }
+
+    private function parseEvents(string $jsonContent): void
+    {
         $parser = new EventParser();
-        $events = $parser->parseJsonFile($jsonContent);
-
-        $this->io->writeln("Found ".count($events)." events with idTypeOffre = 9");
-
-        if (!empty($events)) {
-            $firstEvent = $events[0];
-            $this->io->title("First event:");
-            $this->io->writeln("Code: ".$firstEvent->codeCgt);
-            $this->io->writeln("Name: ".$firstEvent->nom);
-            $this->io->writeln("Type: ".$firstEvent->typeOffre->idTypeOffre);
-            $this->io->writeln("Location: ".$firstEvent->adresse1?->rue." ".$firstEvent->adresse1?->numero);
-            foreach ($firstEvent->spec as $spec) {
-                if ($spec->urn === UrnEnum::DATE_OBJECT->value) {
-                    $this->io->writeln("Spec: ".$spec->value);
-                    foreach ($spec->spec as $childSpec) {
-                        $this->io->writeln($childSpec['value']);
-                    }
-                }
-            }
-            foreach ($firstEvent->dates as $date) {
-                $this->io->writeln("Date: ".$date->dateBegin->format('Y-m-d'));
-            }
-            dd($firstEvent->relOffre);
-            $this->io->writeln('');
-        }
-    }
-
-    private function allEvents(): void
-    {
-        $pivotRepository = new PivotRepository();
         try {
-            $data = $pivotRepository->queryContent(ContentEnum::LVL3->value);
-        } catch (\Exception $e) {
-            dd($e->getMessage());
+            $events = $parser->parseJsonFile($jsonContent);
+        } catch (\JsonException|\Throwable$e) {
+            $this->io->error($e->getMessage());
+
+            return;
         }
 
-        $events = [];
-        foreach ($data->offre as $offre) {
-            if (str_contains($offre->codeCgt, "EVT-")) {
-                // $this->io->writeln($offre->codeCgt);
-                $events[] = $offre;
-                if (count($events) > 4) {
-                    break;
-                }
-            }
-        }
-
-        echo json_encode($events);
+        $this->displayOffers($events);
     }
 
-    private function displayOffer(Event $offre): void
+    private function displayOffers(array $offres): void
     {
-        $this->io->section($offre->nom);
-        $rows = [[$offre->nom, $offre->codeCgt,  $offre->dateModification]];
-
+        $this->io->section("Liste des évènements. ".count($offres));
+        $rows = [];
         $table = new Table($this->output);
+        foreach ($offres as $offer) {
+            $item = [$offer->nom, $offer->codeCgt, $offer->dateModification];
+            $rows[] = $item;
+        }
         $table
             ->setHeaders(['Nom', 'CodeCgt', 'Modifié le'])
-            ->setRows($rows);
-        $table->render();
-
+            ->setRows($rows)
+            ->render();
     }
 }
