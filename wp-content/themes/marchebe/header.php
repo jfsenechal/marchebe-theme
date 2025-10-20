@@ -9,7 +9,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-$twig = Twig::loadTwig();
 ?>
     <!DOCTYPE html>
     <html lang="fr">

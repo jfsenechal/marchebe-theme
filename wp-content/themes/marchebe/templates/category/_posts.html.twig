@@ -8,10 +8,10 @@
                 <div
                         class="group bg-white p-8 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-in-out animated-element">
                     <h3 class="text-lg md:text-xl font-bold">
-                        <a href="#" x-text="post.post_title"></a>
+                        <a :href="post.url" x-text="post.post_title"></a>
                     </h3>
                     <p class="mt-2  line-clamp-3" x-text="post.post_excerpt" x-show="post.post_excerpt"></p>
-                    <a href="#"
+                    <a :href="post.url"
                        class="inline-block font-semibold text-primary mt-6 group-hover:underline group-hover:text-citoyen">
                         En savoir plus →
                     </a>
