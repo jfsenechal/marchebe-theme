@@ -9,61 +9,87 @@ use AcMarche\Theme\Lib\Pivot\Helper\DateHelper;
 
 trait DatesParserTrait
 {
+    /**
+     *
+     * @param Event $event
+     * @return void
+     */
     public function parseDates(Event $event): void
     {
+        //$this->parseDatesValidation($event);
         $today = new \DateTime();
         $allDates = [];
-        foreach ($event->spec as $spec) {
+        $spec = $this->findByUrn($event, UrnEnum::DATE_OBJECT->value, returnValue: false);
+        if ($spec) {
             $dateEvent = new EventDate();
-            foreach ($spec->spec as $specData) {
-                $this->parseDatesValidation($event);
-                if ($data = $this->getData($specData, UrnEnum::DATE_DEB->value)) {
-                    $dateBegin = DateHelper::convertStringToDateTime($data);
+            foreach ($spec->spec as $row) {
+                if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
+                    $dateEvent->dateBegin = DateHelper::convertStringToDateTime($data);
+                    /**
+                     * Exception for event on all the year
+                     * like st loup or marche public
+                     */
+                    $dateEvent->dateRealBegin = $dateEvent->dateBegin;
+                    if ($dateEvent->dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
+                        $dateEvent->dateBegin = $today;
+                    }
+                }
+                if ($data = $this->getData($row, UrnEnum::DATE_END)) {
+                    $dateEvent->dateEnd = DateHelper::convertStringToDateTime($data);
+                }
+                if ($data = $this->getData($row, UrnEnum::DATE_OUVERTURE_HEURE_1)) {
+                    $dateEvent->ouvertureHeure1 = $data;
+                }
+                if ($data = $this->getData($row, UrnEnum::DATE_FERMETURE_HEURE_1)) {
+                    $dateEvent->fermetureHeure1 = $data;
+                }
+                if ($data = $this->getData($row, UrnEnum::DATE_OUVERTURE_HEURE_2)) {
+                    $dateEvent->ouvertureHeure2 = $data;
+                }
+                if ($data = $this->getData($row, UrnEnum::DATE_FERMETURE_HEURE_2)) {
+                    $dateEvent->fermetureHeure2 = $data;
+                }
+                if ($data = $this->getData($row, UrnEnum::DATE_DETAIL_OUVERTURE)) {
+                    $dateEvent->ouvertureDetails = $data;
+                }
+                if ($data = $this->getData($row, UrnEnum::DATE_RANGE)) {
+                    $dateEvent->dateRange = $data;
+                }
+            }
+            $allDates[] = $dateEvent;
+        }
+
+
+        /*
+        $dateBegin = DateHelper::convertStringToDateTime($data);
                     $dateEvent->dateRealBegin = $dateBegin;
                     if ($dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
                         $dateEvent->dateBegin = $today;//st loup
                     } else {
                         $dateEvent->dateBegin = $dateBegin;
                     }
-                }
-                if ($data = $this->getData($specData, UrnEnum::DATE_END->value)) {
-                    $dateEvent->dateEnd = DateHelper::convertStringToDateTime($data);
-                }
-                if ($data = $this->getData($specData, UrnEnum::DATE_OUVERTURE_HEURE_1->value)) {
-                    $dateEvent->ouvertureHeure1 = $data;
-                }
-                if ($data = $this->getData($specData, UrnEnum::DATE_FERMETURE_HEURE_1->value)) {
-                    $dateEvent->fermetureHeure1 = $data;
-                }
-                if ($data = $this->getData($specData, UrnEnum::DATE_OUVERTURE_HEURE_2->value)) {
-                    $dateEvent->ouvertureHeure2 = $data;
-                }
-                if ($data = $this->getData($specData, UrnEnum::DATE_FERMETURE_HEURE_2->value)) {
-                    $dateEvent->fermetureHeure2 = $data;
-                }
-                if ($data = $this->getData($specData, UrnEnum::DATE_DETAIL_OUVERTURE->value)) {
-                    $dateEvent->ouvertureDetails =  $data;
-                }
-                if ($data = $this->getData($specData, UrnEnum::DATE_RANGE->value)) {
-                    $dateEvent->dateRange = $data;
-                }
-            }
-            if ($dateEvent->dateEnd && $dateEvent->dateEnd->format('Y-m-d') >= $today->format('Y-m-d')) {
-                //dump($dateEvent->dateEnd->format('Y-m-d'));
-                $allDates[] = $dateEvent;
-            }
-        }
+
+         if ($dateEvent->dateEnd && $dateEvent->dateEnd->format('Y-m-d') >= $today->format('Y-m-d')) {
+                 //dump($dateEvent->dateEnd->format('Y-m-d'));
+                 $allDates[] = $dateEvent;
+             }*/
+
 
         $event->dates = $allDates;
     }
 
+    /**
+     * IN content detail level 4 don't have this data
+     * @param Event $offre
+     * @return void
+     */
     public function parseDatesValidation(Event $offre): void
     {
-        $value = $this->findByUrn($offre, UrnEnum::DATE_DEB_VALID->value, returnValue: true);
+        $value = $this->findByUrn($offre, UrnEnum::DATE_DEB_VALID->value);
         if ($value) {
             $offre->dateDebValid = DateHelper::convertStringToDateTime($value);
         }
-        $value = $this->findByUrn($offre, UrnEnum::DATE_FIN_VALID->value, returnValue: true);
+        $value = $this->findByUrn($offre, UrnEnum::DATE_FIN_VALID->value);
         if ($value) {
             $offre->dateFinValid = DateHelper::convertStringToDateTime($value);
         }
@@ -72,13 +98,13 @@ trait DatesParserTrait
     /**
      * Bug server www
      * @param array $data
-     * @param string $urn
+     * @param UrnEnum $urn
      * @return string|null
      */
-    private function getData(array $data, string $urn): ?string
+    private function getData(array $data, UrnEnum $urn): ?string
     {
-        if ($data['urn'] === $urn) {
-            return $data['value'];
+        if ($data['urn'] === $urn->value) {
+            return $data['value'] ?? null;
         }
 
         return null;

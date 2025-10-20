@@ -6,16 +6,17 @@
                 {% include '@AcMarche/article/_title.html.twig' %}
                 <div class="prose max-w-none prose-lg prose-slate prose-a:text-blue-600 hover:prose-a:text-blue-800">
                     {% if event.description %}
-                        <p class="fade-in-up text-xl leading-relaxed text-slate-600">
-                            {{ event.description }}
-                        </p>
+                        <div class="fade-in-up text-xl leading-relaxed text-slate-600">
+                            {{ event.description|raw }}
+                        </div>
                     {% endif %}
 
                     <div class="fade-in-up">
                         <p class="text-4xl text-red-500 font-bold text-center">To do details agenda</p>
                         {% include '@AcMarche/agenda/_dates.html.twig' %}
+                        {% include '@AcMarche/agenda/_communication.html.twig' %}
                         <ul class="flex flex-wrap gap-2">
-                            {% for tag in event.tagsFormatted %}
+                            {% for tag in event.tags %}
                                 <li
                                         class="text-sm mx-2 whitespace-nowrap flex items-center border border-caractere text-caractere transition-all duration-500 ease-in-out hover:bg-cta-light hover:text-white">
                                     <a href="#" class="px-2 py-2 ">{{ tag.name }}</a>

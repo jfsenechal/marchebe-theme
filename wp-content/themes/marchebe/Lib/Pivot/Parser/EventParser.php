@@ -2,8 +2,8 @@
 
 namespace AcMarche\Theme\Lib\Pivot\Parser;
 
-
 use AcMarche\Theme\Lib\Pivot\Entity\Adresse;
+use AcMarche\Theme\Lib\Pivot\Entity\Communication;
 use AcMarche\Theme\Lib\Pivot\Entity\Event;
 use AcMarche\Theme\Lib\Pivot\Entity\RelOffre;
 use AcMarche\Theme\Lib\Pivot\Entity\Spec;
@@ -19,11 +19,10 @@ class EventParser
 
     /**
      * @param string $jsonContent
-     * @param int $maxIems
      * @return array<Event>
      * @throws \JsonException|\Throwable
      */
-    public function parseJsonFile(string $jsonContent, int $maxIems = 5): array
+    public function parseJsonFile(string $jsonContent): array
     {
         try {
             $data = json_decode($jsonContent, true, flags: JSON_THROW_ON_ERROR);
@@ -36,14 +35,9 @@ class EventParser
         }
 
         $events = [];
-        $i = 0;
         foreach ($data['offre'] as $item) {
             if (isset($item['typeOffre']['idTypeOffre']) && $item['typeOffre']['idTypeOffre'] === TypeEnum::Event->value) {
                 $events[] = $this->parseEvent($item);
-                $i++;
-                if ($i > $maxIems) {
-                    break;
-                }
             }
         }
 
@@ -72,9 +66,9 @@ class EventParser
             $this->parseDates($event);
         }
 
+        $this->parseDescription($event);
         $this->parseImages($event);
         $this->parseCommunication($event);
-        $this->parseDescription($event);
 
         return $event;
     }
@@ -154,16 +148,38 @@ class EventParser
         );
     }
 
+    /**
+     * urn:cat:descmarket
+     * @param Event $event
+     * @return void
+     */
     private function parseDescription(Event $event): void
     {
         $event->description = $this->findByUrn($event, UrnEnum::DESCRIPTION->value);
     }
 
+    /**
+     * urn:cat:moycom
+     * @param Event $event
+     * @return void
+     */
     private function parseCommunication(Event $event): void
     {
-        $event->facebook = $this->findByUrn($event, UrnEnum::FACEBOOK->value);
-        $event->mail1 = $this->findByUrn($event, UrnEnum::MAIL1->value);
-        $event->website = $this->findByUrn($event, UrnEnum::WEB->value);
+        $communication = new Communication();
+        $communication->facebook = $this->findByUrn($event, UrnEnum::FACEBOOK->value);
+        $communication->mail1 = $this->findByUrn($event, UrnEnum::MAIL1->value);
+        $communication->mail2 = $this->findByUrn($event, UrnEnum::MAIL2->value);
+        $communication->phone1 = $this->findByUrn($event, UrnEnum::PHONE1->value);
+        $communication->phone2 = $this->findByUrn($event, UrnEnum::PHONE2->value);
+        $communication->mobile1 = $this->findByUrn($event, UrnEnum::MOBI1->value);
+        $communication->mobile2 = $this->findByUrn($event, UrnEnum::MOBI2->value);
+        $communication->website = $this->findByUrn($event, UrnEnum::WEB->value);
+        $communication->pinterest = $this->findByUrn($event, UrnEnum::PINTEREST->value);
+        $communication->youtube = $this->findByUrn($event, UrnEnum::YOUTUBE->value);
+        $communication->flickr = $this->findByUrn($event, UrnEnum::FLICKR->value);
+        $communication->instagram = $this->findByUrn($event, UrnEnum::INSTAGRAM->value);
+
+        $event->communication = $communication;
     }
 
     private function parseRelOffre(array $data): RelOffre
@@ -179,11 +195,15 @@ class EventParser
         return $relOffre;
     }
 
-    public function findByUrn(Event $event, string $urnName, bool $returnValue = false): mixed
+    public function findByUrn(Event $event, string $urnName, bool $returnValue = true): Spec|string|null
     {
         foreach ($event->spec as $specification) {
             if ($specification->urn === $urnName) {
-                return $specification->value;
+                if ($returnValue) {
+                    return $specification->value;
+                }
+
+                return $specification;
             }
         }
 

@@ -2,8 +2,8 @@
     Dates
 </h3>
 <div class="flex flex-col gap-2 mb-2">
-    {% for dateEvent in event.datesEvent %}
-        <span class="font-montserrat-semi-bold text-cta-dark">
+    {% for dateEvent in event.dates %}
+        <div class="font-montserrat-semi-bold text-cta-dark">
 
             {% if dateEvent.dateBegin %}
                 {{ dateEvent.dateBegin.date|format_date('full') }}
@@ -17,33 +17,34 @@
                 au {{ dateEvent.dateEnd.date|format_date('full') }}
             {% endif %}
 
-          <br>
+            <div class="flex flex-col gap-1 my-4">
 
-            {% if dateEvent.dateRange %}
-                {{ dateEvent.dateRange }}
-            {% endif %}
+                {% if dateEvent.dateRange %}
+                    <span>{{ dateEvent.dateRange }}</span>
+                {% endif %}
 
-            {% if dateEvent.ouvertureHeure1 %}
-                {{ dateEvent.ouvertureHeure1 }}
-            {% endif %}
+                {% if dateEvent.ouvertureHeure1 %}
+                    <span>{{ dateEvent.ouvertureHeure1 }}</span>
+                {% endif %}
 
-            {% if dateEvent.fermetureHeure1 %}
-                {{ dateEvent.fermetureHeure1 }}
-            {% endif %}
+                {% if dateEvent.fermetureHeure1 %}
+                    <span>{{ dateEvent.fermetureHeure1 }}</span>
+                {% endif %}
 
-            {% if dateEvent.ouvertureHeure2 %}
-                {{ dateEvent.ouvertureHeure2 }}
-            {% endif %}
+                {% if dateEvent.ouvertureHeure2 %}
+                    <span>{{ dateEvent.ouvertureHeure2 }}</span>
+                {% endif %}
 
-            {% if dateEvent.fermetureHeure2 %}
-                {{ dateEvent.fermetureHeure2 }}
-            {% endif %}
+                {% if dateEvent.fermetureHeure2 %}
+                    <span>{{ dateEvent.fermetureHeure2 }}</span>
+                {% endif %}
 
-            {% if dateEvent.ouvertureDetails %}
-                {{ dateEvent.ouvertureDetails|raw }}
-            {% endif %}
+                {% if dateEvent.ouvertureDetails %}
+                    <span>{{ dateEvent.ouvertureDetails|raw }}</span>
+                {% endif %}
 
+            </div>
 
-    </span>
+        </div>
     {% endfor %}
 </div>

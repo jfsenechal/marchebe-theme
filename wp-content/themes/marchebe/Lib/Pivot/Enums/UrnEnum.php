@@ -22,6 +22,15 @@ enum UrnEnum: string
     case URL = "urn:fld:url";
     case WEB = "urn:fld:urlweb";
     case FACEBOOK = "urn:fld:urlfacebook";
+    case INSTAGRAM = "urn:fld:urlinstagram";
+    case TWITTER = "urn:fld:urltwitter";
+    case YOUTUBE = "urn:fld:urlyoutub";
+    case FLICKR = "urn:fld:urlflickr";
+    case PINTEREST = "urn:fld:urlpinterest";
     case MAIL1 = "urn:fld:mail1";
+    case MAIL2 = "urn:fld:mail2";
+    case PHONE1 = "urn:fld:phone1";
+    case PHONE2 = "urn:fld:phone2";
     case MOBI1 = "urn:fld:mobi1";
+    case MOBI2 = "urn:fld:mobi2";
 }

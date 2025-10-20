@@ -25,9 +25,7 @@ class Event
     public array $documents = [];
     public array $tags = [];
     public ?string $description = null;
-    public ?string $facebook = null;
-    public ?string $mail1 = null;
-    public ?string $website = null;
+    public ?Communication $communication = null;
 
     public function __construct(
         public string $codeCgt,

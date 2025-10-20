@@ -77,12 +77,13 @@ class PivotCommand extends Command
 
     private function allData(): void
     {
+        $cacheKey = Cache::generateKey('pivot_json_file');
         if ($this->purge) {
-            Cache::delete('pivot_json_file');
+            Cache::delete($cacheKey);
         }
-        $jsonContent = Cache::get('pivot_json_file', function () {
+        $jsonContent = Cache::get($cacheKey, function () {
             $pivotApi = new PivotApi();
-            $response = $pivotApi->query(ContentEnum::LVL3->value);
+            $response = $pivotApi->query(ContentEnum::LVL4->value);
 
             return $response->getContent();
         });
