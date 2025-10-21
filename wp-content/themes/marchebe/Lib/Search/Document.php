@@ -16,7 +16,7 @@ class Document
     public string $type;
     public int $count = 0;
     public array $ids = [];
-    public array $path = [];
+    public array $paths = [];
 
     public static function documentFromPost(\WP_Post $post, int $siteId): Document
     {
@@ -36,7 +36,7 @@ class Document
         $document->excerpt = Cleaner::cleandata($post->post_excerpt);
         $document->content = Cleaner::cleandata($content);
         $document->tags = $categories;
-        $document->path = $wpRepository->getAncestorsOfPost($post->ID);
+        $document->paths = $wpRepository->getAncestorsOfPost($post->ID);
         $document->date = $date;
         $document->type = 'article';
         $document->url = get_permalink($post->ID);
@@ -58,7 +58,7 @@ class Document
         $document->excerpt = $description;
         $document->content = $content;
         $document->tags = $tags;
-        $document->path = $wpRepository->getAncestorsOfCategory($category->cat_ID);
+        $document->paths = $wpRepository->getAncestorsOfCategory($category->cat_ID);
         $document->date = date('Y-m-d');
         $document->type = 'catégorie';
         $document->url = get_category_link($category->cat_ID);

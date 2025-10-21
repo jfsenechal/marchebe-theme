@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use AcMarche\Theme\Command\FixCommand;
 use AcMarche\Theme\Command\MeiliCommand;
 use AcMarche\Theme\Command\PivotCommand;
 use Symfony\Component\Console\Application;
@@ -22,5 +23,6 @@ $application = new Application();
 
 $application->add(new PivotCommand());
 $application->add(new MeiliCommand());
+$application->add(new FixCommand());
 
 $application->run();

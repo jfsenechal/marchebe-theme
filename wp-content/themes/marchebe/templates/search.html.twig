@@ -46,9 +46,9 @@
                                         {{ tag }}
                                     </span>
                                 {% endfor %}
-                                {% for path in result.path %}
+                                {% for path in result.paths %}
                                     <span class="text-sm text-gray-500">
-                                      tt  {{ path|json_encode }}
+                                       {{ path.name }} >
                                     </span>
                                 {% endfor %}
                             </a>

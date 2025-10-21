@@ -193,7 +193,7 @@ class WpRepository
                 $data[$idSite]['blogid'] = $idSite;
                 $data[$idSite]['colorhover'] = 'hover:text-'.$site;
                 $data[$idSite]['color'] = 'text-'.$site;
-                $data[$idSite]['items'] = $this->getItems($idSite, $site);
+                $data[$idSite]['items'] = $this->getItems( $site);
             }
             switch_to_blog($blog);
 
@@ -202,7 +202,7 @@ class WpRepository
         );
     }
 
-    public function getItems(int $idSite, string $site = null): array
+    public function getItems(string $site = null): array
     {
         $menu = wp_get_nav_menu_object(self::MENU_NAME);
 
@@ -227,8 +227,6 @@ class WpRepository
                     continue;
                 }
                 $row->slug = $post->post_name;
-                $row->typejfs = 'article';
-                $row->parents = $this->getAncestorsOfPost((int)$row->object_id);
             }
             if ($row->object === 'page') {
                 $page = get_post($row->object_id);
@@ -236,21 +234,15 @@ class WpRepository
                     continue;
                 }
                 $row->slug = $page->post_name;
-                $row->typejfs = 'article';
-                $row->parents = [];
             }
             if ($row->object === 'category') {
                 $category = get_category($row->object_id);
                 if ($category) {
                     $row->slug = $category->slug;
-                    $row->typejfs = 'category';
-                    $row->parents = $this->getAncestorsOfCategory((int)$row->object_id);
                 }
             }
             if ($row->object === 'custom') {
                 $row->slug = $row->post_name;
-                $row->typejfs = 'custom';
-                $row->parents = [];
             }
         }
 
@@ -272,6 +264,10 @@ class WpRepository
         return $data;
     }
 
+    /**
+     * @param int $categoryId
+     * @return array<int,\WP_Term>
+     */
     public function getAncestorsOfCategory(int $categoryId): array
     {
         $ancestors = get_ancestors($categoryId, 'category');
@@ -286,12 +282,17 @@ class WpRepository
         return $parents;
     }
 
+    /**
+     * @param int $postId
+     * @return array<int,\WP_Term>
+     */
     public function getAncestorsOfPost(int $postId): array
     {
         $categories = get_the_category($postId);
         if (count($categories) > 0) {
-            $ancestors = $this->getAncestorsOfCategory($categories[0]->term_id);
-            $ancestors[] = $categories[0]->slug;
+            $firstCategory = $categories[0];
+            $ancestors = $this->getAncestorsOfCategory($firstCategory->term_id);
+            $ancestors[] = $firstCategory;
 
             return $ancestors;
         }
