@@ -10,6 +10,7 @@ use Twig\Extension\DebugExtension;
 use Twig\Extra\Intl\IntlExtension;
 use Twig\Extra\String\StringExtension;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 class Twig
 {
@@ -46,6 +47,7 @@ class Twig
         locale_set_default('fr-FR');//for format date
         $twig->addGlobal('locale', 'fr');
         $twig->addGlobal('WP_DEBUG', WP_DEBUG);
+        $twig->addFunction(self::currentUrl());
         $twig->addExtension(new StringExtension());
         $twig->addExtension(new IntlExtension());
         $twig->addGlobal('template_directory', get_template_directory_uri());
@@ -79,9 +81,36 @@ class Twig
         }
     }
 
+    /**
+     * For sharing pages
+     * @return TwigFunction
+     */
+    private static function currentUrl(): TwigFunction
+    {
+        global $wp;
+
+        $url = home_url($wp->request);
+
+        return new TwigFunction(
+            'currentUrl',
+            function () use ($url): string {
+                return $url;
+            }
+        );
+    }
+
     private static function getPathCache(string $folder): string
     {
         return ABSPATH.'var/cache/'.$folder;
+    }
+
+    public static function rendPage(string $path, array $params = []): void
+    {
+        try {
+            echo self::loadTwig()->render($path, $params);
+        } catch (LoaderError|RuntimeError|SyntaxError $e) {
+            echo $e->getMessage();
+        }
     }
 
 }

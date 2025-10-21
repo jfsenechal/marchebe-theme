@@ -17,7 +17,7 @@ get_header();
 $twig = Twig::loadTwig();
 $category = get_category(11);
 $wpRepository = new WpRepository();
-$news = $wpRepository->getAllNews();
+$news = $wpRepository->getNews();
 $thumbnail = "https://picsum.photos/2070";
 $paths = [];
 

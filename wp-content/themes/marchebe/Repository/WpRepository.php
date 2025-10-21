@@ -17,7 +17,7 @@ class WpRepository
      *
      * @return WP_Post[]
      */
-    public static function getAllNews(int $max = 50): array
+    public static function getNews(int $max = 50): array
     {
         $news = array();
 

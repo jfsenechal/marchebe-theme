@@ -14,15 +14,14 @@ use Twig\Error\SyntaxError;
     <html lang="fr">
     <head>
         <?php
-        //Twig::rendPage('footer/_analytics.html.twig');
+        //Twig::rendPage('@AcMarche/header/header/_analytics.html.twig');
         ?>
         <meta charset="<?php bloginfo('charset'); ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Nucleïd">
-        <meta name="author" content="Cst">
-        <title>Homepage</title>
+        <meta name="author" content="Epn">
+        <meta name="author" content="Esquare">
         <?php
-        //Twig::rendPage('header/_favicons.html.twig');
+        Twig::rendPage('@AcMarche/header/_favicons.html.twig');
         wp_head();
         ?>
     </head>
