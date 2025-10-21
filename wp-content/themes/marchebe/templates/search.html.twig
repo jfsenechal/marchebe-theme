@@ -40,17 +40,23 @@
                             <a href="{{ result.url }}"
                                class="group block w-full">
                                 <p class="font-semibold text-cta-dark group-hover:text-citoyen transition-colors">
-                                    {{ result.name }}</p>
-                                {% for tag in result.tags %}
-                                    <span class="text-sm text-gray-500">
+                                    {{ result.name }}
+                                </p>
+                                <div class="flex flex-col gap-2">
+                                    {% for tag in result.tags %}
+                                        <span class="text-sm text-gray-500">
                                         {{ tag }}
                                     </span>
-                                {% endfor %}
-                                {% for path in result.paths %}
-                                    <span class="text-sm text-gray-500">
+                                    {% endfor %}
+                                </div>
+
+                                <div class="flex flex-col gap-2">
+                                    {% for path in result.paths %}
+                                        <span class="text-sm text-gray-500">
                                        {{ path.name }} >
                                     </span>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </a>
                             <svg class="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor">
