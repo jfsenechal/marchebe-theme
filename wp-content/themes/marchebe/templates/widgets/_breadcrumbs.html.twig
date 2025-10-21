@@ -7,7 +7,7 @@
         <li><span class="select-none">/</span></li>
         {% for item in paths %}
             <li class="space-x-2">
-                <a href="#" class="hover:text-blue-600 hover:underline">
+                <a href="{{ item.url }}" class="hover:text-blue-600 hover:underline">
                     {{ item.name }}
                 </a>
                 <span class="select-none">/</span>

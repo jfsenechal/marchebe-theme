@@ -10,6 +10,9 @@ class Assets
         add_action('wp_enqueue_scripts', [$this, 'theme_slug_enqueue_styles']);
         add_action('wp_enqueue_scripts', [$this, 'theme_slug_enqueue_scripts']);
         add_filter('script_loader_tag', [$this, 'add_defer_attribute'], 10, 2);
+        // Fix WordPress core asset URLs in multisite subdirectory setup
+        add_filter('style_loader_src', [$this, 'fix_multisite_urls'], 10, 1);
+        add_filter('script_loader_src', [$this, 'fix_multisite_urls'], 10, 1);
     }
 
     function theme_slug_enqueue_styles()
@@ -71,6 +74,28 @@ class Assets
     {
         //replace get_template_directory_uri()
         //https://marche.local/enfance-jeunesse/wp-content/themes/marchebe
-        return 'https://'.$_ENV['WP_HOME'].'/wp-content/themes/marchebe';
+        return 'https://'.$_ENV['WP_URL_HOME'].'/wp-content/themes/marchebe';
+    }
+
+    /**
+     * Fix WordPress core asset URLs in multisite subdirectory setup
+     * Removes subsite path from wp-includes and wp-content URLs
+     * Example: /culture/wp-includes/css/file.css -> /wp-includes/css/file.css
+     */
+    public function fix_multisite_urls($src): string
+    {
+        if (!is_multisite() || is_main_site()) {
+            return $src;
+        }
+
+        // Get the current blog details to extract the path
+        $current_blog = get_blog_details();
+        if ($current_blog && $current_blog->path !== '/') {
+            $subsite_path = trim($current_blog->path, '/');
+            // Remove subsite path from wp-includes and wp-content URLs
+            $src = preg_replace('#/'.$subsite_path.'/(wp-includes|wp-content)/#', '/$1/', $src);
+        }
+
+        return $src;
     }
 }
