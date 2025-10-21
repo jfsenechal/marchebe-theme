@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Lib\Search;
 
+use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Repository\WpRepository;
 
 class Document
@@ -17,6 +18,7 @@ class Document
     public int $count = 0;
     public array $ids = [];
     public array $paths = [];
+    public array $site = [];
 
     public static function documentFromPost(\WP_Post $post, int $siteId): Document
     {
@@ -28,7 +30,7 @@ class Document
 
         $content = get_the_content(null, null, $post);
         $content = apply_filters('the_content', $content);
-
+        $siteName = Theme::getTitleBlog($siteId);
         $wpRepository = new WpRepository();
         $document = new Document();
         $document->id = $post->ID."-post-".$siteId;
@@ -36,6 +38,7 @@ class Document
         $document->excerpt = Cleaner::cleandata($post->post_excerpt);
         $document->content = Cleaner::cleandata($content);
         $document->tags = $categories;
+        $document->site = ['name' => $siteName, 'id' => $siteId];
         $document->paths = $wpRepository->getAncestorsOfPost($post->ID);
         $document->date = $date;
         $document->type = 'article';
@@ -53,11 +56,13 @@ class Document
     ): Document {
         $wpRepository = new WpRepository();
         $document = new Document();
+        $siteName = Theme::getTitleBlog($siteId);
         $document->id = $category->cat_ID."-category-".$siteId;
         $document->name = Cleaner::cleandata($category->name);
         $document->excerpt = $description;
         $document->content = $content;
         $document->tags = $tags;
+        $document->site = ['name' => $siteName, 'id' => $siteId];
         $document->paths = $wpRepository->getAncestorsOfCategory($category->cat_ID);
         $document->date = date('Y-m-d');
         $document->type = 'catégorie';
