@@ -146,6 +146,29 @@ class WpRepository
         return $children;
     }
 
+
+    /**
+     * @return array<int,\WP_Term> Array of child categories with additional properties like URL and ID.
+     */
+    public function getRootCategories(): array
+    {
+        $children = get_categories([
+            'parent' => 0,
+            'orderby' => 'name',
+            'order' => 'ASC',
+            'hide_empty' => true,
+        ]);
+        array_map(
+            function ($category) {
+                $category->url = get_category_link($category->term_id);
+                $category->id = $category->term_id;
+            },
+            $children
+        );
+
+        return $children;
+    }
+
     public function getMenu(bool $purgeCache = false): array
     {
         $cacheKey = Cache::generateKey('menu-top');
