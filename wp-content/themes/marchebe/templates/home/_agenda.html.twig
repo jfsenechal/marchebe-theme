@@ -3,7 +3,7 @@
     <div class="space-y-6">
         {% for event in events %}
             <a
-                    href="/agenda/{{ event.codeCgt }}"
+                    href="/agenda-des-manifestations//{{ event.codeCgt }}"
                     class="{% if loop.index > 2 %}hidden md:flex{% endif %} bg-white rounded-lg shadow-md overflow-hidden flex hover:shadow-lg transition-shadow"
             >
                 <div
@@ -18,7 +18,7 @@
             </a>
         {% endfor %}
     </div>
-    <a href="/agenda"
+    <a href="/agenda-des-manifestations/"
        class="inline-block mt-8 bg-cta-dark text-white font-semibold py-2 px-5 rounded-lg hover:bg-cta-light transition-colors">
         Tout l'agenda
     </a>
