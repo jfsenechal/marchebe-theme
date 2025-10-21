@@ -5,7 +5,11 @@
     activeMobileDrawerId: null,
     isDesktopMenuOpen: false,
     activeDesktopCategory: null,
-    isModalOpen: false,
+    isSearchModalOpen: false,
+    searchQuery: '',
+    results: [],
+    isLoading: false,
+    error: '',
     // Computed
     get activeMobileCategoryData() {
         if (!this.activeMobileDrawerId || !this.menuData) return null;
@@ -35,6 +39,17 @@
 
     selectDesktopCategory(category) {
         this.activeDesktopCategory = category;
+    },
+
+    openSearchModal() {
+      this.isSearchModalOpen = true;
+      },
+
+    closeSearchModal() {
+        this.isSearchModalOpen = false;
+        this.searchQuery = '';
+        this.results = [];
+        this.error = '';
     },
 
     closeOnClickOutside(event) {
@@ -80,6 +95,7 @@
             </div>
         </div>
         <!-- Search modal-->
+        {% include '@AcMarche/search/_modal.html.twig' %}
     </header>
     <!-- Desktop Menu Panel -->
     {% include '@AcMarche/navigation/_desktop_menu.html.twig' %}

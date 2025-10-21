@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use AcMarche\Theme\Command\MeiliCommand;
 use AcMarche\Theme\Command\PivotCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
@@ -13,5 +14,6 @@ $dotenv->load(__DIR__.'/.env');
 $application = new Application();
 
 $application->add(new PivotCommand());
+$application->add(new MeiliCommand());
 
 $application->run();

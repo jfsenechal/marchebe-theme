@@ -59,6 +59,10 @@ img, video, iframe {
     grid-template-rows: auto 1fr auto;
 }
 
+[x-cloak] {
+  display: none !important;
+}
+
 /** animation **/
 
 /* Hero image subtle zoom animation */
