@@ -11,7 +11,7 @@ trait MeiliTrait
     public string $indexName;
     public string $masterKey;
     public ?Indexes $index = null;
-    public string $primaryKey = 'idSearch';
+    public string $primaryKey = 'id';
     private array $filterableAttributes = [];
     private array $sortableAttributes = [];
 

@@ -3,7 +3,7 @@
     <div class="relative z-20 -mt-16 md:-mt-24">
         <article class="w-full md:max-w-6xl mx-auto bg-white rounded-xl shadow-2xl p-2 sm:p-10 md:p-12">
             {% include '@AcMarche/article/_title.html.twig' %}
-            <form action="/search" method="GET" role="search">
+            <form action="/?s=" method="GET" role="search">
                 <label for="hero-search" class="sr-only">Rechercher sur le site</label>
                 <div class="relative">
                     <!-- Search Icon (decorative) -->
@@ -41,7 +41,16 @@
                                class="group block w-full">
                                 <p class="font-semibold text-cta-dark group-hover:text-citoyen transition-colors">
                                     {{ result.name }}</p>
-                                <p class="text-sm text-gray-500">{{ result.type }}</p>
+                                {% for tag in result.tags %}
+                                    <span class="text-sm text-gray-500">
+                                        {{ tag }}
+                                    </span>
+                                {% endfor %}
+                                {% for path in result.path %}
+                                    <span class="text-sm text-gray-500">
+                                      tt  {{ path|json_encode }}
+                                    </span>
+                                {% endfor %}
                             </a>
                             <svg class="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none"
                                  viewBox="0 0 24 24" stroke="currentColor">

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Lib;
 
+use AcMarche\Theme\Inc\Assets;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -50,7 +51,7 @@ class Twig
         $twig->addFunction(self::currentUrl());
         $twig->addExtension(new StringExtension());
         $twig->addExtension(new IntlExtension());
-        $twig->addGlobal('template_directory', get_template_directory_uri());
+        $twig->addGlobal('template_directory', Assets::getThemeUri());
 
         return $twig;
     }

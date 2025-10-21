@@ -10,7 +10,6 @@ use WP_Query;
 class WpRepository
 {
     const MENU_NAME = 'top-menu';
-    const MENU_CACHE_NAME = 'menu_all3';
 
     /**
      * @param int $max
