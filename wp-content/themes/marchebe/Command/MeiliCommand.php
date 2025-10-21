@@ -5,7 +5,6 @@ namespace AcMarche\Theme\Command;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Search\DataForSearch;
 use AcMarche\Theme\Lib\Search\MeiliServer;
-use AcMarche\Theme\Lib\Search\MeiliTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -47,7 +46,7 @@ class MeiliCommand extends Command
         $dump = (bool)$input->getOption('dump');
 
         $this->meiliServer = new MeiliServer();
-        $this->initClientAndIndex();
+        $this->meiliServer->initClientAndIndex();
 
         if ($key) {
             dump($this->meiliServer->createApiKey());
@@ -99,7 +98,7 @@ class MeiliCommand extends Command
             }
         }
 
-        $this->index->addDocuments($documents, $this->primaryKey);
+        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
     }
 
     private function indexCategories(): void
@@ -113,7 +112,7 @@ class MeiliCommand extends Command
                 $documents[] = $documentElastic;
             }
         }
-        $this->index->addDocuments($documents, $this->primaryKey);
+        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
     }
 
     private function indexBottin()
