@@ -12,7 +12,7 @@ $dotenv = new Dotenv();
 $dotenv->load(__DIR__.'/.env');
 
 // Set up server variables for WordPress multisite CLI context
-$_SERVER['HTTP_HOST'] = $_ENV['WP_HOME'];
+$_SERVER['HTTP_HOST'] = $_ENV['WP_URL_HOME'];
 
 // Bootstrap WordPress to make WordPress functions available
 define('WP_USE_THEMES', false);
