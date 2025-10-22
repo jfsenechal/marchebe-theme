@@ -24,6 +24,7 @@ $catSlug = get_query_var('category_name');
 $currentCategory = get_category_by_slug($catSlug);
 $tags = [];
 $tags[] = ['name' => 'Agenda', 'term_id' => 5, 'url' => '/agenda'];
+
 $content = get_the_content(null, null, $post);
 $content = apply_filters('the_content', $content);
 $content = str_replace(']]>', ']]&gt;', $content);

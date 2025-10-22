@@ -30,9 +30,7 @@ class DataForSearch
         $data = [];
 
         foreach ($posts as $post) {
-            if ($document = Document::documentFromPost($post, $siteId)) {
-                $data[] = $document;
-            }
+            $data[] = Document::documentFromPost($post, $siteId);
         }
 
         return $data;

@@ -53,4 +53,10 @@ class MeiliServer
     {
         return $this->client->createDump();
     }
+
+    public function addPost(array|\WP_Post|null $post): void
+    {
+        $document = Document::documentFromPost($post, get_current_blog_id());
+        $this->index->addDocuments([$document], $this->meiliServer->primaryKey);
+    }
 }

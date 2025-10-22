@@ -123,16 +123,23 @@ class ShortCode
         return $txt;
     }
 
-    public function enaos(): string
+    public function enaos(): ?string
     {
         $cacheKey = Cache::generateKey('enaos');
 
         return Cache::get($cacheKey, function () {
-            file_get_contents('https://api.marche.be/marchebe/necrologie/');
-        });
+            return file_get_contents('https://api.marche.be/marchebe/necrologie/');
+            $content = wp_remote_get('https://api.marche.be/marchebe/necrologie/');//timeout
+            if ($content instanceof \WP_Error) {
+                return $content->get_error_message();
+            } else {
+                return $content['body'];
+            }
+        }
+        );
     }
 
-    public function taxe():string
+    public function taxe(): string
     {
         $cacheKey = Cache::generateKey('liste_taxes');
 
