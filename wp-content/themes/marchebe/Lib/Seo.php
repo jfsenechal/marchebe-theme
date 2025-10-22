@@ -4,7 +4,7 @@
 namespace AcMarche\Theme\Lib;
 
 
-use AcMarche\Theme\Inc\RouterMarche;
+use AcMarche\Theme\Inc\RouterEvent;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Repository\BottinRepository;
@@ -50,7 +50,7 @@ class Seo
               self::metaBottinCategory($slugCategory);
           }*/
 
-        $codeCgt = get_query_var(RouterMarche::PARAM_EVENT);
+        $codeCgt = get_query_var(RouterEvent::PARAM_EVENT);
         if ($codeCgt) {
             self::metaHadesEvent($codeCgt);
         }

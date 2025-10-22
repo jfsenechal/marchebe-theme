@@ -2,46 +2,48 @@
 
 namespace AcMarche\Theme\Inc;
 
-class RouterMarche
+class RouterEvent
 {
     const PARAM_EVENT = 'codeCgt';
+    const ROUTE = 'agenda-des-manifestations/manifestations';
+    const SINGLE_EVENT = 'single_event';
 
     public function __construct()
     {
-        add_action('init', [$this, 'custom_event_rewrite_rule']);
-        add_filter('query_vars', [$this, 'custom_event_query_vars']);
-        add_filter('template_include', [$this, 'custom_event_template']);
+        add_action('init', [$this, 'add_rewrite_rule']);
+        add_filter('query_vars', [$this, 'add_query_vars']);
+        add_filter('template_include', [$this, 'add_template']);
         //Flush rewrite rules on theme activation (only once)
-        register_activation_hook(__FILE__, [$this, 'custom_event_flush_rules']);
+        register_activation_hook(__FILE__, [$this, 'flush_rules']);
     }
 
-    function custom_event_flush_rules(): void
+    function flush_rules(): void
     {
-        $this->custom_event_rewrite_rule();
+        $this->add_rewrite_rule();
         flush_rewrite_rules();
     }
 
-    function custom_event_rewrite_rule(): void
+    function add_rewrite_rule(): void
     {
         add_rewrite_rule(
-            '^agenda/([^/]+)/?$',  // URL pattern: yoursite.com/event/EVENT_CODE
+            self::ROUTE.'([a-zA-Z0-9-]+)[/]?$',
             'index.php?single_event=1&'.self::PARAM_EVENT.'=$matches[1]',  // Query vars
             'top'  // Priority
         );
     }
 
-    function custom_event_query_vars($vars)
+    function add_query_vars($vars)
     {
-        $vars[] = 'single_event';
+        $vars[] = self::SINGLE_EVENT;
         $vars[] = self::PARAM_EVENT;
 
         return $vars;
     }
 
-    function custom_event_template($template)
+    function add_template($template)
     {
         // Check if this is our custom route
-        if (get_query_var('single_event')) {
+        if (get_query_var(self::SINGLE_EVENT)) {
             $codeCgt = get_query_var(self::PARAM_EVENT);
 
             // Check if codeCgt exists

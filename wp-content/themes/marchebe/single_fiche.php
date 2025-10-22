@@ -6,23 +6,26 @@
 
 namespace AcMarche\Theme\Templates;
 
+use AcMarche\Theme\Inc\RouterBottin;
 use AcMarche\Theme\Inc\RouterEvent;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Lib\Twig;
+use AcMarche\Theme\Repository\BottinRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-$codeCgt = get_query_var(RouterEvent::PARAM_EVENT);
 
 get_header();
 
+$slug = get_query_var(RouterBottin::PARAM_CATEGORY, null);
+dd($slug);
 if (!str_contains($codeCgt, "EVT")) {
 
 }
 
-$pivotRepository = new PivotRepository();
+$bottinRepository = new BottinRepository();
 try {
     $event = $pivotRepository->loadOneEvent($codeCgt, parse: true, purgeCache: true);
 } catch (\JsonException $e) {

@@ -3,8 +3,10 @@
 namespace AcMarche\Theme;
 
 use AcMarche\Theme\Inc\Assets;
+use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Inc\Filter;
-use AcMarche\Theme\Inc\RouterMarche;
+use AcMarche\Theme\Inc\RouterBottin;
+use AcMarche\Theme\Inc\RouterEvent;
 use AcMarche\Theme\Inc\SecurityConfig;
 use AcMarche\Theme\Inc\SetupTheme;
 use AcMarche\Theme\Inc\ShortCode;
@@ -24,7 +26,9 @@ if (WP_DEBUG === false) {
 }
 new SetupTheme();
 new Assets();
-new RouterMarche();
+new RouterEvent();
+new RouterBottin();
+new BottinCategoryMetaBox();
 new SecurityConfig();
 new Seo();
 new ShortCode();
