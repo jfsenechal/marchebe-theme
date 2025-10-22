@@ -18,6 +18,7 @@ class FixCommand extends Command
 {
     private SymfonyStyle $io;
     private OutputInterface $output;
+    private array $allposts = [];
 
     protected function configure(): void
     {
@@ -29,14 +30,64 @@ class FixCommand extends Command
         $this->output = $output;
         $this->io = new SymfonyStyle($input, $output);
 
+        $this->allposts = $this->getAllPosts();
+        $postsToDelete = [];
+
+        foreach (Theme::SITES as $siteId => $nom) {
+            switch_to_blog($siteId);
+
+            $args = [
+                'numberposts' => 5000,
+                'post_status' => 'inherit',
+                'post_type' => 'attachment',
+            ];
+            $query = new \WP_Query($args);
+
+            while ($query->have_posts()) {
+                $attachment = $query->next_post();
+                if (!$this->check($attachment)) {
+                    $postsToDelete[] = $attachment;
+                }
+            }
+        }
+        foreach ($postsToDelete as $post) {
+            //  wp_delete_attachment($post, true);
+        }
+        $this->io->success(count($postsToDelete).' posts to delete');
+
+        return Command::SUCCESS;
+    }
+
+    private function getAllPosts(): array
+    {
+        $allPosts = [];
+
+        foreach (Theme::SITES as $siteId => $nom) {
+            switch_to_blog($siteId);
+            $allPosts = [...$allPosts, ...get_posts(['numberposts' => 10000])];
+        }
+
+        return $allPosts;
+    }
+
+    private function ancestor()
+    {
         switch_to_blog(Theme::ENFANCE);
         $post = get_post(894);
         $wpRepository = new WpRepository();
         $paths = $wpRepository->getAncestorsOfPost($post->ID);
         dd($paths);
+    }
 
+    private function check(int|\WP_Post|null $attachment): bool
+    {
+        foreach ($this->allposts as $post) {
+            if (str_contains($post->post_content, $attachment->guid)) {
+                return true;
+            }
+        }
 
-        return Command::SUCCESS;
+        return false;
     }
 
 }

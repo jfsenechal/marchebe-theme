@@ -32,6 +32,9 @@ wp-config.php
 /wp-content/backup-db/
 /wp-content/backups/
 /wp-content/blogs.dir/
+/wp-content/uploads
+/wp-content/blogs.dir
+/wp-content/blogs.dir/
 /wp-content/upgrade/
 
 # WordPress Plugins (add exceptions for custom plugins)
