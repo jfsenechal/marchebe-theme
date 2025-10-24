@@ -20,7 +20,7 @@ $category = get_category($cat_ID);
 $description = category_description($cat_ID);
 $title = single_cat_title('', false);
 
-$posts = $wpRepository->getPosts($cat_ID);
+$posts = $wpRepository->getPostsAndFiches($cat_ID);
 $parent = $wpRepository->getParentCategory($cat_ID);
 $postsSerialized = [];
 foreach ($posts as $post) {

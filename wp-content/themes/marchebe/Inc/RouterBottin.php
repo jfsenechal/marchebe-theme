@@ -12,7 +12,7 @@ class RouterBottin
     public const PARAM_CATEGORY = 'slugcategory';
     public const CATEGORY_ROUTE = 'bwp/categorie';
     public const SINGLE_CATEGORY = 'single_category';
-    private BottinRepository $bottinRepository;
+    private static ?BottinRepository $bottinRepository = null;
 
     public function __construct()
     {
@@ -21,7 +21,15 @@ class RouterBottin
         add_filter('template_include', [$this, 'add_templates']);
         //Flush rewrite rules on theme activation (only once)
         register_activation_hook(__FILE__, [$this, 'flush_rules']);
-        $this->bottinRepository = new BottinRepository();
+        self::$bottinRepository = new BottinRepository();
+    }
+
+    private static function getBottinRepository(): BottinRepository
+    {
+        if (self::$bottinRepository === null) {
+            self::$bottinRepository = new BottinRepository();
+        }
+        return self::$bottinRepository;
     }
 
     function flush_rules(): void
@@ -89,8 +97,8 @@ class RouterBottin
 
     public static function getUrlCategoryBottin(\stdClass $category): ?string
     {
-        if ($this->bottinRepository->isEconomie([$category]) !== null) {
-            return self::generateCategoryUrlCap($category, new BottinRepository());
+        if (self::getBottinRepository()->isEconomie([$category]) !== null) {
+            return self::generateCategoryUrlCap($category);
         }
 
         return self::getBaseUrlSite(Theme::ECONOMIE).self::CATEGORY_ROUTE.'/'.$category->slug;
@@ -116,7 +124,7 @@ class RouterBottin
     /**
      * url pour recherche via le site de marche.
      */
-    public static function generateCategoryUrlCap(\stdClass $category, BottinRepository $bottinRepository): string
+    public static function generateCategoryUrlCap(\stdClass $category): string
     {
         $parents = [574, 520, 609, 548, 582, 553, 527, 540, 534, 636, 568, 591];
 
@@ -124,7 +132,7 @@ class RouterBottin
             $categoryId = $category->id;
             $sousCategory = '';
         } else {
-            $parent = $bottinRepository->getCategory($category->parent_id);
+            $parent = self::getBottinRepository()->getCategory($category->parent_id);
             $categoryId = $parent->id;
             $sousCategory = $category->id;
         }

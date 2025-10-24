@@ -6,6 +6,7 @@ use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Inc\RouterBottin;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Bottin\Bottin;
+use AcMarche\Theme\Lib\Helper\SortingHelper;
 use WP_Post;
 use WP_Query;
 
@@ -121,36 +122,7 @@ class WpRepository
 
         $all = array_merge($posts, $fiches);
 
-        if (get_current_blog_id(
-            ) === Theme::ADMINISTRATION && ($catId == Theme::ENQUETE_DIRECTORY_URBA || $catId == Theme::ENQUETE_DIRECTORY_INSTIT || $catId == Theme::PUBLICATIOCOMMUNAL_CATEGORY)) {
-
-            /*$permis = Urba::getEnquetesPubliques();
-            $data   = [];
-            foreach ($permis as $permi) {
-                $post   = Urba::permisToPost($permi);
-                $data[] = $post;
-            }
-            $all = array_merge($all, $data);*/
-
-            $enquetes = self::getEnquetesPubliques($catId);
-            array_map(
-                function ($enquete) {
-                    list($yearD, $monthD, $dayD) = explode('-', $enquete->date_debut);
-                    $dateDebut = $dayD.'-'.$monthD.'-'.$yearD;
-                    list($yearF, $monthF, $dayF) = explode('-', $enquete->date_fin);
-                    $dateFin = $dayF.'-'.$monthF.'-'.$yearF;
-                    $enquete->ID = $enquete->id;
-                    $enquete->excerpt = $enquete->demandeur.' à '.$enquete->localite.'<br /> Affichate: du '.$dateDebut.' au '.$dateFin;
-                    $enquete->post_excerpt = $enquete->demandeur.' à '.$enquete->localite.'<br /> Affichate: du '.$dateDebut.' au '.$dateFin;
-                    $enquete->url = RouterMarche::getUrlEnquete($enquete->id);
-                    $enquete->post_title = $enquete->intitule.' à '.$enquete->localite;
-                },
-                $enquetes
-            );
-            $all = array_merge($all, $enquetes);
-        }
-
-        return SortUtil::sortPosts($all);
+        return SortingHelper::sortPosts($all);
     }
 
     /**

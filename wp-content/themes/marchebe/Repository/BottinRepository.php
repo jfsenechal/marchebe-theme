@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Repository;
 
+use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Bottin\Bottin;
 
 class BottinRepository
@@ -306,6 +307,28 @@ class BottinRepository
         }
 
         return null;
+    }
+
+    public function findSiteFiche(object $fiche): int
+    {
+        if ($classementPrincipal = $this->getCategoriePrincipale($fiche)) {
+            list($vide, $root) = explode('/', $classementPrincipal->materialized_path);
+            if ($root) {
+                return match ($root) {
+                    '485' => Theme::TOURISME,
+                    '486' => Theme::SPORT,
+                    '487' => Theme::SOCIAL,
+                    '488' => Theme::SANTE,
+                    '511' => Theme::ECONOMIE,
+                    '663' => Theme::CULTURE,
+                    '664' => Theme::ADMINISTRATION,
+                    '671' => Theme::ENFANCE,
+                    default => Theme::CITOYEN,
+                };
+            }
+        }
+
+        return Theme::CITOYEN;
     }
 
     private function sort(array $fiches): array
