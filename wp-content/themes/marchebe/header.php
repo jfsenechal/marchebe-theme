@@ -4,7 +4,7 @@ namespace AcMarche\Theme;
 
 use AcMarche\Theme\Data\Data;
 use AcMarche\Theme\Lib\Twig;
-use AcMarche\Theme\Repository\WpRepository;
+use AcMarche\Theme\Repository\MenuRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -29,7 +29,7 @@ use Twig\Error\SyntaxError;
     <?php
 wp_body_open();
 
-$wpRepository = new WpRepository();
+$wpRepository = new MenuRepository();
 $menu = $wpRepository->getMenu();
 
 $twig = Twig::loadTwig();

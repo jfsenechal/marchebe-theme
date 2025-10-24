@@ -2,6 +2,8 @@
 
 namespace AcMarche\Theme\Inc;
 
+use AcMarche\Theme\Repository\BottinRepository;
+
 class RouterBottin
 {
     public const PARAM_FICHE = 'slugfiche';
@@ -10,6 +12,7 @@ class RouterBottin
     public const PARAM_CATEGORY = 'slugcategory';
     public const CATEGORY_ROUTE = 'bwp/categorie';
     public const SINGLE_CATEGORY = 'single_category';
+    private BottinRepository $bottinRepository;
 
     public function __construct()
     {
@@ -18,6 +21,7 @@ class RouterBottin
         add_filter('template_include', [$this, 'add_templates']);
         //Flush rewrite rules on theme activation (only once)
         register_activation_hook(__FILE__, [$this, 'flush_rules']);
+        $this->bottinRepository = new BottinRepository();
     }
 
     function flush_rules(): void
@@ -81,6 +85,69 @@ class RouterBottin
         }
 
         return $template;
+    }
+
+    public static function getUrlCategoryBottin(\stdClass $category): ?string
+    {
+        if ($this->bottinRepository->isEconomie([$category]) !== null) {
+            return self::generateCategoryUrlCap($category, new BottinRepository());
+        }
+
+        return self::getBaseUrlSite(Theme::ECONOMIE).self::CATEGORY_ROUTE.'/'.$category->slug;
+    }
+
+    public static function getUrlFicheBottin(int $blogId, \stdClass $fiche): string
+    {
+        if ($url = self::generateFicheUrlCap($fiche)) {
+            return $url;
+        }
+
+        return self::getBaseUrlSite($blogId).self::FICHE_ROUTE.$fiche->slug;
+    }
+
+    /**
+     * url pour recherche via le site de marche.
+     */
+    public static function generateFicheUrlCap(\stdClass $fiche): ?string
+    {
+        return 'https://cap.marche.be/en_GB/commerce?id='.$fiche->id;
+    }
+
+    /**
+     * url pour recherche via le site de marche.
+     */
+    public static function generateCategoryUrlCap(\stdClass $category, BottinRepository $bottinRepository): string
+    {
+        $parents = [574, 520, 609, 548, 582, 553, 527, 540, 534, 636, 568, 591];
+
+        if (in_array($category->id, $parents)) {
+            $categoryId = $category->id;
+            $sousCategory = '';
+        } else {
+            $parent = $bottinRepository->getCategory($category->parent_id);
+            $categoryId = $parent->id;
+            $sousCategory = $category->id;
+        }
+
+        return "https://cap.marche.be/en_GB/liste-commercants?search=&categorie_id=$categoryId&sous_categorie_id=$sousCategory";
+    }
+
+    /**
+     * Retourne la base du blog (/economie/, /sante/, /culture/...
+     *
+     *
+     */
+    public static function getBaseUrlSite(?int $blodId = null): string
+    {
+        if (is_multisite()) {
+            if (!$blodId) {
+                $blodId = Theme::CITOYEN;
+            }
+
+            return get_blog_details($blodId)->path;
+        }
+
+        return '/';
     }
 
 }
