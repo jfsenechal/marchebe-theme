@@ -3,6 +3,7 @@
 namespace AcMarche\Theme\Templates;
 
 use AcMarche\Theme\Inc\Theme;
+use AcMarche\Theme\Lib\Helper\BreadcrumbHelper;
 use AcMarche\Theme\Lib\Twig;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -24,6 +25,7 @@ $catSlug = get_query_var('category_name');
 $currentCategory = get_category_by_slug($catSlug);
 $tags = [];
 $tags[] = ['name' => 'Agenda', 'term_id' => 5, 'url' => '/agenda'];
+$paths = BreadcrumbHelper::post($post->ID);
 
 $content = get_the_content(null, null, $post);
 $content = apply_filters('the_content', $content);
@@ -34,7 +36,7 @@ try {
         'post' => $post,
         'title' => $post->post_title,
         'body' => $content,
-        'paths' => [],
+        'paths' => $paths,
         'site' => Theme::TOURISME,
         'tags' => $tags,
         'thumbnail' => $image,
