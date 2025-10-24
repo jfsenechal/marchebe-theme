@@ -31,7 +31,8 @@ class FixCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
 
         $this->allposts = $this->getAllPosts();
-        $postsToDelete = [];
+        $this->io->success(count($this->allposts).' posts');
+        $attachmentsToDelete = [];
 
         foreach (Theme::SITES as $siteId => $nom) {
             switch_to_blog($siteId);
@@ -46,14 +47,20 @@ class FixCommand extends Command
             while ($query->have_posts()) {
                 $attachment = $query->next_post();
                 if (!$this->check($attachment)) {
-                    $postsToDelete[] = $attachment;
+                    $attachmentsToDelete[] = $attachment;
                 }
             }
         }
-        foreach ($postsToDelete as $post) {
-            //  wp_delete_attachment($post, true);
+
+        $this->io->success(count($attachmentsToDelete).' posts to delete');
+
+        foreach ($attachmentsToDelete as $attachment) {
+            if ($attachment->ID === 12279) {
+                dump($attachment);
+                $this->io->write($attachment->guid);
+                //  wp_delete_attachment($post, true);
+            }
         }
-        $this->io->success(count($postsToDelete).' posts to delete');
 
         return Command::SUCCESS;
     }
@@ -64,7 +71,16 @@ class FixCommand extends Command
 
         foreach (Theme::SITES as $siteId => $nom) {
             switch_to_blog($siteId);
-            $allPosts = [...$allPosts, ...get_posts(['numberposts' => 10000])];
+            $all = [];
+            $posts = get_posts(['numberposts' => 10000]);
+            foreach ($posts as $post) {
+                $all[] = $post;
+                if ($thumbnail = get_post_thumbnail_id($post->ID)) {
+                    $all[] = get_post($thumbnail);
+                }
+            }
+
+            $allPosts = [...$allPosts, ...$all];
         }
 
         return $allPosts;

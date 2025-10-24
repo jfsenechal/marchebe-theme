@@ -5,7 +5,7 @@
             {% for item in news %}
                 <a
                         class="{% if loop.index > 2 %}hidden md:block{% endif %}  bg-white shadow rounded-lg overflow-hidden  hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
-                        href="{{ item.blog }}/article/11/{{ item.ID }}"
+                        href="{{ item.url }}"
                 >
                     <img
                             src="{{ item.post_thumbnail_url }}" alt="" class="w-full h-48 object-cover"/>
