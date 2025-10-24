@@ -46,7 +46,7 @@ class FixCommand extends Command
 
             while ($query->have_posts()) {
                 $attachment = $query->next_post();
-                if (!$this->check($attachment)) {
+                if (!$this->checkAttachmentIsUsed($attachment)) {
                     $attachmentsToDelete[] = $attachment;
                 }
             }
@@ -55,16 +55,16 @@ class FixCommand extends Command
         $this->io->success(count($attachmentsToDelete).' posts to delete');
 
         foreach ($attachmentsToDelete as $attachment) {
-            if ($attachment->ID === 12279) {
-                dump($attachment);
-                $this->io->write($attachment->guid);
-                //  wp_delete_attachment($post, true);
-            }
+            $this->io->writeln($attachment->guid);
+            //  wp_delete_attachment($post, true);
         }
 
         return Command::SUCCESS;
     }
 
+    /**
+     * @return array<int,\WP_Post>
+     */
     private function getAllPosts(): array
     {
         $allPosts = [];
@@ -95,10 +95,13 @@ class FixCommand extends Command
         dd($paths);
     }
 
-    private function check(int|\WP_Post|null $attachment): bool
+    private function checkAttachmentIsUsed(int|\WP_Post|null $attachment): bool
     {
         foreach ($this->allposts as $post) {
             if (str_contains($post->post_content, $attachment->guid)) {
+                return true;
+            }
+            if (str_contains($post->guid, $attachment->guid)) {
                 return true;
             }
         }
