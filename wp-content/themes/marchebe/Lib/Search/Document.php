@@ -46,7 +46,7 @@ class Document
     {
         $document = new Document();
         $nameSite = Theme::getTitleBlog($idSite);
-        $document->id = $category->cat_ID."-category-".$idSite;
+        $document->id = $category->term_id ?? $category->id."-category-".$idSite;
         $document->name = Cleaner::cleandata($category->name);
         $document->excerpt = $category->description;
         $document->content = $category->content;
@@ -54,7 +54,7 @@ class Document
         $document->site = ['name' => $nameSite, 'id' => $idSite];
         $document->paths = $category->paths;
         $document->date = date('Y-m-d');
-        $document->type = 'catégorie';
+        $document->type = 'category';
         $document->link = $category->link;
 
         return $document;

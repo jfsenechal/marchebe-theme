@@ -49,16 +49,15 @@ class AdlRepository
     {
         $dataString = $this->executeRequest('/categories');
         $categories = json_decode($dataString);
+        $today = new \DateTime();
+        $date = $today->format('Y-m-d');
         $data = [];
         foreach ($categories as $category) {
-
             $description = '';
             if ($category->description) {
                 $description = Cleaner::cleandata($category->description);
             }
 
-            $today = new \DateTime();
-            $date = $today->format('Y-m-d');
             $content = $description;
 
             foreach ($this->getPostsByCategoryId($category->id) as $documentElastic) {
@@ -79,21 +78,23 @@ class AdlRepository
     }
 
     /**
+     * @param int $categoryId
      * @return Document[]
+     * @throws Exception
      */
     private function getPostsByCategoryId(int $categoryId): array
     {
         $dataString = $this->executeRequest('/posts/?categories='.$categoryId);
 
         $posts = json_decode($dataString);
-        $datas = [];
+        $data = [];
 
         foreach ($posts as $post) {
             WpRepository::instance()->preparePost($post);
-            $datas[] = Document::documentFromPost($post, Theme::ECONOMIE);
+            $data[] = Document::documentFromPost($post, Theme::ECONOMIE);
         }
 
-        return $datas;
+        return $data;
     }
 
     /**
