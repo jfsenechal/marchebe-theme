@@ -90,9 +90,9 @@ class MeiliCommand extends Command
     private function indexPosts(): void
     {
         $documents = [];
-        foreach (Theme::SITES as $siteId => $nom) {
-            switch_to_blog($siteId);
-            $documents = $this->dataForSearch->getPosts($siteId);
+        foreach (Theme::SITES as $idSite => $nom) {
+            switch_to_blog($idSite);
+            $documents = $this->dataForSearch->getPosts($idSite);
             foreach ($documents as $document) {
                 $documents[] = $document;
             }
@@ -104,11 +104,11 @@ class MeiliCommand extends Command
     private function indexCategories(): void
     {
         $documents = [];
-        foreach (Theme::SITES as $siteId => $nom) {
-            switch_to_blog($siteId);
-            $categories = $this->dataForSearch->getCategoriesBySite($siteId);
+        foreach (Theme::SITES as $idSite => $nom) {
+            switch_to_blog($idSite);
+            $categories = $this->dataForSearch->getCategoriesBySite($idSite);
             foreach ($categories as $documentElastic) {
-                $documentElastic->id = 'category-'.$documentElastic->id.'-'.$siteId;
+                $documentElastic->id = 'category-'.$documentElastic->id.'-'.$idSite;
                 $documents[] = $documentElastic;
             }
         }

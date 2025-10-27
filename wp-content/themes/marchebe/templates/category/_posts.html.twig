@@ -4,13 +4,13 @@
             {{ posts|length }} article(s) dans {{ category.name }}
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 ml-0 md:ml-4">
-            <template x-for="post in posts" :key="post.ID">
+            <template x-for="post in posts" :key="post.id">
                 <div
                         class="group bg-white p-8 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-in-out animated-element">
                     <h3 class="text-lg md:text-xl font-bold">
-                        <a :href="post.url" x-text="post.post_title"></a>
+                        <a :href="post.url" x-text="post.name"></a>
                     </h3>
-                    <p class="mt-2  line-clamp-3" x-text="post.post_excerpt" x-show="post.post_excerpt"></p>
+                    <div class="mt-2  line-clamp-3" x-html="post.excerpt" x-show="post.excerpt"></div>
                     <a :href="post.url"
                        class="inline-block font-semibold text-primary mt-6 group-hover:underline group-hover:text-citoyen">
                         En savoir plus →

@@ -34,8 +34,8 @@ class FixCommand extends Command
         $this->io->success(count($this->allposts).' posts');
         $attachmentsToDelete = [];
 
-        foreach (Theme::SITES as $siteId => $nom) {
-            switch_to_blog($siteId);
+        foreach (Theme::SITES as $idSite => $nom) {
+            switch_to_blog($idSite);
 
             $args = [
                 'numberposts' => 5000,
@@ -69,8 +69,8 @@ class FixCommand extends Command
     {
         $allPosts = [];
 
-        foreach (Theme::SITES as $siteId => $nom) {
-            switch_to_blog($siteId);
+        foreach (Theme::SITES as $idSite => $nom) {
+            switch_to_blog($idSite);
             $all = [];
             $posts = get_posts(['numberposts' => 10000]);
             foreach ($posts as $post) {

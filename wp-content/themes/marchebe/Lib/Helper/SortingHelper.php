@@ -2,29 +2,29 @@
 
 namespace AcMarche\Theme\Lib\Helper;
 
+use AcMarche\Theme\Lib\Search\Document;
+
 class SortingHelper
 {
     /**
-     * @param array<int,\WP_Post> $posts
-     * @return array<int,\WP_Post>
+     * @param array<int,Document> $documents
+     * @return array<int,Document>
      */
-    public static function sortPosts(array $posts): array
+    public static function sortDocuments(array $documents): array
     {
         usort(
-            $posts,
+            $documents,
             function ($postA, $postB) {
                 {
-                    $titleA = is_array($postA) ? $postA['post_title'] : $postA->post_title;
-                    $titleB = is_array($postB) ? $postB['post_title'] : $postB->post_title;
-                    if ($titleA == $titleB) {
+                    if ($postA->name == $postB->name) {
                         return 0;
                     }
 
-                    return ($titleA < $titleB) ? -1 : 1;
+                    return ($postA->name < $postB->name) ? -1 : 1;
                 }
             }
         );
 
-        return $posts;
+        return $documents;
     }
 }

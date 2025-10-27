@@ -3,10 +3,9 @@
 namespace AcMarche\Theme\Repository;
 
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
-use AcMarche\Theme\Inc\RouterBottin;
 use AcMarche\Theme\Inc\Theme;
-use AcMarche\Theme\Lib\Bottin\Bottin;
 use AcMarche\Theme\Lib\Helper\SortingHelper;
+use AcMarche\Theme\Lib\Search\Document;
 use WP_Post;
 use WP_Query;
 
@@ -21,8 +20,8 @@ class WpRepository
     {
         $news = array();
 
-        foreach (Theme::SITES as $siteId => $name) :
-            switch_to_blog($siteId);
+        foreach (Theme::SITES as $idSite => $name) :
+            switch_to_blog($idSite);
 
             $args = array(
                 'category_name' => 'actualites-principales',
@@ -31,7 +30,7 @@ class WpRepository
                 'order' => 'ASC',
             );
 
-            if ($siteId == 1) {
+            if ($idSite == 1) {
                 $args = array(
                     'category_name' => 'actualites',
                     'orderby' => 'title',
@@ -60,10 +59,10 @@ class WpRepository
                 $permalink = get_permalink($id);
                 $post->url = $permalink;
 
-                $post->blog_id = $siteId;
+                $post->blog_id = $idSite;
                 $post->blog = ucfirst($name);
-                $post->color = Theme::COLORS[$siteId];
-                $post->colorTailwind = 'text-'.Theme::SITES[$siteId];
+                $post->color = Theme::COLORS[$idSite];
+                $post->colorTailwind = 'text-'.Theme::SITES[$idSite];
 
                 $news[] = $post;
             endwhile;
@@ -81,55 +80,40 @@ class WpRepository
         return $news;
     }
 
+    /**
+     * @param int $catId
+     * @return array<int,Document>
+     */
     public function getPostsAndFiches(int $catId): array
     {
-        $args = array(
-            'cat' => $catId,
-            'numberposts' => 5000,
-            'orderby' => 'post_title',
-            'order' => 'ASC',
-            'post_status' => 'publish',
-        );
-
-        $querynews = new WP_Query($args);
-        $posts = [];
-        while ($querynews->have_posts()) {
-            $post = $querynews->next_post();
-            $post->excerpt = $post->post_excerpt;
-            $post->url = get_permalink($post->ID);
-            $posts[] = $post;
+        $documents = [];
+        $idSite = get_current_blog_id();
+        $posts = $this->getPostsByCategory($catId);
+        foreach ($posts as $post) {
+            $document = Document::documentFromPost($post, $idSite);
+            $documents[] = $document;
         }
 
-        $fiches = [];
         $categoryBottinId = get_term_meta($catId, BottinCategoryMetaBox::KEY_NAME, true);
         $bottinRepository = new BottinRepository();
+        $fiches = [];
         if ($categoryBottinId) {
-
             $fiches = $bottinRepository->getFichesByCategory($categoryBottinId);
         }
 
-        array_map(
-            function ($fiche) use ($bottinRepository) {
-                $idSite = $bottinRepository->findSiteFiche($fiche);
-                $fiche->fiche = true;
-                $fiche->excerpt = Bottin::getExcerpt($fiche);
-                $fiche->post_excerpt = Bottin::getExcerpt($fiche);
-                $fiche->url = RouterBottin::getUrlFicheBottin($idSite, $fiche);
-                $fiche->post_title = $fiche->societe;
-            },
-            $fiches
-        );
+        foreach ($fiches as $fiche) {
+            $idSite = $bottinRepository->findSiteFiche($fiche);
+            $documents[] = Document::documentFromFiche($fiche, $idSite);
+        }
 
-        $all = array_merge($posts, $fiches);
-
-        return SortingHelper::sortPosts($all);
+        return SortingHelper::sortDocuments($documents);
     }
 
     /**
      * @param int $categoryId
      * @return array<int,WP_Post>
      */
-    public function getPosts(int $categoryId): array
+    public function getPostsByCategory(int $categoryId): array
     {
         $args = array(
             'cat' => $categoryId,
@@ -143,8 +127,6 @@ class WpRepository
         $posts = [];
         while ($querynews->have_posts()) {
             $post = $querynews->next_post();
-            $post->excerpt = $post->post_excerpt;
-            $post->url = get_permalink($post->ID);
             $posts[] = $post;
         }
 

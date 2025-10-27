@@ -20,16 +20,6 @@ $description = category_description($cat_ID);
 $title = single_cat_title('', false);
 
 $posts = $wpRepository->getPostsAndFiches($cat_ID);
-$postsSerialized = [];
-foreach ($posts as $post) {
-    $postsSerialized[$post->ID] = [
-        'name' => $post->ID,
-        'post_title' => $post->post_title,
-        'ID' => $post->ID,
-        'post_excerpt' => $post->post_excerpt,
-        'url' => get_permalink($post),
-    ];
-}
 $twig = Twig::loadTwig();
 $thumbnail = "https://picsum.photos/2070";
 $paths = BreadcrumbHelper::category($cat_ID);
@@ -38,7 +28,7 @@ try {
     echo $twig->render('@AcMarche/category/show.html.twig', [
         'category' => $category,
         'posts' => $posts,
-        'postsSerialized' => json_encode($postsSerialized),
+        'postsSerialized' => json_encode($posts),
         'thumbnail' => $thumbnail,
         'paths' => $paths,
         'title' => $title,

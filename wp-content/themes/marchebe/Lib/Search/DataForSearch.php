@@ -2,18 +2,31 @@
 
 namespace AcMarche\Theme\Lib\Search;
 
+use AcMarche\Theme\Repository\BottinRepository;
 use AcMarche\Theme\Repository\WpRepository;
 
 class DataForSearch
 {
     private WpRepository $wpRepository;
+    private BottinRepository $bottinRepository;
+    private static ?BottinRepository $bottinRepositoryStatic = null;
 
     public function __construct()
     {
         $this->wpRepository = new WpRepository();
+        $this->bottinRepository = new BottinRepository();
     }
 
-    public function getPosts(int $siteId, int $categoryId = null): array
+    public static function instanceBottinRepository(): BottinRepository
+    {
+        if (!self::$bottinRepositoryStatic) {
+            self::$bottinRepositoryStatic = new BottinRepository();
+        }
+
+        return self::$bottinRepositoryStatic;
+    }
+
+    public function getPosts(int $idSite, int $categoryId = null): array
     {
         $args = array(
             'numberposts' => 5000,
@@ -30,13 +43,13 @@ class DataForSearch
         $data = [];
 
         foreach ($posts as $post) {
-            $data[] = Document::documentFromPost($post, $siteId);
+            $data[] = Document::documentFromPost($post, $idSite);
         }
 
         return $data;
     }
 
-    public function getCategoriesBySite(int $siteId): array
+    public function getCategoriesBySite(int $idSite): array
     {
         $args = array(
             'type' => 'post',
@@ -67,7 +80,7 @@ class DataForSearch
             $date = $today->format('Y-m-d');
             $content = $description;
 
-            foreach ($this->getPosts($siteId, $category->cat_ID) as $document) {
+            foreach ($this->getPosts($idSite, $category->cat_ID) as $document) {
                 $content .= $document->name;
                 $content .= $document->excerpt;
                 $content .= $document->content;
@@ -86,7 +99,7 @@ class DataForSearch
                 $tags[] = $parent->name;
             }
 
-            $data[] = Document::documentFromCategory($category, $siteId, $description, $content, $tags, $date);
+            $data[] = Document::documentFromCategory($category, $idSite, $description, $content, $tags, $date);
         }
 
         return $data;
@@ -104,5 +117,21 @@ class DataForSearch
         }
 
         return '';
+    }
+
+    /**
+     * @param $fiche
+     *
+     * @return string[]
+     */
+    public static function getCategoriesFiche($fiche): array
+    {
+        $data       = self::instanceBottinRepository()->getCategoriesOfFiche($fiche->id);
+        $categories = [];
+        foreach ($data as $category) {
+            $categories[] = $category->name;
+        }
+
+        return $categories;
     }
 }

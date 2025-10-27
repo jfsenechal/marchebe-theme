@@ -12,7 +12,7 @@ class BottinRepository
     private function init()
     {
         if (!$this->dbh) {
-            $dsn = 'mysql:host=localhost;dbname=bottin';
+            $dsn = 'mysql:host=127.0.0.1;dbname=bottin';
             $username = $_ENV['DB_BOTTIN_USER'];
             $password = $_ENV['DB_BOTTIN_PASS'];
             $options = array(
@@ -244,7 +244,7 @@ class BottinRepository
 
         $fiches = array_merge(...$fiches);
 
-        return $this->sort($fiches);
+        return $this->sortFiches($fiches);
     }
 
     public function getFichesByCategory(int $id): array
@@ -268,7 +268,7 @@ class BottinRepository
             $data[$fiche->id] = $fiche;
         }
 
-        return $this->sort($data);
+        return $this->sortFiches($data);
     }
 
     /**
@@ -331,7 +331,7 @@ class BottinRepository
         return Theme::CITOYEN;
     }
 
-    private function sort(array $fiches): array
+    private function sortFiches(array $fiches): array
     {
         usort(
             $fiches,
@@ -348,5 +348,4 @@ class BottinRepository
 
         return $fiches;
     }
-
 }
