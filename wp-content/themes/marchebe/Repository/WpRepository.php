@@ -133,20 +133,6 @@ class WpRepository
         $post->paths = WpRepository::instance()->getAncestorsOfPost($post->ID);
     }
 
-    public function prepareCategory(\WP_Term $category): void
-    { $tags = [];
-
-            $children = $this->wpRepository->getChildrenOfCategory($category->cat_ID);
-            foreach ($children as $child) {
-                $tags[] = ['id' => $child->term_id, 'name' => $child->name];
-            }
-            $parent = $this->wpRepository->getParentCategory($category->cat_ID);
-            if ($parent) {
-                $tags[] = ['id' => $parent->term_id, 'name' => $parent->name];
-            }
-        $category->paths = WpRepository::instance()->getAncestorsOfCategory($category->cat_ID);
-    }
-
     /**
      * @param int $categoryId
      * @return array<int,WP_Post>
