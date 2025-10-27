@@ -68,7 +68,7 @@ class WpRepository
                 $post->post_thumbnail_url = $post_thumbnail_url;
 
                 $permalink = get_permalink($id);
-                $post->url = $permalink;
+                $post->link = $permalink;
 
                 $post->blog_id = $idSite;
                 $post->blog = ucfirst($name);
