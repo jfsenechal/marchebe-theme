@@ -42,22 +42,14 @@
                                 <p class="font-semibold text-cta-dark group-hover:text-citoyen transition-colors">
                                     {{ result.name }}
                                 </p>
-                                <div class="flex flex-col gap-2">
-                                    {% for tag in result.tags %}
-                                        <span class="text-sm text-gray-500">
-                                        {{ tag }}
-                                    </span>
-                                    {% endfor %}
-                                </div>
-
-                                <div class="flex flex-col gap-2">
+                                <div class="flex flex-row gap-2">
                                      <span class="text-sm text-gray-500">
-                                       {{ result.site.name }} >
+                                       {{ result.site.name }}
                                     </span>
                                     {% for path in result.paths %}
                                         <span class="text-sm text-gray-500">
-                                       {{ path.name }} >
-                                    </span>
+                                            > {{ path.name }}
+                                        </span>
                                     {% endfor %}
                                 </div>
                             </a>

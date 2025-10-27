@@ -27,12 +27,12 @@ class ShortCode
     {
         add_shortcode('taxe', [$this, 'taxe']);
         add_shortcode('enaos', [$this, 'enaos']);
-        add_shortcode('conseil_ordre', [$this, 'conseilOrdre']);
-        add_shortcode('conseil_pv', [$this, 'conseilPv']);
-        add_shortcode('conseil_archive', [$this, 'conseilArchive']);
+        //add_shortcode('conseil_ordre', [$this, 'conseilOrdre']);
+        //add_shortcode('conseil_pv', [$this, 'conseilPv']);
+        //add_shortcode('conseil_archive', [$this, 'conseilArchive']);
         add_shortcode('google_map', [$this, 'googleMap']);
-        add_shortcode('capteur_list', [$this, 'capteurList']);
-        add_shortcode('capteur_color', [$this, 'capteurColor']);
+        //add_shortcode('capteur_list', [$this, 'capteurList']);
+        //add_shortcode('capteur_color', [$this, 'capteurColor']);
     }
 
     public function conseilOrdre(): string
@@ -179,7 +179,7 @@ class ShortCode
         $title = $post ? $post->post_title : '';
 
         $t = $twig->render(
-            'map/_carte.html.twig',
+            '@AcMarche/widgets/_map.html.twig',
             [
                 'latitude' => $latitude,
                 'longitude' => $longitude,
