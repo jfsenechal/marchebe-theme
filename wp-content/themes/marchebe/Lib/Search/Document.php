@@ -28,7 +28,7 @@ class Document
 
         $nameSite = Theme::getTitleBlog($idSite);
         $document = new Document();
-        $document->id = $post->ID."-post-".$idSite;
+        $document->id = $post->ID ?? $post->id."-post-".$idSite;
         $document->name = Cleaner::cleandata($post->post_title);
         $document->excerpt = Cleaner::cleandata($post->post_excerpt);
         $document->content = Cleaner::cleandata($post->content);

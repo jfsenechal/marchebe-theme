@@ -29,15 +29,7 @@ class AdlRepository
         $posts = json_decode($dataString);
 
         foreach ($posts as $post) {
-            $categories = [];
-            foreach ($post->categories as $categoryId) {
-                $categories[] = ['id' => $categoryId, 'name' => ''];
-            }
-            $post->tags = $categories;
-            $post->content = $post->content->rendered;
-            $post->title = Cleaner::cleandata($post->title->rendered);
-            $post->excerpt = Cleaner::cleandata($post->excerpt->rendered);
-            $post->paths = WpRepository::instance()->getAncestorsOfPost($post->ID);
+            $this->preparePost($post);
 
             Document::documentFromPost($post, Theme::ECONOMIE);
         }
@@ -90,11 +82,30 @@ class AdlRepository
         $data = [];
 
         foreach ($posts as $post) {
-            WpRepository::instance()->preparePost($post);
+            $this->preparePost($post);
             $data[] = Document::documentFromPost($post, Theme::ECONOMIE);
         }
 
         return $data;
+    }
+
+    /**
+     * @param \stdClass $post
+     * @return void
+     */
+    private function preparePost(\stdClass $post): void
+    {
+        $categories = [];
+        foreach ($post->categories as $categoryId) {
+            $categories[] = ['id' => $categoryId, 'name' => ''];
+        }
+        $post->tags = $categories;
+        $post->content = $post->content->rendered;
+        $post->post_title = Cleaner::cleandata($post->title->rendered);
+        $post->post_excerpt = Cleaner::cleandata($post->excerpt->rendered);
+        $today = new \DateTime();
+        $post->post_date = $today->format('Y-m-d'). " ";
+        $post->paths = [];
     }
 
     /**
@@ -105,7 +116,7 @@ class AdlRepository
         try {
             $response = $this->client->request(
                 $method,
-               '/wp-json/wp/v2'.$url,
+                '/wp-json/wp/v2'.$url,
                 $options
             );
 
@@ -114,4 +125,5 @@ class AdlRepository
             throw  new Exception($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
+
 }
