@@ -8,8 +8,9 @@ use AcMarche\Theme\Lib\Bottin\Bottin;
 class BottinRepository
 {
     private ?\PDO $dbh = null;
+    private static ?self $instance = null;
 
-    private function init()
+    private function init(): void
     {
         if (!$this->dbh) {
             $dsn = 'mysql:host=127.0.0.1;dbname=bottin';
@@ -20,6 +21,16 @@ class BottinRepository
             );
             $this->dbh = new \PDO($dsn, $username, $password, $options);
         }
+    }
+
+    public static function instanceBottinRepository(): self
+    {
+        if (!self::$instance) {
+            self::$instance = new BottinRepository();
+            self::$instance->init();
+        }
+
+        return self::$instance;
     }
 
     public function getClassementsFiche(int $ficheId): array|bool
@@ -249,11 +260,6 @@ class BottinRepository
 
     public function getFichesByCategory(int $id): array
     {
-        $category = $this->getCategory($id);
-        if (!$category) {
-            //Mailer::sendError('fiche non trouvée', 'categorie id: '.$id);
-        }
-
         $sql = 'SELECT * FROM classements WHERE `category_id` = '.$id;
         $query = $this->execQuery($sql);
         $classements = $query->fetchAll();
@@ -289,7 +295,7 @@ class BottinRepository
         return $query;
     }
 
-    public function isEconomie(array $categories): ?\stdClass
+    public function isEconomy(array $categories): ?\stdClass
     {
         foreach ($categories as $category) {
             if (isset($category->parent_id)) {

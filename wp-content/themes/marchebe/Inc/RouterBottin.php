@@ -97,20 +97,20 @@ class RouterBottin
 
     public static function getUrlCategoryBottin(\stdClass $category): ?string
     {
-        if (self::getBottinRepository()->isEconomie([$category]) !== null) {
+        if (self::getBottinRepository()->isEconomy([$category]) !== null) {
             return self::generateCategoryUrlCap($category);
         }
 
         return self::getBaseUrlSite(Theme::ECONOMIE).self::CATEGORY_ROUTE.'/'.$category->slug;
     }
 
-    public static function getUrlFicheBottin(int $blogId, \stdClass $fiche): string
+    public static function getUrlFicheBottin(int $idSite, \stdClass $fiche): string
     {
         if ($url = self::generateFicheUrlCap($fiche)) {
             return $url;
         }
 
-        return self::getBaseUrlSite($blogId).self::FICHE_ROUTE.$fiche->slug;
+        return self::getBaseUrlSite($idSite).self::FICHE_ROUTE.$fiche->slug;
     }
 
     /**

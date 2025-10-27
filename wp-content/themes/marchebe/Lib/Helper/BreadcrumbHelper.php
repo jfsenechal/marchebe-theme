@@ -10,12 +10,12 @@ class BreadcrumbHelper
     public static function post(int $postId): array
     {
         $paths = [];
-        $blogId = get_current_blog_id();
+        $idSite = get_current_blog_id();
 
-        if ($blogId > Theme::CITOYEN) {
-            $path = Theme::getPathBlog($blogId);
-            $blogName = Theme::getTitleBlog($blogId);
-            $paths[] = ['name' => $blogName, 'term_id' => $blogId, 'url' => $path];
+        if ($idSite > Theme::CITOYEN) {
+            $path = Theme::getPathBlog($idSite);
+            $blogName = Theme::getTitleBlog($idSite);
+            $paths[] = ['name' => $blogName, 'term_id' => $idSite, 'url' => $path];
         }
 
         $catSlug = get_query_var('category_name');
@@ -38,13 +38,13 @@ class BreadcrumbHelper
 
     public static function category(int $categoryId): array
     {
-        $blogId = get_current_blog_id();
+        $idSite = get_current_blog_id();
         $wpRepository = new WpRepository();
         $paths = [];
-        if ($blogId > Theme::CITOYEN) {
-            $path = Theme::getPathBlog($blogId);
-            $blogName = Theme::getTitleBlog($blogId);
-            $paths[] = ['name' => $blogName, 'term_id' => $blogId, 'url' => $path];
+        if ($idSite > Theme::CITOYEN) {
+            $path = Theme::getPathBlog($idSite);
+            $blogName = Theme::getTitleBlog($idSite);
+            $paths[] = ['name' => $blogName, 'term_id' => $idSite, 'url' => $path];
         }
 
         $parent = $wpRepository->getParentCategory($categoryId);

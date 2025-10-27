@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Lib\Search;
 
+use AcMarche\Theme\Repository\WpRepository;
 use Meilisearch\Contracts\DeleteTasksQuery;
 use Meilisearch\Endpoints\Keys;
 
@@ -56,7 +57,8 @@ class MeiliServer
 
     public function addPost(array|\WP_Post|null $post): void
     {
+        WpRepository::instance()->preparePost($post);
         $document = Document::documentFromPost($post, get_current_blog_id());
-        $this->index->addDocuments([$document], $this->meiliServer->primaryKey);
+        $this->index->addDocuments([$document], $this->primaryKey);
     }
 }

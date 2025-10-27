@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Lib\Search;
 
+use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Repository\BottinRepository;
 use AcMarche\Theme\Repository\WpRepository;
 
@@ -10,6 +11,7 @@ class DataForSearch
     private WpRepository $wpRepository;
     private BottinRepository $bottinRepository;
     private static ?BottinRepository $bottinRepositoryStatic = null;
+    private array $skips = [679, 705, 707];//parkings
 
     public function __construct()
     {
@@ -43,6 +45,7 @@ class DataForSearch
         $data = [];
 
         foreach ($posts as $post) {
+            $this->wpRepository->preparePost($post);
             $data[] = Document::documentFromPost($post, $idSite);
         }
 
@@ -68,17 +71,13 @@ class DataForSearch
 
         $categories = get_categories($args);
         $data = [];
-        $today = new \DateTime();
 
         foreach ($categories as $category) {
-
-            $description = '';
             if ($category->description) {
-                $description = Cleaner::cleandata($category->description);
+                $category->description = Cleaner::cleandata($category->description);
             }
 
-            $date = $today->format('Y-m-d');
-            $content = $description;
+            $content = $category->description;
 
             foreach ($this->getPosts($idSite, $category->cat_ID) as $document) {
                 $content .= $document->name;
@@ -92,14 +91,18 @@ class DataForSearch
             $children = $this->wpRepository->getChildrenOfCategory($category->cat_ID);
             $tags = [];
             foreach ($children as $child) {
-                $tags[] = $child->name;
+                $tags[] = ['id' => $child->term_id, 'name' => $child->name];
             }
             $parent = $this->wpRepository->getParentCategory($category->cat_ID);
             if ($parent) {
-                $tags[] = $parent->name;
+                $tags[] = ['id' => $parent->term_id, 'name' => $parent->name];
             }
 
-            $data[] = Document::documentFromCategory($category, $idSite, $description, $content, $tags, $date);
+            $category->content = $content;
+            $category->tags = $tags;
+            $category->paths = $tags;
+            $category->link= get_category_link($category);
+            $data[] = Document::documentFromCategory($category, $idSite);
         }
 
         return $data;
@@ -107,16 +110,31 @@ class DataForSearch
 
     public function getContentFichesBottin(object $category): string
     {
-        return '';
         $categoryBottinId = get_term_meta($category->cat_ID, BottinCategoryMetaBox::KEY_NAME, true);
 
         if ($categoryBottinId) {
             $fiches = $this->bottinRepository->getFichesByCategory($categoryBottinId);
 
-            return $this->bottinData->getContentForCategory($fiches);
+            return $this->getContentForCategory($fiches);
         }
 
         return '';
+    }
+
+    public static function getContentForCategory(array $fiches): string
+    {
+        $content = '';
+
+        foreach ($fiches as $fiche) {
+            $content .= self::getContentFiche($fiche);
+        }
+
+        return $content;
+    }
+
+    public static function getContentFiche($fiche): string
+    {
+        return ' '.$fiche->societe.' '.$fiche->email.' '.$fiche->website.''.$fiche->twitter.' '.$fiche->facebook.' '.$fiche->nom.' '.$fiche->prenom.' '.$fiche->comment1.''.$fiche->comment2.' '.$fiche->comment3;
     }
 
     /**
@@ -126,12 +144,83 @@ class DataForSearch
      */
     public static function getCategoriesFiche($fiche): array
     {
-        $data       = self::instanceBottinRepository()->getCategoriesOfFiche($fiche->id);
+        $data = self::instanceBottinRepository()->getCategoriesOfFiche($fiche->id);
         $categories = [];
         foreach ($data as $category) {
-            $categories[] = $category->name;
+            $categories[] = ['id' => $category->id, 'name' => $category->name];
         }
 
         return $categories;
+    }
+
+    /**
+     * @return array<int,Document>
+     * @throws \Exception
+     */
+    public function fiches(): array
+    {
+        $documents = [];
+
+        foreach ($this->bottinRepository->getFiches() as $fiche) {
+            $idSite = $this->bottinRepository->findSiteFiche($fiche);
+            $documents[] = Document::documentFromFiche($fiche, $idSite);
+        }
+
+        $data = [];
+        foreach ($documents as $document) {
+            $skip = false;
+            foreach ($document->tags as $category) {
+                if (in_array($category['id'], $this->skips)) {
+                    $skip = true;
+                    break;
+                }
+            }
+            if (!$skip) {
+                $data[] = $document;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return array<int,Document>
+     */
+    public function indexCategoriesBottin(): array
+    {
+        $documents = [];
+        $data = $this->getAllCategoriesBottin();
+        foreach ($data as $document) {
+            if (in_array($document->id, $this->skips)) {
+                continue;
+            }
+            $id = 'bottin_cat_'.$document->id;
+            $document->id = $id;
+            $documents[] = $document;
+        }
+
+        return $documents;
+    }
+
+    /**
+     * @return Document[]
+     *
+     * @throws \Exception
+     */
+    public function getAllCategoriesBottin(): array
+    {
+        $data = $this->bottinRepository->getAllCategories();
+        $documents = [];
+        foreach ($data as $category) {
+            $documents[] = Document::documentFromCategoryBottin($category);
+        }
+
+        return $documents;
+    }
+
+    public function getEnqueteDocuments(): array
+    {
+        return [];
+
     }
 }

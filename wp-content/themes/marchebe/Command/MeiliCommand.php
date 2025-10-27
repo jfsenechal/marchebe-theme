@@ -5,13 +5,13 @@ namespace AcMarche\Theme\Command;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Search\DataForSearch;
 use AcMarche\Theme\Lib\Search\MeiliServer;
+use AcMarche\Theme\Repository\AdlRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'meili:server',
@@ -19,8 +19,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class MeiliCommand extends Command
 {
-    private SymfonyStyle $io;
-    private OutputInterface $output;
     private DataForSearch $dataForSearch;
     private readonly MeiliServer $meiliServer;
 
@@ -36,9 +34,6 @@ class MeiliCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->output = $output;
-        $this->io = new SymfonyStyle($input, $output);
-
         $key = (bool)$input->getOption('key');
         $tasks = (bool)$input->getOption('tasks');
         $reset = (bool)$input->getOption('reset');
@@ -71,10 +66,10 @@ class MeiliCommand extends Command
 
         if ($update) {
             $this->dataForSearch = new DataForSearch();
-            $this->indexPosts();
+       /*     $this->indexPosts();
             $this->indexCategories();
             $this->indexBottin();
-            $this->indexEnquetes();
+            $this->indexEnquetes();*/
             $this->indexAdl();
 
             return Command::SUCCESS;
@@ -107,24 +102,47 @@ class MeiliCommand extends Command
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
             $categories = $this->dataForSearch->getCategoriesBySite($idSite);
-            foreach ($categories as $documentElastic) {
-                $documentElastic->id = 'category-'.$documentElastic->id.'-'.$idSite;
-                $documents[] = $documentElastic;
+            foreach ($categories as $document) {
+                $document->id = 'category-'.$document->id.'-'.$idSite;
+                $documents[] = $document;
             }
         }
         $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
     }
 
-    private function indexBottin()
+    private function indexBottin(): void
     {
+        $documents = $this->dataForSearch->fiches();
+        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
+        $documents = $this->dataForSearch->indexCategoriesBottin();
+        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
     }
 
-    private function indexEnquetes()
+    private function indexEnquetes(): void
     {
+        $documents = [];
+        switch_to_blog(Theme::ADMINISTRATION);
+        foreach ($this->dataForSearch->getEnqueteDocuments() as $documentElastic) {
+            $documentElastic->id = 'enquete_'.$documentElastic->id;
+            $documents[] = $documentElastic;
+        }
+        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
     }
 
-    private function indexAdl()
+    private function indexAdl(): void
     {
+        $documents = [];
+        $adlIndexer = new AdlRepository();
+        foreach ($adlIndexer->getAllCategories() as $documentElastic) {
+            $documentElastic->id = 'adl_cat_'.$documentElastic->id;
+            $documents[] = $documentElastic;
+        }
+
+        foreach ($adlIndexer->getAllPosts() as $documentElastic) {
+            $documentElastic->id = 'adl_post_'.$documentElastic->id;
+            $documents[] = $documentElastic;
+        }
+        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
     }
 
     private function tasks(OutputInterface $output): void

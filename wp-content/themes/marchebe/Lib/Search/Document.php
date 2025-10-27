@@ -5,7 +5,7 @@ namespace AcMarche\Theme\Lib\Search;
 use AcMarche\Theme\Inc\RouterBottin;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Bottin\Bottin;
-use AcMarche\Theme\Repository\WpRepository;
+use AcMarche\Theme\Repository\BottinRepository;
 
 class Document
 {
@@ -15,60 +15,47 @@ class Document
     public string $content;
     public array $tags = [];
     public string $date;
-    public string $url;
+    public string $link;
     public string $type;
     public int $count = 0;
     public array $ids = [];
     public array $paths = [];
     public array $site = [];
 
-    public static function documentFromPost(\WP_Post $post, int $idSite): Document
+    public static function documentFromPost(\WP_Post|\stdClass $post, int $idSite): Document
     {
         list($date, $time) = explode(" ", $post->post_date);
-        $categories = array();
-        foreach (get_the_category($post->ID) as $category) {
-            $categories[] = $category->cat_name;
-        }
 
-        $content = get_the_content(null, null, $post);
-        $content = apply_filters('the_content', $content);
-        $siteName = Theme::getTitleBlog($idSite);
-        $wpRepository = new WpRepository();
+        $nameSite = Theme::getTitleBlog($idSite);
         $document = new Document();
         $document->id = $post->ID."-post-".$idSite;
         $document->name = Cleaner::cleandata($post->post_title);
         $document->excerpt = Cleaner::cleandata($post->post_excerpt);
-        $document->content = Cleaner::cleandata($content);
-        $document->tags = $categories;
-        $document->site = ['name' => $siteName, 'id' => $idSite];
-        $document->paths = $wpRepository->getAncestorsOfPost($post->ID);
+        $document->content = Cleaner::cleandata($post->content);
+        $document->site = ['name' => $nameSite, 'id' => $idSite];
+        $document->tags = $post->tags;
+        $document->paths = $post->paths;
         $document->date = $date;
         $document->type = 'article';
-        $document->url = get_permalink($post->ID);
+        $document->link = $post->link;
 
         return $document;
     }
 
-    public static function documentFromCategory(
-        \WP_Term $category,
-        int $idSite,
-        string $description,
-        string $content,
-        array $tags
-    ): Document {
-        $wpRepository = new WpRepository();
+    public static function documentFromCategory(\WP_Term|\stdClass $category, int $idSite): Document
+    {
         $document = new Document();
-        $siteName = Theme::getTitleBlog($idSite);
+        $nameSite = Theme::getTitleBlog($idSite);
         $document->id = $category->cat_ID."-category-".$idSite;
         $document->name = Cleaner::cleandata($category->name);
-        $document->excerpt = $description;
-        $document->content = $content;
-        $document->tags = $tags;
-        $document->site = ['name' => $siteName, 'id' => $idSite];
-        $document->paths = $wpRepository->getAncestorsOfCategory($category->cat_ID);
+        $document->excerpt = $category->description;
+        $document->content = $category->content;
+        $document->tags = $category->tags;
+        $document->site = ['name' => $nameSite, 'id' => $idSite];
+        $document->paths = $category->paths;
         $document->date = date('Y-m-d');
         $document->type = 'catégorie';
-        $document->url = get_category_link($category->cat_ID);
+        $document->link = $category->link;
 
         return $document;
     }
@@ -78,25 +65,40 @@ class Document
         $categories = DataForSearch::getCategoriesFiche($fiche);
 
         $document = new Document();
-        $siteName = Theme::getTitleBlog($idSite);
+        $nameSite = Theme::getTitleBlog($idSite);
         $document->id = $fiche->id."-fiche-".$idSite;
         $document->name = Cleaner::cleandata($fiche->societe);
         $document->excerpt = Bottin::getExcerpt($fiche);
-        $document->content = self::getContentFiche($fiche);
-        $document->site = ['name' => $siteName, 'id' => $idSite];
+        $document->content = DataForSearch::getContentFiche($fiche);
+        $document->site = ['name' => $nameSite, 'id' => $idSite];
         $document->tags = $categories;
-        $document->paths = [];
+        $document->paths = [];//todo
         list($date, $heure) = explode(' ', $fiche->created_at);
         $document->date = $date;
         $document->type = 'fiche';
-        $document->url = RouterBottin::getUrlFicheBottin($idSite, $fiche);
+        $document->link = RouterBottin::getUrlFicheBottin($idSite, $fiche);
 
         return $document;
     }
 
-    private static function getContentFiche($fiche): string
+    public static function documentFromCategoryBottin(\stdClass $category): Document
     {
-        return ' '.$fiche->societe.' '.$fiche->email.' '.$fiche->website.''.$fiche->twitter.' '.$fiche->facebook.' '.$fiche->nom.' '.$fiche->prenom.' '.$fiche->comment1.''.$fiche->comment2.' '.$fiche->comment3;
+        $created = explode(' ', $category->created_at);
+        $document = new Document();
+        $document->id = $category->id;
+        $document->name = $category->name;
+        $document->excerpt = $category->description;
+        $document->tags = [];//todo
+        $document->paths = [];
+        $document->date = $created[0];
+        $document->type = 'category';
+        $document->link = RouterBottin::getUrlCategoryBottin($category);
+        $fiches = BottinRepository::instanceBottinRepository()->getFichesByCategory($category->id);
+        $document->count = count($fiches);
+        $document->content = DataForSearch::getContentForCategory($fiches);
+
+        return $document;
+
     }
 
 }

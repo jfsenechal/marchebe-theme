@@ -11,6 +11,17 @@ use WP_Query;
 
 class WpRepository
 {
+    private static ?WpRepository $instance = null;
+
+    public static function instance(): self
+    {
+        if (!self::$instance) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
     /**
      * @param int $max
      *
@@ -90,6 +101,7 @@ class WpRepository
         $idSite = get_current_blog_id();
         $posts = $this->getPostsByCategory($catId);
         foreach ($posts as $post) {
+            $this->preparePost($post);
             $document = Document::documentFromPost($post, $idSite);
             $documents[] = $document;
         }
@@ -107,6 +119,32 @@ class WpRepository
         }
 
         return SortingHelper::sortDocuments($documents);
+    }
+
+    public function preparePost(WP_Post $post): void
+    {
+        $categories = [];
+        foreach (get_the_category($post->ID) as $category) {
+            $categories[] = ['id' => $category->term_id, 'name' => $category->name];
+        }
+        $post->tags = $categories;
+        $content = get_the_content(null, null, $post);
+        $post->content = apply_filters('the_content', $content);
+        $post->paths = WpRepository::instance()->getAncestorsOfPost($post->ID);
+    }
+
+    public function prepareCategory(\WP_Term $category): void
+    { $tags = [];
+
+            $children = $this->wpRepository->getChildrenOfCategory($category->cat_ID);
+            foreach ($children as $child) {
+                $tags[] = ['id' => $child->term_id, 'name' => $child->name];
+            }
+            $parent = $this->wpRepository->getParentCategory($category->cat_ID);
+            if ($parent) {
+                $tags[] = ['id' => $parent->term_id, 'name' => $parent->name];
+            }
+        $category->paths = WpRepository::instance()->getAncestorsOfCategory($category->cat_ID);
     }
 
     /**
