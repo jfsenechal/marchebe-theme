@@ -118,6 +118,12 @@ class RouterBottin
      */
     public static function generateFicheUrlCap(\stdClass $fiche): ?string
     {
+        $bottinRepository = new BottinRepository();
+        $categories = $bottinRepository->getCategoriesOfFiche($fiche->id);
+        if ($bottinRepository->isEconomy($categories) === null) {
+            return null;
+        }
+
         return 'https://cap.marche.be/en_GB/commerce?id='.$fiche->id;
     }
 
