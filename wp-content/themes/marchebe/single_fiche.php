@@ -65,7 +65,7 @@ try {
         'paths' => $paths,
         'site' => Theme::TOURISME,
         'tags' => $tags,
-        'thumbnail' => $images[0],
+        'thumbnail' => count($images) > 0 ? $images[0] : null,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();

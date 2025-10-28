@@ -53,6 +53,7 @@ class Twig
         $twig->addExtension(new IntlExtension());
         $twig->addFunction(TwigFunctions::fichePhones());
         $twig->addFunction(TwigFunctions::ficheEmails());
+        $twig->addFunction(TwigFunctions::ficheUrlMap());
         $twig->addGlobal('template_directory', Assets::getThemeUri());
 
         return $twig;
