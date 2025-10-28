@@ -19,6 +19,7 @@ $category = get_category($cat_ID);
 $category->url = get_category_link($cat_ID);
 $description = category_description($cat_ID);
 $title = single_cat_title('', false);
+$currentSite = get_current_blog_id();
 
 $posts = $wpRepository->getPostsAndFiches($cat_ID);
 $twig = Twig::loadTwig();
@@ -35,6 +36,7 @@ try {
         'title' => $title,
         'description' => $description,
         'children' => $children,
+        'currentSite' => $currentSite,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();

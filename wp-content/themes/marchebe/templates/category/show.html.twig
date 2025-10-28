@@ -1,26 +1,52 @@
 <section x-data="
 {
+  currentSite: {{ currentSite }},
   categorySelected: {{ category.term_id }},
+  loading: false,
   categoryName: '{{ category.name }}',
+  allPosts: {{ postsSerialized }},
+  filteredPosts: {{ postsSerialized }},
   handleCategorySelected(category) {
     this.categorySelected = category.cat_ID;
     this.categoryName = category.name;
   },
-  selectCategory(categoryId, categoryName) {
+  async selectCategory(categoryId, categoryName) {
     this.categorySelected = categoryId;
     this.categoryName = categoryName;
+    await this.fetchData();
   },
   isSelected(categoryId){
     return this.categorySelected === categoryId;
   },
-  allPosts: {{ postsSerialized }},
-  get filteredPosts() {
-    if (this.categorySelected === 0 || this.categorySelected === {{ category.term_id }}) {
-      return this.allPosts;
+  async fetchData() {
+    this.loading = true;
+
+    const formData = new FormData();
+    formData.append('action', 'my_ajax_action');
+    formData.append('nonce', wpData.nonce);
+    formData.append('categorySelected', this.categorySelected);
+    formData.append('currentSite', this.currentSite);
+
+    try {
+        const response = await fetch(wpData.ajaxUrl, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.data.posts) {
+            this.filteredPosts = result.data.posts;
+        } else {
+            console.error('Error fetching posts:', result.data?.message || 'Unknown error');
+            this.filteredPosts = [];
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        this.filteredPosts = [];
+    } finally {
+        this.loading = false;
     }
-    return this.allPosts.filter(post => {
-      return post.tags && post.tags.some(tag => tag.id === this.categorySelected);
-    });
   }
 }">
     {% include '@AcMarche/category/_header.html.twig' %}

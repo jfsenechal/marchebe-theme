@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme;
 
+use AcMarche\Theme\Inc\Ajax;
 use AcMarche\Theme\Inc\Assets;
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Inc\Filter;
@@ -26,6 +27,7 @@ if (WP_DEBUG === false) {
 }
 new SetupTheme();
 new Assets();
+new Ajax();
 new RouterEvent();
 new RouterBottin();
 new BottinCategoryMetaBox();

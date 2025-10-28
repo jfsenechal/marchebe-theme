@@ -1,9 +1,17 @@
 <section class="py-4 lg:py-4 bg-background mt-3" id="posts">
     <div class="container mx-auto px-6">
         <h2 class="text-xl lg:text-4xl font-bold text-citoyen mb-4">
-            <span x-text="filteredPosts.length"></span> article(s) dans <span x-text="categoryName"></span>
+            <span x-text="filteredPosts.length"></span> article(s) dans <span x-html="categoryName"></span>
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 ml-0 md:ml-4">
+
+        <!-- Loading State -->
+        <div x-show="loading" class="flex justify-center items-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cta-dark"></div>
+            <span class="ml-3 text-lg text-gray-600">Chargement des articles...</span>
+        </div>
+
+        <!-- Posts Grid -->
+        <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 ml-0 md:ml-4">
             <template x-for="post in filteredPosts" :key="post.id">
                 <div
                         class="group bg-white p-8 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-in-out animated-element">
@@ -17,7 +25,7 @@
                     </a>
                 </div>
             </template>
-            <div x-show="filteredPosts.length === 0" class="text-center">
+            <div x-show="!loading && filteredPosts.length === 0" class="text-center col-span-full">
                 Aucun article pour le moment.
             </div>
         </div>
