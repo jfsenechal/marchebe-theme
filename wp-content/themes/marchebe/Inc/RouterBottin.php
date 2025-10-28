@@ -22,6 +22,7 @@ class RouterBottin
         //Flush rewrite rules on theme activation (only once)
         register_activation_hook(__FILE__, [$this, 'flush_rules']);
         self::$bottinRepository = new BottinRepository();
+        //$this->flushRoutes();
     }
 
     private static function getBottinRepository(): BottinRepository
@@ -30,6 +31,20 @@ class RouterBottin
             self::$bottinRepository = new BottinRepository();
         }
         return self::$bottinRepository;
+    }
+
+    public function flushRoutes(): void
+    {
+        if (is_multisite()) {
+            $current = get_current_blog_id();
+            foreach (get_sites(['fields' => 'ids']) as $site) {
+                switch_to_blog($site);
+                flush_rewrite_rules();
+            }
+            switch_to_blog($current);
+        } else {
+            flush_rewrite_rules();
+        }
     }
 
     function flush_rules(): void
