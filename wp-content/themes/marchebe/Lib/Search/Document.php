@@ -18,7 +18,6 @@ class Document
     public string $link;
     public string $type;
     public int $count = 0;
-    public array $ids = [];
     public array $paths = [];
     public array $site = [];
 
