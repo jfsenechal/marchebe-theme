@@ -2745,7 +2745,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-#homepage,#main-header a {
+#homepage a,#main-header a {
   text-decoration: none;
 }
 img, video, iframe {
