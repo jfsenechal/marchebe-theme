@@ -21,10 +21,11 @@ if (has_post_thumbnail()) {
         $image = $images[0];
     }
 }
-$catSlug = get_query_var('category_name');
-$currentCategory = get_category_by_slug($catSlug);
+
 $tags = [];
-$tags[] = ['name' => 'Agenda', 'term_id' => 5, 'url' => '/agenda'];
+foreach (get_the_category($post->ID) as $category) {
+    $tags[] = ['id' => $category->term_id, 'name' => $category->name, 'url' => get_category_link($category->term_id)];
+}
 $paths = BreadcrumbHelper::post($post->ID);
 
 $content = get_the_content(null, null, $post);

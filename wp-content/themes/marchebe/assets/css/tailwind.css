@@ -58,7 +58,7 @@ img, video, iframe {
     /* see https://web.dev/learn/design/responsive-"/images/ */
 }
 
-article h2 {
+article h2,article h3 {
     @apply text-cta-light;
 }
 

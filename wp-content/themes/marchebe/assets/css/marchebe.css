@@ -2752,7 +2752,7 @@ img, video, iframe {
   max-width: 100%;
   object-fit: cover;
 }
-article h2 {
+article h2,article h3 {
   color: var(--color-cta-light);
 }
 #app {

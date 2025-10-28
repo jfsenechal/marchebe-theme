@@ -22,6 +22,7 @@ $title = single_cat_title('', false);
 $currentSite = get_current_blog_id();
 
 $posts = $wpRepository->getPostsAndFiches($cat_ID);
+
 $twig = Twig::loadTwig();
 $thumbnail = "https://picsum.photos/2070";
 $paths = BreadcrumbHelper::category($cat_ID);
