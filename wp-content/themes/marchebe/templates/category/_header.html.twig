@@ -2,9 +2,12 @@
     <header class="container mx-auto  text-center mt-3 animate-fade-in-up"
             style="animation: fade-in-up 1s ease-out forwards;">
         {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
-        <h1 class="text-4xl md:text-6xl font-bold  text-cta-dark">{{ category.name }}</h1>
-        <!-- <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto">Ensemble, agissons pour un cadre de vie durable, propre et
-           respectueux de la nature.</p> -->
+        <h1 class="text-4xl md:text-6xl font-bold  text-cta-dark">{{ category.name|raw }}</h1>
+        <!--
+        <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto">
+        {{ description }}
+        </p>
+        -->
     </header>
     {% include '@AcMarche/category/_menu.html.twig' %}
 </section>

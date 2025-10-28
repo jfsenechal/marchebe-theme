@@ -16,6 +16,7 @@ $cat_ID = get_queried_object_id();
 $wpRepository = new WpRepository();
 $children = $wpRepository->getChildrenOfCategory($cat_ID);
 $category = get_category($cat_ID);
+$category->url = get_category_link($cat_ID);
 $description = category_description($cat_ID);
 $title = single_cat_title('', false);
 
@@ -32,6 +33,7 @@ try {
         'thumbnail' => $thumbnail,
         'paths' => $paths,
         'title' => $title,
+        'description' => $description,
         'children' => $children,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
