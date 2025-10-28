@@ -98,8 +98,8 @@ class ShortCode
 
     public function googleMap(array $args): string
     {
-        $latitude = $args['lat'];
-        $longitude = $args['long'];
+        $latitude = $args['lat']??null;
+        $longitude = $args['long']??null;
         $twig = Twig::LoadTwig();
         $post = get_post();
         $title = $post ? $post->post_title : '';

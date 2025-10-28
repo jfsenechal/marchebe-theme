@@ -6,7 +6,7 @@ class Assets
 {
     public function __construct()
     {
-        //add_action('wp_enqueue_scripts', [$this, 'remove_global_styles'], 100);
+        add_action('wp_enqueue_scripts', [$this, 'remove_global_styles'], 100);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_filter('script_loader_tag', [$this, 'add_defer_attribute'], 10, 2);
@@ -22,6 +22,7 @@ class Assets
             'theme-slug-style',
             $themeUri.'/style.css'// get_stylesheet_uri()
         );
+
         wp_enqueue_style(
             'marchebe-primary',
             $themeUri.'/assets/css/marchebe.css',
