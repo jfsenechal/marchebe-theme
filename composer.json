@@ -26,7 +26,8 @@
   },
   "autoload": {
     "psr-4": {
-      "AcMarche\\Theme\\": "wp-content/themes/marchebe/"
+      "AcMarche\\Theme\\": "wp-content/themes/marchebe/",
+      "AcMarche\\Issep\\": "src/AcMarche/Issep/src"
     }
   },
   "config": {

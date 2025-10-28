@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Lib\Search;
 
+use AcMarche\Bottin\SearchData\Data\ElasticData;
 use AcMarche\Theme\Repository\WpRepository;
 use Meilisearch\Contracts\DeleteTasksQuery;
 use Meilisearch\Endpoints\Keys;
@@ -59,6 +60,15 @@ class MeiliServer
     {
         WpRepository::instance()->preparePost($post);
         $document = Document::documentFromPost($post, get_current_blog_id());
+        $this->initClientAndIndex();
         $this->index->addDocuments([$document], $this->primaryKey);
+    }
+
+
+    public function deleteDocument(int $postId, string $type, int $siteId): void
+    {
+        $this->initClientAndIndex();
+        $id = Document::createId($postId, $type, $siteId);
+        $this->index->deleteDocument($id);
     }
 }

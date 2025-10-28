@@ -28,7 +28,7 @@ class Document
 
         $nameSite = Theme::getTitleBlog($idSite);
         $document = new Document();
-        $document->id = $post->ID ?? $post->id."-post-".$idSite;
+        $document->id = self::createId($post->ID ?? $post->id, "post", $idSite);
         $document->name = Cleaner::cleandata($post->post_title);
         $document->excerpt = Cleaner::cleandata($post->post_excerpt);
         $document->content = Cleaner::cleandata($post->content);
@@ -46,7 +46,7 @@ class Document
     {
         $document = new Document();
         $nameSite = Theme::getTitleBlog($idSite);
-        $document->id = $category->term_id ?? $category->id."-category-".$idSite;
+        $document->id = self::createId($category->term_id ?? $category->id, "category", $idSite);
         $document->name = Cleaner::cleandata($category->name);
         $document->excerpt = $category->description;
         $document->content = $category->content;
@@ -66,7 +66,7 @@ class Document
 
         $document = new Document();
         $nameSite = Theme::getTitleBlog($idSite);
-        $document->id = $fiche->id."-fiche-".$idSite;
+        $document->id = self::createId($fiche->id, "fiche", $idSite);
         $document->name = Cleaner::cleandata($fiche->societe);
         $document->excerpt = Bottin::getExcerpt($fiche);
         $document->content = DataForSearch::getContentFiche($fiche);
@@ -85,7 +85,7 @@ class Document
     {
         $created = explode(' ', $category->created_at);
         $document = new Document();
-        $document->id = $category->id;
+        $document->id = self::createId($category->id, "category-bottin", Theme::ECONOMIE);
         $document->name = $category->name;
         $document->excerpt = $category->description;
         $document->tags = [];//todo
@@ -99,6 +99,16 @@ class Document
 
         return $document;
 
+    }
+
+    public static function createId(int $id, string $type, ?int $siteId = 0): string
+    {
+        $id = $type.'-'.$id;
+        if ($siteId) {
+            $id .= '-'.$siteId;
+        }
+
+        return $id;
     }
 
 }
