@@ -48,6 +48,10 @@ body {
     @apply antialiased text-cta-dark;
 }
 
+#homepage a {
+    text-decoration: none;
+}
+
 img, video, iframe {
     /*@apply object-cover max-w-full object-top-center;*/ /* todo object-top-center */
     @apply object-cover max-w-full ;
@@ -64,7 +68,7 @@ article h2 {
 }
 
 [x-cloak] {
-  display: none !important;
+    display: none !important;
 }
 
 /** animation **/

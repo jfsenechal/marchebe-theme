@@ -6,7 +6,7 @@ class Assets
 {
     public function __construct()
     {
-        add_action('wp_enqueue_scripts', [$this, 'remove_global_styles'], 100);
+        add_action('wp_enqueue_scripts', [$this,'remove_unnecessary_core_styles'], 9999);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_filter('script_loader_tag', [$this, 'add_defer_attribute'], 10, 2);
@@ -56,19 +56,19 @@ class Assets
         return $tag;
     }
 
-    function remove_global_styles(): void
+    function remove_unnecessary_core_styles(): void
     {
-        // Remove global styles
-       // wp_dequeue_style('global-styles');
-     //   wp_deregister_style('global-styles');
-        // Remove classic theme styles
+        // Remove Classic Theme Styles (Often redundant/opinionated CSS)
         wp_dequeue_style('classic-theme-styles');
-        // Remove block library
-        //  wp_dequeue_style('wp-block-library');
-        // wp_dequeue_style('wp-block-library-theme');
 
-        // Remove SVG filters
-        //remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
+        // Remove Block Library Theme Styles (Often redundant/opinionated CSS)
+        wp_dequeue_style('wp-block-library-theme');
+
+        // Remove Duotone SVG filters (Large inline SVG definitions for image effects)
+        remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
+
+        // DO NOT remove 'wp-block-library' (Needed for basic block structure/layouts)
+        // DO NOT remove 'global-styles' (Needed for colors, typography, and layout settings)
     }
 
     public static function getThemeUri(): string
