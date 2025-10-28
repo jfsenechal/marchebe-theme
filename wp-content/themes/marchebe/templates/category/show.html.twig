@@ -14,6 +14,11 @@
     this.categorySelected = categoryId;
     this.categoryName = categoryName;
     await this.fetchData();
+    await this.$nextTick();
+    const element = document.getElementById('posts');
+    if (element) {
+      element.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
   },
   isSelected(categoryId){
     return this.categorySelected === categoryId;
