@@ -6,16 +6,16 @@ class Assets
 {
     public function __construct()
     {
-        add_action('wp_enqueue_scripts', [$this, 'remove_global_styles'], 100);
-        add_action('wp_enqueue_scripts', [$this, 'theme_slug_enqueue_styles']);
-        add_action('wp_enqueue_scripts', [$this, 'theme_slug_enqueue_scripts']);
+        //add_action('wp_enqueue_scripts', [$this, 'remove_global_styles'], 100);
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_filter('script_loader_tag', [$this, 'add_defer_attribute'], 10, 2);
         // Fix WordPress core asset URLs in multisite subdirectory setup
         add_filter('style_loader_src', [$this, 'fix_multisite_urls'], 10, 1);
         add_filter('script_loader_src', [$this, 'fix_multisite_urls'], 10, 1);
     }
 
-    function theme_slug_enqueue_styles()
+    function enqueue_styles(): void
     {
         $themeUri = self::getThemeUri();
         wp_enqueue_style(
@@ -35,7 +35,7 @@ class Assets
         );
     }
 
-    function theme_slug_enqueue_scripts()
+    function enqueue_scripts(): void
     {
         wp_enqueue_script(
             'marchebe-alpine',
@@ -45,7 +45,7 @@ class Assets
         );
     }
 
-    function add_defer_attribute($tag, $handle)
+    function add_defer_attribute($tag, $handle): string
     {
         // Add defer to Alpine.js script
         if ('marchebe-alpine' === $handle) {
@@ -55,7 +55,7 @@ class Assets
         return $tag;
     }
 
-    function remove_global_styles()
+    function remove_global_styles(): void
     {
         // Remove global styles
         wp_dequeue_style('global-styles');

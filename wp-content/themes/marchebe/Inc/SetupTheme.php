@@ -6,16 +6,13 @@ class SetupTheme
 {
     public function __construct()
     {
-        $this->marche_post_format_setup();
+        $this->setup();
     }
 
     /**
-     * Adds theme support for post formats.
-     *
-     * @return void
      *
      */
-    function marche_post_format_setup()
+    function setup()
     {
         add_theme_support('post-thumbnails');
 
@@ -40,9 +37,6 @@ class SetupTheme
                 'navigation-widgets',
             )
         );
-
-        // Add theme support for selective refresh for widgets.
-        add_theme_support('customize-selective-refresh-widgets');
 
         // Add support for Block Styles.
         add_theme_support('wp-block-styles');

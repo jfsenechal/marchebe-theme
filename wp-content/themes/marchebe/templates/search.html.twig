@@ -37,14 +37,16 @@
                 <ul class="divide-y divide-gray-200">
                     {% for result in hits %}
                         <li class="py-4 flex items-center justify-between">
-                            <a href="{{ result.url }}"
+                            <a href="{{ result.link }}"
                                class="group block w-full">
                                 <p class="font-semibold text-cta-dark group-hover:text-citoyen transition-colors">
                                     {{ result.name }}
                                 </p>
                                 <div class="flex flex-row gap-2">
                                      <span class="text-sm text-gray-500">
-                                       {{ result.site.name }}
+                                       {% if result.site|length > 0 %}
+                                           {{ result.site.name }}
+                                       {% endif %}
                                     </span>
                                     {% for path in result.paths %}
                                         <span class="text-sm text-gray-500">
