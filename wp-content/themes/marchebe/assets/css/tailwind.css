@@ -48,7 +48,7 @@ body {
     @apply antialiased text-cta-dark;
 }
 
-#homepage a {
+#homepage,#main-header a {
     text-decoration: none;
 }
 

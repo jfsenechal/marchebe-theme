@@ -2742,7 +2742,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-#homepage a {
+#homepage,#main-header a {
   text-decoration: none;
 }
 img, video, iframe {
