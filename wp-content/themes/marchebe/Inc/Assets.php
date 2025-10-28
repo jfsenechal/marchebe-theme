@@ -6,7 +6,7 @@ class Assets
 {
     public function __construct()
     {
-       // add_action('wp_enqueue_scripts', [$this, 'remove_global_styles'], 100);
+        add_action('wp_enqueue_scripts', [$this, 'remove_global_styles'], 100);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_filter('script_loader_tag', [$this, 'add_defer_attribute'], 10, 2);
@@ -62,7 +62,7 @@ class Assets
         wp_dequeue_style('global-styles');
         wp_deregister_style('global-styles');
         // Remove classic theme styles
-        wp_dequeue_style('classic-theme-styles');
+        //wp_dequeue_style('classic-theme-styles');
         // Remove block library
         //  wp_dequeue_style('wp-block-library');
         // wp_dequeue_style('wp-block-library-theme');
