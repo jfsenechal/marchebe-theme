@@ -51,6 +51,8 @@ class Twig
         $twig->addFunction(self::currentUrl());
         $twig->addExtension(new StringExtension());
         $twig->addExtension(new IntlExtension());
+        $twig->addFunction(TwigFunctions::fichePhones());
+        $twig->addFunction(TwigFunctions::ficheEmails());
         $twig->addGlobal('template_directory', Assets::getThemeUri());
 
         return $twig;
@@ -84,7 +86,7 @@ class Twig
 
     /**
      * For sharing pages
-     * @return TwigFunction
+     * @return TwigFunctions
      */
     private static function currentUrl(): TwigFunction
     {
