@@ -1,7 +1,7 @@
 <section x-data="
 {
-  categorySelected: 0,
-  categoryName: '',
+  categorySelected: {{ category.term_id }},
+  categoryName: '{{ category.name }}',
   handleCategorySelected(category) {
     this.categorySelected = category.cat_ID;
     this.categoryName = category.name;
@@ -13,7 +13,15 @@
   isSelected(categoryId){
     return this.categorySelected === categoryId;
   },
-  posts: {{ postsSerialized }}
+  allPosts: {{ postsSerialized }},
+  get filteredPosts() {
+    if (this.categorySelected === 0 || this.categorySelected === {{ category.term_id }}) {
+      return this.allPosts;
+    }
+    return this.allPosts.filter(post => {
+      return post.tags && post.tags.some(tag => tag.id === this.categorySelected);
+    });
+  }
 }">
     {% include '@AcMarche/category/_header.html.twig' %}
     {% include '@AcMarche/category/_posts.html.twig' %}

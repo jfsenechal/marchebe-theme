@@ -1,5 +1,21 @@
 <section class="mx-auto p-8 bg-blue-50">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2" role="list">
+        <a role="listitem"
+           class="p-4 rounded-md shadow-sm flex items-center justify-between transition-colors duration-300"
+           :class="isSelected({{ category.term_id }}) ? 'bg-cta-dark text-white' : 'bg-white text-black-base'"
+           href="#"
+           @click="selectCategory({{ category.term_id }},'{{ category.slug }}')">
+            <span class="mr-2">Tous</span>
+            <button aria-label="Voir tous les articles"
+                    class="hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded"
+                    :class="isSelected({{ category.term_id }}) ? 'text-white' : 'text-gray-500'">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+                </svg>
+            </button>
+        </a>
         {% for child in children %}
             <a role="listitem"
                class="p-4 rounded-md shadow-sm flex items-center justify-between transition-colors duration-300"
