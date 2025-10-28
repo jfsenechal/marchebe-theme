@@ -132,6 +132,7 @@ class WpRepository
         $content = get_the_content(null, null, $post);
         $post->content = apply_filters('the_content', $content);
         $post->paths = WpRepository::instance()->getAncestorsOfPost($post->ID);
+        $post->link = get_permalink($post);
     }
 
     /**
