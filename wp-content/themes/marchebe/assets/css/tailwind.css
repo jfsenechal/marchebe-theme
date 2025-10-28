@@ -54,6 +54,10 @@ img, video, iframe {
     /* see https://web.dev/learn/design/responsive-"/images/ */
 }
 
+article h2 {
+    @apply text-cta-light;
+}
+
 #app {
     @apply grid min-h-screen;
     grid-template-rows: auto 1fr auto;

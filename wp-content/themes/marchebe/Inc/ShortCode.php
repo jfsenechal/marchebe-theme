@@ -104,17 +104,21 @@ class ShortCode
         $post = get_post();
         $title = $post ? $post->post_title : '';
 
-        $t = $twig->render(
-            '@AcMarche/widgets/_map.html.twig',
-            [
-                'latitude' => $latitude,
-                'longitude' => $longitude,
-                'title' => $title,
-            ]
-        );
-        $t = preg_replace("#\n#", "", $t);//bug avec raw de twig
+        if ($latitude && $longitude) {
+            $t = $twig->render(
+                '@AcMarche/widgets/_map.html.twig',
+                [
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                    'title' => $title,
+                ]
+            );
+            $t = preg_replace("#\n#", "", $t);//bug avec raw de twig
 
-        return $t;
+            return $t;
+        }
+
+        return '';
     }
 
     public function capteurList(): string
