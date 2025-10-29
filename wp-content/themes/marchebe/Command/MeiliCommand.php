@@ -66,10 +66,10 @@ class MeiliCommand extends Command
 
         if ($update) {
             $this->dataForSearch = new DataForSearch();
-       /*     $this->indexPosts();
+            $this->indexPosts();
             $this->indexCategories();
             $this->indexBottin();
-            $this->indexEnquetes();*/
+            $this->indexEnquetes();
             $this->indexAdl();
 
             return Command::SUCCESS;
