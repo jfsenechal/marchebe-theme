@@ -40,6 +40,6 @@ try {
         'currentSite' => $currentSite,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
-    echo $e->getMessage();
+    Twig::renderErrorPage($e);
 }
 get_footer();

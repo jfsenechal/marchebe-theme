@@ -19,20 +19,29 @@ $codeCgt = get_query_var(RouterEvent::PARAM_EVENT);
 get_header();
 
 if (!str_contains($codeCgt, "EVT")) {
+    Twig::renderNotFoundPage('Code CGT invalide');
+    get_footer();
 
+    return;
 }
 
 $pivotRepository = new PivotRepository();
 try {
-    $event = $pivotRepository->loadOneEvent($codeCgt, parse: true, purgeCache: true);
+    $event = $pivotRepository->loadOneEvent($codeCgt, parse: true, purgeCache: WP_DEBUG);
 } catch (\JsonException $e) {
-    dd($e);
+    Twig::renderErrorPage($e);
+    get_footer();
+
+    return;
 }
 
 $twig = Twig::loadTwig();
 
 if (count($event->dates) === 0) {
+    Twig::renderNotFoundPage('Evènement cloturé');
+    get_footer();
 
+    return;
 }
 
 $image = count(

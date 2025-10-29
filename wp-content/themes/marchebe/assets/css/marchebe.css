@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.14 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.16 | MIT License | https://tailwindcss.com */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @layer properties;
 @layer theme, base, components, utilities;
@@ -106,8 +106,10 @@
     --color-sport: #98C02DFF;
     --color-social: #CB0044FF;
     --color-tourisme: #8A5A9DFF;
-    --color-cta-light: #4ae0c7;
+    --color-cta-light: #6B9CA5;
+    --color-cta-brown: #7B6B5F;
     --color-cta-dark: #487F89FF;
+    --color-grey-light: #dee2e6;
   }
 }
 @layer base {
@@ -1188,6 +1190,12 @@
   .max-w-3xl {
     max-width: var(--container-3xl);
   }
+  .max-w-\[10px\] {
+    max-width: 10px;
+  }
+  .max-w-\[150px\] {
+    max-width: 150px;
+  }
   .max-w-\[200px\] {
     max-width: 200px;
   }
@@ -2191,6 +2199,13 @@
       }
     }
   }
+  .hover\:text-cta-brown {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-cta-brown);
+      }
+    }
+  }
   .hover\:text-cta-light {
     &:hover {
       @media (hover: hover) {
@@ -2230,6 +2245,13 @@
     &:hover {
       @media (hover: hover) {
         color: var(--color-gray-600);
+      }
+    }
+  }
+  .hover\:text-grey-light {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-grey-light);
       }
     }
   }
@@ -2598,6 +2620,12 @@
       padding-right: calc(var(--spacing) * 32);
     }
   }
+  .md\:text-2xl {
+    @media (width >= 48rem) {
+      font-size: var(--text-2xl);
+      line-height: var(--tw-leading, var(--text-2xl--line-height));
+    }
+  }
   .md\:text-3xl {
     @media (width >= 48rem) {
       font-size: var(--text-3xl);
@@ -2643,6 +2671,11 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
+  .lg\:grid-cols-4 {
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
   .lg\:grid-cols-\[repeat\(3\,minmax\(0\,300px\)\)\] {
     @media (width >= 64rem) {
       grid-template-columns: repeat(3,minmax(0,300px));
@@ -2661,6 +2694,12 @@
   .lg\:py-4 {
     @media (width >= 64rem) {
       padding-block: calc(var(--spacing) * 4);
+    }
+  }
+  .lg\:text-3xl {
+    @media (width >= 64rem) {
+      font-size: var(--text-3xl);
+      line-height: var(--tw-leading, var(--text-3xl--line-height));
     }
   }
   .lg\:text-4xl {
@@ -2745,14 +2784,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-#homepage a,#main-header a {
+#homepage a, #main-header a, #desktop-menu a, #mobile-menu a {
   text-decoration: none;
 }
 img, video, iframe {
   max-width: 100%;
   object-fit: cover;
 }
-article h2,article h3 {
+article h2, article h3 {
   color: var(--color-cta-light);
 }
 #app {

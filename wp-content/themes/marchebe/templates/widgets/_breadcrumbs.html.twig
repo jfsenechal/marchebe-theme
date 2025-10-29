@@ -7,14 +7,14 @@
         <li><span class="select-none">/</span></li>
         {% for item in paths %}
             <li class="space-x-2">
-                <a href="{{ item.url }}" class="hover:text-blue-600 hover:underline">
-                    {{ item.name }}
+                <a href="{{ item.link }}" class="hover:text-blue-600 hover:underline">
+                    {{ item.name|raw }}
                 </a>
                 <span class="select-none">/</span>
             </li>
         {% endfor %}
         <li aria-current="page" class="font-medium text-slate-700 truncate max-w-[200px] sm:max-w-none">
-            {{ title }}
+            {{ title|raw }}
         </li>
     </ol>
 </nav>

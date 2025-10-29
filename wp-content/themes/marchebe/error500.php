@@ -12,9 +12,9 @@ $twig = Twig::loadTwig();
 
 try {
     $twig->render('@AcMarche/error/_error.html.twig', [
-        'message' => $exception?->getMessage(),
-        'file' => $exception?->getFile(),
-        'line' => $exception?->getLine(),
+        'message' => 'Une erreur est survenue.',
+        'file' => '',
+        'line' => '',
         'statusCode' => $statusCode,
         'statusText' => $statusText,
     ]);

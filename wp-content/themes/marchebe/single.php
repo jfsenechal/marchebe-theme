@@ -26,7 +26,7 @@ $tags = [];
 foreach (get_the_category($post->ID) as $category) {
     $tags[] = ['id' => $category->term_id, 'name' => $category->name, 'url' => get_category_link($category->term_id)];
 }
-$paths = BreadcrumbHelper::post($post->ID);
+$paths = BreadcrumbHelper::currentPost();
 
 $content = get_the_content(null, null, $post);
 $content = apply_filters('the_content', $content);
@@ -43,7 +43,7 @@ try {
         'thumbnail' => $image,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
-    echo $e->getMessage();
+    Twig::renderErrorPage($e);
 }
 
 get_footer();

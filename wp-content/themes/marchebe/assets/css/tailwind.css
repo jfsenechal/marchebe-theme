@@ -27,7 +27,9 @@
     --color-sport: #98C02DFF;
     --color-social: #CB0044FF;
     --color-tourisme: #8A5A9DFF;
-    --color-cta-light: #4ae0c7;
+    --color-cta-light2: #5A8C96;
+    --color-cta-light: #6B9CA5;
+    --color-cta-brown: #7B6B5F;
     --color-cta-dark: #487F89FF;
     --color-grey-dark: #232222;
     --color-grey-light: #dee2e6;
@@ -48,7 +50,7 @@ body {
     @apply antialiased text-cta-dark;
 }
 
-#homepage a,#main-header a {
+#homepage a, #main-header a, #desktop-menu a, #mobile-menu a {
     text-decoration: none;
 }
 
@@ -58,7 +60,7 @@ img, video, iframe {
     /* see https://web.dev/learn/design/responsive-"/images/ */
 }
 
-article h2,article h3 {
+article h2, article h3 {
     @apply text-cta-light;
 }
 

@@ -1,43 +1,9 @@
 {% if children|length > 0 %}
     <nav aria-label="Filtrer les articles par catégorie" class="mx-auto p-8 bg-blue-50">
-        <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-            <li>
-                <a class="p-4 rounded-md shadow-sm flex items-center justify-between transition-colors duration-300 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                   :class="isSelected({{ category.term_id }}) ? 'bg-cta-dark text-white' : 'bg-white text-black-base'"
-                   href="{{ category.url }}"
-                   @click.prevent="selectCategory({{ category.term_id }},'{{ category.name }}')"
-                   :aria-current="isSelected({{ category.term_id }}) ? 'page' : null">
-                    <span class="mr-2 font-medium">Tous</span>
-                    <svg class="w-5 h-5 flex-shrink-0"
-                         xmlns="http://www.w3.org/2000/svg"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke-width="1.5"
-                         stroke="currentColor"
-                         aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
-                    </svg>
-                </a>
-            </li>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            {% include '@AcMarche/category/_btn_all.html.twig' with {'item':category, 'name': 'Tous'} %}
             {% for child in children %}
-                <li>
-                    <a class="p-4 rounded-md shadow-sm flex items-center justify-between transition-colors duration-300 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                       :class="isSelected({{ child.cat_ID }}) ? 'bg-cta-dark text-white' : 'bg-white text-black-base'"
-                       href="{{ child.url }}"
-                       @click.prevent="selectCategory({{ child.cat_ID }},'{{ child.slug }}')"
-                       :aria-current="isSelected({{ child.cat_ID }}) ? 'page' : null">
-                        <span class="mr-2 font-medium">{{ child.name }}</span>
-                        <svg class="w-5 h-5 flex-shrink-0"
-                             xmlns="http://www.w3.org/2000/svg"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke-width="1.5"
-                             stroke="currentColor"
-                             aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
-                        </svg>
-                    </a>
-                </li>
+                {% include '@AcMarche/category/_btn_all.html.twig' with {'item':child} %}
             {% endfor %}
         </ul>
     </nav>
