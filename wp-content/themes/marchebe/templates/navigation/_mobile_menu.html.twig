@@ -18,9 +18,12 @@
 
             <div class="p-4 flex items-center justify-between border-b border-gray-700">
                 <h2 class="text-lg font-semibold">Menu</h2>
-                <button @click="toggleMobileMenu()" class="p-2 -mr-2" aria-label="Close menu">
+                <button @click="toggleMobileMenu()"
+                        type="button"
+                        class="p-2 -mr-2"
+                        aria-label="Fermer le menu">
                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor">
+                         stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
@@ -31,11 +34,14 @@
                     <li>
                         <button
                                 @click="openMobileDrawer(item.blogid)"
+                                type="button"
                                 class="w-full flex justify-between items-center text-left p-3 rounded-md text-base hover:bg-gray-700"
+                                :aria-expanded="activeMobileDrawerId === item.blogid"
+                                :aria-label="'Ouvrir ' + item.name"
                         >
                             <span x-text="item.name"></span>
                             <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                 fill="currentColor">
+                                 fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd"
                                       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                       clip-rule="evenodd"/>
@@ -52,8 +58,11 @@
 
             <div x-show="activeMobileCategoryData">
                 <div class="p-4 flex items-center border-b border-gray-700">
-                    <button @click="closeMobileDrawer()" class="p-2 -ml-2 mr-2" aria-label="Go back">
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <button @click="closeMobileDrawer()"
+                            type="button"
+                            class="p-2 -ml-2 mr-2"
+                            aria-label="Retour au menu principal">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
                                   d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                                   clip-rule="evenodd"/>
