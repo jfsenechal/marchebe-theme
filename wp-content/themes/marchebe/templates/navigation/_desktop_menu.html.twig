@@ -36,7 +36,7 @@
             <div x-show="activeDesktopCategory">
                 <h3
                         :class="`text-sm font-semibold ${activeDesktopCategory?.color} tracking-wider uppercase`"
-                        x-text="activeDesktopCategory?.name"
+                        x-text="activeDesktopCategory?.name ?? 'select a category'"
                 ></h3>
                 <ul class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
                     <template x-for="child in activeDesktopCategory?.items" :key="child.id">
