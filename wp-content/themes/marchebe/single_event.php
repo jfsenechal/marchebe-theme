@@ -51,7 +51,7 @@ $image = count(
 $paths = $tags = [
     'name' => 'Agenda des manifestations',
     'term_id' => 5,
-    'url' => '/tourisme/agenda-des-manifestations',
+    'link' => '/tourisme/agenda-des-manifestations',
 ];
 
 try {
