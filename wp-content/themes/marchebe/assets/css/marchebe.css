@@ -1524,6 +1524,9 @@
   .bg-citoyen-100 {
     background-color: var(--color-citoyen-100);
   }
+  .bg-cta-brown {
+    background-color: var(--color-cta-brown);
+  }
   .bg-cta-dark {
     background-color: var(--color-cta-dark);
   }
