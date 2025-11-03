@@ -123,6 +123,7 @@ class Seo
         $language = 'fr';
         if (null !== $offre) {
             $base = self::baseTitle('| Agenda des manifestations');
+            dd($offre->nom);
             $label = $offre->typeOffre->getLabelByLanguage('fr');
             self::$metas['title'] = $offre->nom.' '.$label.' '.$base;
             if ($offre->description) {
