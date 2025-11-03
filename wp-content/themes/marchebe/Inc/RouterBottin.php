@@ -21,7 +21,7 @@ class RouterBottin
         add_filter('template_include', [$this, 'add_templates']);
         //Flush rewrite rules on theme activation (only once)
         register_activation_hook(__FILE__, [$this, 'flush_rules']);
-        $this->flushRoutes();
+        //$this->flushRoutes();
     }
 
     private static function getBottinRepository(): BottinRepository
