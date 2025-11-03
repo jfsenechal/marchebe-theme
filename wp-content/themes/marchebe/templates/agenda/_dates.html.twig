@@ -5,23 +5,19 @@
     {% for dateEvent in event.dates %}
         <ul class="font-montserrat-semi-bold text-cta-dark flex flex-row gap-2">
             <li>
-                {% if dateEvent.dateBegin %}
-                    {{ dateEvent.dateBegin.date|format_date('full') }}
-                {% endif %}
-
-                {% if dateEvent.dateRealBegin %}
-                    Du {{ dateEvent.dateRealBegin.date|format_date('full') }}
-                {% endif %}
-
-                {% if dateEvent.dateEnd %}
-                    au {{ dateEvent.dateEnd.date|format_date('full') }}
-                {% endif %}
-
-                <div class="flex flex-col gap-1 my-4">
-
+                {% if dateEvent.isSameDate() %}
+                    {% if dateEvent.dateBegin %}
+                        {{ dateEvent.dateBegin.date|format_date('full') }}
+                    {% endif %}
+                {% else %}
                     {% if dateEvent.dateRange %}
                         <span>{{ dateEvent.dateRange }}</span>
+                    {% else %}
+                        Du {{ dateEvent.dateBegin.date|format_date('full') }}  au {{ dateEvent.dateEnd.date|format_date('full') }}
                     {% endif %}
+                {% endif %}
+
+                <span class="flex flex-col gap-1 my-4">
 
                     {% if dateEvent.ouvertureHeure1 %}
                         <span>{{ dateEvent.ouvertureHeure1 }}</span>
@@ -43,7 +39,7 @@
                         <span>{{ dateEvent.ouvertureDetails|raw }}</span>
                     {% endif %}
 
-                </div>
+                </span>
             </li>
         </ul>
     {% endfor %}
