@@ -66,6 +66,8 @@ try {
         'site' => Theme::TOURISME,
         'tags' => $tags,
         'thumbnail' => count($images) > 0 ? $images[0] : null,
+        'thumbnail_srcset' => null,
+        'thumbnail_sizes' => null,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();
