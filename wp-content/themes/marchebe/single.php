@@ -4,6 +4,7 @@ namespace AcMarche\Theme\Templates;
 
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Helper\BreadcrumbHelper;
+use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Lib\Twig;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -32,6 +33,14 @@ $content = get_the_content(null, null, $post);
 $content = apply_filters('the_content', $content);
 $content = str_replace(']]>', ']]&gt;', $content);
 
+$pivotRepository = new PivotRepository();
+try {
+    $events = $pivotRepository->loadEvents();
+    $events = array_slice($events, 0, 3);
+} catch (\Exception|\Throwable  $e) {
+    $events = [];
+}
+
 try {
     echo $twig->render('@AcMarche/article/show.html.twig', [
         'post' => $post,
@@ -41,6 +50,7 @@ try {
         'site' => Theme::TOURISME,
         'tags' => $tags,
         'thumbnail' => $image,
+        'events' => $events,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     Twig::renderErrorPage($e);

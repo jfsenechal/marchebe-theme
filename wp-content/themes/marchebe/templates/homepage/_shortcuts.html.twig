@@ -1,6 +1,6 @@
 <section class="bg-blue-50 py-12">
     <div class="container mx-auto px-4 md:px-6 -mt-8 relative z-20">
-        <div class="grid grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,300px))] gap-2 lg:gap-4 justify-center align-center">
+        <div class="grid grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,300px))] gap-2 lg:gap-4 justify-center align-center" id="shortcuts">
             {% for shortcut in shortcuts %}
                 <a
                         title="{{ shortcut.description }}"
@@ -12,7 +12,7 @@
                         <i class="{{ shortcut.icon }} text-citoyen text-3xl md:text-4xl transition-transform group-hover:text-white group-hover:scale-110"></i>
                     </div>
                     <!-- Title size is now responsive! -->
-                    <h3 class="font-bold text-sm text-black-base md:text-xl md:mb-1">{{ shortcut.name }}</h3>
+                    <h2 class="font-bold text-sm text-black-base md:text-xl md:mb-1">{{ shortcut.name }}</h2>
                 </a>
             {% endfor %}
         </div>

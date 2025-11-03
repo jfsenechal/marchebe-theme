@@ -50,7 +50,7 @@ body {
     @apply antialiased text-cta-dark;
 }
 
-#homepage a, #main-header a, #desktop-menu a, #mobile-menu a {
+#homepage a, #main-header a, #desktop-menu a, #mobile-menu a, #shortcuts a {
     text-decoration: none;
 }
 

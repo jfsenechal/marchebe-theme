@@ -34,10 +34,10 @@
         {# Column 2 & 3: Child Items #}
         <div class="col-span-2">
             <div x-show="activeDesktopCategory">
-                <h3
+                <h2
                         :class="`text-sm font-semibold ${activeDesktopCategory?.color} tracking-wider uppercase`"
                         x-text="activeDesktopCategory?.name ?? 'select a category'"
-                ></h3>
+                ></h2>
                 <ul class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
                     <template x-for="child in activeDesktopCategory?.items" :key="child.id">
                         <li>
@@ -52,7 +52,7 @@
                 </ul>
             </div>
             <div x-show="!activeDesktopCategory" class="flex items-center justify-center h-full">
-                <p class="text-gray-500">Select a category to see more.</p>
+                <p class="text-gray-500">Sélectionnez une catégorie sur la gauche</p>
             </div>
         </div>
     </div>
