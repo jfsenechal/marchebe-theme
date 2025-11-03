@@ -12,9 +12,12 @@ class SetupTheme
     /**
      *
      */
-    function setup()
+    function setup(): void
     {
         add_theme_support('post-thumbnails');
+        add_image_size('news-thumbnail', 800, 450, true);
+        // Hero image for article headers (full-width, responsive heights)
+        add_image_size('hero-header', 1920, 1080, true);
 
         add_theme_support(
             'post-formats',

@@ -15,12 +15,15 @@ get_header();
 $post = get_post();
 
 $twig = Twig::loadTwig();
+
 $image = null;
+$image_srcset = null;
+$image_sizes = null;
 if (has_post_thumbnail()) {
-    $images = wp_get_attachment_image_src(get_post_thumbnail_id(), 'original');
-    if ($images) {
-        $image = $images[0];
-    }
+    $attachment_id = get_post_thumbnail_id();
+    $image = wp_get_attachment_image_url($attachment_id, 'hero-header');
+    $image_srcset = wp_get_attachment_image_srcset($attachment_id, 'hero-header');
+    $image_sizes = wp_get_attachment_image_sizes($attachment_id, 'hero-header');
 }
 
 $tags = [];
@@ -50,6 +53,8 @@ try {
         'site' => Theme::TOURISME,
         'tags' => $tags,
         'thumbnail' => $image,
+        'thumbnail_srcset' => $image_srcset,
+        'thumbnail_sizes' => $image_sizes,
         'events' => $events,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {

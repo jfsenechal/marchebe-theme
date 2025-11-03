@@ -8,7 +8,14 @@
                         href="{{ item.link }}"
                 >
                     <img
-                            src="{{ item.post_thumbnail_url }}" alt="" class="w-full h-48 object-cover"/>
+                            src="{{ item.post_thumbnail_url }}"
+                            {% if item.post_thumbnail_srcset %}srcset="{{ item.post_thumbnail_srcset }}"{% endif %}
+                            {% if item.post_thumbnail_sizes %}sizes="{{ item.post_thumbnail_sizes }}"{% endif %}
+                            alt="{{ item.post_title }}"
+                            class="w-full h-48 object-cover"
+                            loading="lazy"
+                    />
+
                     <div class="p-4">
                         <h4 class="font-bold text-lg mb-2"> {{ item.post_title }}</h4>
                     </div>

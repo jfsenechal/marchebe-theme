@@ -59,13 +59,13 @@ class WpRepository
 
                 if (has_post_thumbnail($id)) {
                     $attachment_id = get_post_thumbnail_id($id);
-                    $images = wp_get_attachment_image_src($attachment_id, 'original');
-                    $post_thumbnail_url = $images[0];
+                    $post->post_thumbnail_id = $attachment_id;
+                    $post->post_thumbnail_url = wp_get_attachment_image_url($attachment_id, 'news-thumbnail');
+                    $post->post_thumbnail_srcset = wp_get_attachment_image_srcset($attachment_id, 'news-thumbnail');
+                    $post->post_thumbnail_sizes = wp_get_attachment_image_sizes($attachment_id, 'news-thumbnail');
                 } else {
-                    $post_thumbnail_url = get_template_directory_uri().'/assets/images/404.jpg';
+                    $post->post_thumbnail_url = get_template_directory_uri().'/assets/images/404.jpg';
                 }
-
-                $post->post_thumbnail_url = $post_thumbnail_url;
 
                 $permalink = get_permalink($id);
                 $post->link = $permalink;
