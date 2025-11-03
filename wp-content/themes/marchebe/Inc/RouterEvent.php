@@ -17,7 +17,6 @@ class RouterEvent
             add_filter('template_include', [$this, 'add_template']);
             //Flush rewrite rules on theme activation (only once)
             register_activation_hook(__FILE__, [$this, 'flush_rules']);
-            $this->flush_rules();
         }
     }
 
@@ -25,7 +24,6 @@ class RouterEvent
     {
         $this->add_rewrite_rule();
         flush_rewrite_rules();
-        dump(123456789);
     }
 
     function add_rewrite_rule(): void
