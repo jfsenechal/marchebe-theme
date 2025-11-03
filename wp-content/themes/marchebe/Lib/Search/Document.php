@@ -20,6 +20,8 @@ class Document
     public int $count = 0;
     public array $paths = [];
     public array $site = [];
+    private ?string $latitude = null;
+    private ?string $longitude = null;
 
     public static function documentFromPost(\WP_Post|\stdClass $post, int $idSite): Document
     {
@@ -76,6 +78,8 @@ class Document
         $document->date = $date;
         $document->type = 'fiche';
         $document->link = RouterBottin::getUrlFicheBottin($idSite, $fiche);
+        $document->latitude = $fiche->latitude;
+        $document->longitude = $fiche->longitude;
 
         return $document;
     }
@@ -100,6 +104,28 @@ class Document
 
     }
 
+    public static function documentFromEnquete(\stdClass $enquete): Document
+    {
+        $categories = [];
+
+        $document = new Document();
+        $nameSite = Theme::getTitleBlog(Theme::ADMINISTRATION);
+        $document->id = self::createId($enquete->id, "enquete", Theme::ADMINISTRATION);
+        $document->name = Cleaner::cleandata($enquete->intitule);
+        $document->excerpt = $enquete->rue." ".$enquete->localite;
+        $document->content = $enquete->demandeur." ".$enquete->localite." ".$enquete->rue;
+        $document->site = ['name' => $nameSite, 'id' => Theme::ADMINISTRATION];
+        $document->tags = $categories;
+        $document->paths = [];//todo
+        $document->date = $enquete->date_debut;
+        $document->type = 'enquete';
+        $document->link = get_category_link(Theme::ENQUETE_DIRECTORY_URBA).'enquete/'.$enquete->id;
+        $document->latitude = $enquete->latitude;
+        $document->longitude = $enquete->longitude;
+
+        return $document;
+    }
+
     public static function createId(int $id, string $type, ?int $siteId = 0): string
     {
         $id = $type.'-'.$id;
@@ -109,5 +135,4 @@ class Document
 
         return $id;
     }
-
 }

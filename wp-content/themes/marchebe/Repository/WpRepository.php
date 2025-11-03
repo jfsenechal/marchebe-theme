@@ -119,6 +119,14 @@ class WpRepository
             $documents[] = Document::documentFromFiche($fiche, $idSite);
         }
 
+        if (Theme::ENQUETE_DIRECTORY_URBA) {
+            $apiRepository = new ApiRepository();
+            $enquetes = $apiRepository->getEnquetesPubliques();
+            foreach ($enquetes as $enquete) {
+                $documents[] = Document::documentFromEnquete($enquete);
+            }
+        }
+
         return SortingHelper::sortDocuments($documents);
     }
 
