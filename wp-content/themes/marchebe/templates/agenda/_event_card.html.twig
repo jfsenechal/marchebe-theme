@@ -1,7 +1,7 @@
 <article
         class="group flex flex-col bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 ease-in-out animate-card-in"
         style="animation-delay: {{ loop.index * 100 }}ms;">
-    <a href="/agenda-des-manifestations/manifestation/{{ event.codeCgt }}" class="block relative">
+    <a href="/tourisme/agenda-des-manifestations/manifestation/{{ event.codeCgt }}" class="block relative">
         <img
                 src="{% if event.images|length > 0 %} {{ event.images[0] }} {% else %} 'https://pivotmedia.tourismewallonie.be/OTH-A0-00UE-0HH1/OTH-A0-00UE-0HH1.jpg' {% endif %}"
                 alt="{{ event.nom }}"
@@ -23,7 +23,7 @@
 
         <!-- Content Section -->
         <div class="p-5 flex flex-col flex-grow">
-            <a href="/agenda-des-manifestations/manifestation/{{ event.codeCgt }}">
+            <a href="/tourisme/agenda-des-manifestations/manifestation/{{ event.codeCgt }}">
                 <h3 class="text-lg font-bold text-cta-dark mb-2 leading-tight">{{ event.nom }}</h3>
             </a>
 

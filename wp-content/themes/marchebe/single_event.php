@@ -54,7 +54,7 @@ try {
         'title' => $event->nom,
         'paths' => [],
         'site' => Theme::TOURISME,
-        'tags' => ['name' => 'Agenda', 'term_id' => 5, 'url' => '/agenda'],
+        'tags' => ['name' => 'Agenda des manifestations', 'term_id' => 5, 'url' => '/tourisme/agenda-des-manifestations'],
         'thumbnail' => $image,
 
     ]);
