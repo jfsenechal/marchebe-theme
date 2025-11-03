@@ -48,17 +48,19 @@ $image = count(
     $event->images
 ) > 0 ? $event->images[0] : 'https://pivotmedia.tourismewallonie.be/OTH-A0-00UE-0HH1/OTH-A0-00UE-0HH1.jpg';
 
+$paths = $tags = [
+    'name' => 'Agenda des manifestations',
+    'term_id' => 5,
+    'url' => '/tourisme/agenda-des-manifestations',
+];
+
 try {
     echo $twig->render('@AcMarche/agenda/show.html.twig', [
         'event' => $event,
         'title' => $event->nom,
-        'paths' => [],
+        'paths' => $paths,
         'site' => Theme::TOURISME,
-        'tags' => [
-            'name' => 'Agenda des manifestations',
-            'term_id' => 5,
-            'url' => '/tourisme/agenda-des-manifestations',
-        ],
+        'tags' => $tags,
         'thumbnail' => $image,
         'thumbnail_srcset' => null,
         'thumbnail_sizes' => null,
