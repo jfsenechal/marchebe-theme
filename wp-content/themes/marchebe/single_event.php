@@ -47,7 +47,7 @@ if (count($event->dates) === 0) {
 $image = count(
     $event->images
 ) > 0 ? $event->images[0] : 'https://pivotmedia.tourismewallonie.be/OTH-A0-00UE-0HH1/OTH-A0-00UE-0HH1.jpg';
-dd($event);
+
 try {
     echo $twig->render('@AcMarche/agenda/show.html.twig', [
         'event' => $event,
