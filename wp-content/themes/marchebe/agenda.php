@@ -34,6 +34,8 @@ try {
     echo $twig->render('@AcMarche/agenda/index.html.twig', [
         'events' => $events,
         'thumbnail' => $thumbnail,
+        'thumbnail_srcset' => null,
+        'thumbnail_sizes' => null,
         'defaultImage' => $defaultImage,
         'paths' => $paths,
         'title' => "Agenda des manifestations",

@@ -36,6 +36,8 @@ try {
         'hits' => $hits,
         'count' => $count,
         'thumbnail' => $thumbnail,
+        'thumbnail_srcset' => null,
+        'thumbnail_sizes' => null,
         'paths' => $paths,
         'title' => 'Rechercher',
     ]);

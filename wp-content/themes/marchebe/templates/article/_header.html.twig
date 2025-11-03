@@ -2,12 +2,14 @@
         title="">
     <!-- Background Image -->
     <div class="absolute inset-0 bg-blue-50">
-        <img src="{{ thumbnail }}"
-             {% if thumbnail_srcset %}srcset="{{ thumbnail_srcset }}"{% endif %}
-                {% if thumbnail_sizes %}sizes="{{ thumbnail_sizes }}"{% endif %}
-             alt=""
-             class="w-full h-full object-cover hero-image-zoom"
-             loading="eager">
+        {% if thumbnail %}
+            <img src="{{ thumbnail }}"
+                 {% if thumbnail_srcset %}srcset="{{ thumbnail_srcset }}"{% endif %}
+                    {% if thumbnail_sizes %}sizes="{{ thumbnail_sizes }}"{% endif %}
+                 alt=""
+                 class="w-full h-full object-cover hero-image-zoom"
+                 loading="eager">
+        {% endif %}
     </div>
 
     <!-- Dark Overlay -->

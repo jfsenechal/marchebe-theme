@@ -25,6 +25,8 @@ $paths[] = ['name' => $title, 'term_id' => $blog_id, 'url' => $path];
 try {
     echo $twig->render('@AcMarche/index.html.twig', [
         'thumbnail' => null,
+        'thumbnail_srcset' => null,
+        'thumbnail_sizes' => null,
         'paths' => $paths,
         'title' => $title,
         'children' => $children,
