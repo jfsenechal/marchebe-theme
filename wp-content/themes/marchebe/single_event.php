@@ -54,11 +54,14 @@ try {
         'title' => $event->nom,
         'paths' => [],
         'site' => Theme::TOURISME,
-        'tags' => ['name' => 'Agenda des manifestations', 'term_id' => 5, 'url' => '/tourisme/agenda-des-manifestations'],
+        'tags' => [
+            'name' => 'Agenda des manifestations',
+            'term_id' => 5,
+            'url' => '/tourisme/agenda-des-manifestations',
+        ],
         'thumbnail' => $image,
         'thumbnail_srcset' => null,
         'thumbnail_sizes' => null,
-
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();
