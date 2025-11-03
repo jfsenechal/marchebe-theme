@@ -3,8 +3,8 @@
 </h3>
 <div class="flex flex-col gap-2 mb-2">
     {% for dateEvent in event.dates %}
-        <ul class="font-montserrat-semi-bold text-cta-dark flex flex-row gap-2">
-            <li class="flex flex-col gap-2">
+        <ul class="font-montserrat-semi-bold text-cta-dark flex flex-col gap-2">
+            <li class="flex flex-row gap-2">
                 {% if dateEvent.isSameDate() %}
                     {% if dateEvent.dateBegin %}
                         {{ dateEvent.dateBegin.date|format_date('full') }}
