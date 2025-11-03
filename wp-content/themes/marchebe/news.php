@@ -18,14 +18,16 @@ $twig = Twig::loadTwig();
 $category = get_category(11);
 $wpRepository = new WpRepository();
 $news = $wpRepository->getNews();
-$thumbnail = "https://picsum.photos/2070";
 $paths = [];
 
 try {
     echo $twig->render('@AcMarche/news/index.html.twig', [
         'news' => $news,
-        'thumbnail' => $thumbnail,
+        'thumbnail' => null,
+        'thumbnail_srcset' => null,
+        'thumbnail_sizes' => null,
         'paths' => $paths,
+        'tags' => [],
         'title' => $category->name,
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
