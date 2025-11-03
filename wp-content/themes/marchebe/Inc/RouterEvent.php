@@ -5,7 +5,7 @@ namespace AcMarche\Theme\Inc;
 class RouterEvent
 {
     const PARAM_EVENT = 'codeCgt';
-    const ROUTE = 'agenda-des-manifestations/manifestations';
+    const ROUTE = 'agenda-des-manifestations/manifestation';
     const SINGLE_EVENT = 'single_event';
 
     public function __construct()
