@@ -20,10 +20,14 @@ class ApiRepository
 
     public function getEnquetesPubliques(): array
     {
-        $response = $this->client->request(
-            'GET',
-            'https://extranet.marche.be/enquete/api/'
-        );
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://extranet.marche.be/enquete/api/'
+            );
+        } catch (TransportExceptionInterface $e) {
+            return [];
+        }
         try {
             $content = $response->getContent();
         } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $e) {

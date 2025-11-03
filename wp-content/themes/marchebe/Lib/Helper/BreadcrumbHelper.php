@@ -56,7 +56,11 @@ class BreadcrumbHelper
 
         $parent = $wpRepository->getParentCategory($categoryId);
         if ($parent) {
-            $paths[] = ['name' => $parent->name, 'term_id' => $parent->cat_ID, 'link' => ''];
+            $paths[] = [
+                'name' => $parent->name,
+                'term_id' => $parent->cat_ID,
+                'link' => get_category_link($parent->term_id),
+            ];
         }
 
         return $paths;
