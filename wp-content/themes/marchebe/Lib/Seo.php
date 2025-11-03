@@ -6,6 +6,7 @@ namespace AcMarche\Theme\Lib;
 
 use AcMarche\Theme\Inc\RouterEvent;
 use AcMarche\Theme\Inc\Theme;
+use AcMarche\Theme\Lib\Pivot\Entity\Event;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Repository\BottinRepository;
 use AcMarche\Theme\Repository\WpRepository;
@@ -113,17 +114,17 @@ class Seo
 
         $wpRepository = new PivotRepository();
         try {
-            $offre = $wpRepository->loadOneEvent($codeCgt);
+            $offre = $wpRepository->loadOneEvent($codeCgt, parse: true);
         } catch (\Exception $exception) {
             $base = self::baseTitle('');
             self::$metas['title'] = "Error 500 ".$base;
 
             return;
         }
-        $language = 'fr';
-        if (null !== $offre) {
+
+        if ($offre instanceof Event) {
             $base = self::baseTitle('| Agenda des manifestations');
-            dd($offre);
+
             $label = $offre->typeOffre->getLabelByLanguage('fr');
             self::$metas['title'] = $offre->nom.' '.$label.' '.$base;
             if ($offre->description) {
