@@ -58,7 +58,7 @@ try {
     echo $twig->render('@AcMarche/agenda/show.html.twig', [
         'event' => $event,
         'title' => $event->nom,
-        'paths' => $paths,
+        'paths' => [$paths],
         'site' => Theme::TOURISME,
         'tags' => $tags,
         'thumbnail' => $image,
