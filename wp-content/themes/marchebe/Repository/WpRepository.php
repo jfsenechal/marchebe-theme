@@ -108,15 +108,14 @@ class WpRepository
 
         $categoryBottinId = get_term_meta($catId, BottinCategoryMetaBox::KEY_NAME, true);
 
-        $bottinRepository = new BottinRepository();
-        $fiches = [];
         if ($categoryBottinId) {
+            $bottinRepository = new BottinRepository();
             $fiches = $bottinRepository->getFichesByCategory($categoryBottinId);
-        }
 
-        foreach ($fiches as $fiche) {
-            $idSite = $bottinRepository->findSiteFiche($fiche);
-            $documents[] = Document::documentFromFiche($fiche, $idSite);
+            foreach ($fiches as $fiche) {
+                $idSite = $bottinRepository->findSiteFiche($fiche);
+                $documents[] = Document::documentFromFiche($fiche, $idSite);
+            }
         }
 
         if (Theme::ENQUETE_DIRECTORY_URBA) {

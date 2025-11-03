@@ -2,6 +2,7 @@
 <?php
 
 use AcMarche\Theme\Command\FixCommand;
+use AcMarche\Theme\Command\IntegrityCommand;
 use AcMarche\Theme\Command\MeiliCommand;
 use AcMarche\Theme\Command\PivotCommand;
 use Symfony\Component\Console\Application;
@@ -24,5 +25,6 @@ $application = new Application();
 $application->add(new PivotCommand());
 $application->add(new MeiliCommand());
 $application->add(new FixCommand());
+$application->add(new IntegrityCommand());
 
 $application->run();
