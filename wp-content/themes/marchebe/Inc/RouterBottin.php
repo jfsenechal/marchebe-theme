@@ -21,8 +21,7 @@ class RouterBottin
         add_filter('template_include', [$this, 'add_templates']);
         //Flush rewrite rules on theme activation (only once)
         register_activation_hook(__FILE__, [$this, 'flush_rules']);
-        self::$bottinRepository = new BottinRepository();
-        //$this->flushRoutes();
+        $this->flushRoutes();
     }
 
     private static function getBottinRepository(): BottinRepository
@@ -30,6 +29,7 @@ class RouterBottin
         if (self::$bottinRepository === null) {
             self::$bottinRepository = new BottinRepository();
         }
+
         return self::$bottinRepository;
     }
 
@@ -37,7 +37,7 @@ class RouterBottin
     {
         if (is_multisite()) {
             $current = get_current_blog_id();
-            foreach (get_sites(['fields' => 'ids']) as $site) {
+            foreach (Theme::SITES as $site) {
                 switch_to_blog($site);
                 flush_rewrite_rules();
             }
@@ -133,9 +133,8 @@ class RouterBottin
      */
     public static function generateFicheUrlCap(\stdClass $fiche): ?string
     {
-        $bottinRepository = new BottinRepository();
-        $categories = $bottinRepository->getCategoriesOfFiche($fiche->id);
-        if ($bottinRepository->isEconomy($categories) === null) {
+        $categories = self::getBottinRepository()->getCategoriesOfFiche($fiche->id);
+        if (self::getBottinRepository()->isEconomy($categories) === null) {
             return null;
         }
 
@@ -163,8 +162,6 @@ class RouterBottin
 
     /**
      * Retourne la base du blog (/economie/, /sante/, /culture/...
-     *
-     *
      */
     public static function getBaseUrlSite(?int $blodId = null): string
     {
