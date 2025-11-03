@@ -98,11 +98,11 @@ class WpRepository
     public function getPostsAndFiches(int $catId): array
     {
         $documents = [];
-        $idSite = get_current_blog_id();
+        $currentSite = get_current_blog_id();
         $posts = $this->getPostsByCategory($catId);
         foreach ($posts as $post) {
             $this->preparePost($post);
-            $document = Document::documentFromPost($post, $idSite);
+            $document = Document::documentFromPost($post, $currentSite);
             $documents[] = $document;
         }
 
@@ -118,7 +118,7 @@ class WpRepository
             }
         }
 
-        if (Theme::ENQUETE_DIRECTORY_URBA) {
+        if ($currentSite === Theme::ADMINISTRATION && $catId === Theme::ENQUETE_DIRECTORY_URBA) {
             $apiRepository = new ApiRepository();
             $enquetes = $apiRepository->getEnquetesPubliques();
             foreach ($enquetes as $enquete) {

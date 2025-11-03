@@ -10,11 +10,14 @@ class RouterEvent
 
     public function __construct()
     {
-        add_action('init', [$this, 'add_rewrite_rule']);
-        add_filter('query_vars', [$this, 'add_query_vars']);
-        add_filter('template_include', [$this, 'add_template']);
-        //Flush rewrite rules on theme activation (only once)
-        register_activation_hook(__FILE__, [$this, 'flush_rules']);
+        if (get_current_blog_id() === Theme::TOURISME) {
+            add_action('init', [$this, 'add_rewrite_rule']);
+
+            add_filter('query_vars', [$this, 'add_query_vars']);
+            add_filter('template_include', [$this, 'add_template']);
+            //Flush rewrite rules on theme activation (only once)
+            register_activation_hook(__FILE__, [$this, 'flush_rules']);
+        }
     }
 
     function flush_rules(): void

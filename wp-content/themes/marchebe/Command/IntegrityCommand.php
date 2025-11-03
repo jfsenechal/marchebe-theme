@@ -29,23 +29,31 @@ class IntegrityCommand extends Command
         $this->output = $output;
         $this->io = new SymfonyStyle($input, $output);
         $wpRepository = new WpRepository();
+
+        $this->listRoutes();
+
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
             foreach (get_categories() as $category) {
                 $posts = $wpRepository->getPostsAndFiches($category->cat_ID);
-                if (is_array($posts)) {
-                    if (count($posts) === 0) {
-                        $this->io->writeln($category->name);
-                        $this->io->writeln(get_category_link($category));
-                    }
-                } else {
-                    $this->io->error('no array '.$category->name);
+                if (count($posts) === 0) {
+                    $this->io->writeln($category->name);
                     $this->io->writeln(get_category_link($category));
                 }
             }
         }
 
         return Command::SUCCESS;
+    }
+
+    private function listRoutes(): void
+    {
+        global $wp_rewrite;
+        switch_to_blog(Theme::TOURISME);
+        $routes = $wp_rewrite->wp_rewrite_rules();
+        foreach ($routes as $route) {
+            $this->io->writeln($route);
+        }
     }
 
 }
