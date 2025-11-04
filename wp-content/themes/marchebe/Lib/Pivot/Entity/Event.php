@@ -64,6 +64,15 @@ class Event
         return null;
     }
 
+    public function firstRealDate(): ?\DateTimeInterface
+    {
+        if (count($this->dates) > 0) {
+            return $this->dates[0]->dateRealBegin;
+        }
+
+        return null;
+    }
+
     public function shortCutDateEvent(): array
     {
         return [

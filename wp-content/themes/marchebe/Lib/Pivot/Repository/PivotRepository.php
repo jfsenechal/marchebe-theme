@@ -5,6 +5,7 @@ namespace AcMarche\Theme\Lib\Pivot\Repository;
 use AcMarche\Theme\Lib\Cache;
 use AcMarche\Theme\Lib\Pivot\Entity\Event;
 use AcMarche\Theme\Lib\Pivot\Enums\ContentEnum;
+use AcMarche\Theme\Lib\Pivot\Helper\SortHelper;
 use AcMarche\Theme\Lib\Pivot\Parser\EventParser;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -64,8 +65,9 @@ class PivotRepository
         }
 
         $parser = new EventParser();
+        $events = $parser->parseJsonFile($jsonContent);
 
-        return $parser->parseJsonFile($jsonContent);
+        return SortHelper::sortEvents($events);
     }
 
     /**

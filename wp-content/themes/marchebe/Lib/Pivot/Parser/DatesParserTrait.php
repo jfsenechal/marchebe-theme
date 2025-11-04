@@ -6,6 +6,7 @@ use AcMarche\Theme\Lib\Pivot\Entity\Event;
 use AcMarche\Theme\Lib\Pivot\Entity\EventDate;
 use AcMarche\Theme\Lib\Pivot\Enums\UrnEnum;
 use AcMarche\Theme\Lib\Pivot\Helper\DateHelper;
+use AcMarche\Theme\Lib\Pivot\Helper\SortHelper;
 
 trait DatesParserTrait
 {
@@ -25,11 +26,11 @@ trait DatesParserTrait
             foreach ($spec->spec as $row) {
                 if ($data = $this->getData($row, UrnEnum::DATE_DEB)) {
                     $dateEvent->dateBegin = DateHelper::convertStringToDateTime($data);
+                    $dateEvent->dateRealBegin = $dateEvent->dateBegin;
                     /**
                      * Exception for event on all the year
                      * like st loup or marche public
                      */
-                    $dateEvent->dateRealBegin = $dateEvent->dateBegin;
                     if ($dateEvent->dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
                         $dateEvent->dateBegin = $today;
                     }
@@ -59,22 +60,7 @@ trait DatesParserTrait
             $allDates[] = $dateEvent;
         }
 
-
-        /*
-        $dateBegin = DateHelper::convertStringToDateTime($data);
-                    $dateEvent->dateRealBegin = $dateBegin;
-                    if ($dateBegin->format('Y-m-d') < $today->format('Y-m-d')) {
-                        $dateEvent->dateBegin = $today;//st loup
-                    } else {
-                        $dateEvent->dateBegin = $dateBegin;
-                    }
-
-         if ($dateEvent->dateEnd && $dateEvent->dateEnd->format('Y-m-d') >= $today->format('Y-m-d')) {
-                 //dump($dateEvent->dateEnd->format('Y-m-d'));
-                 $allDates[] = $dateEvent;
-             }*/
-
-
+        $allDates = SortHelper::sortDatesEvent($allDates);
         $event->dates = $allDates;
     }
 
