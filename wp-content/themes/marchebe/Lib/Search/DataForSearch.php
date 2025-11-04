@@ -29,6 +29,11 @@ class DataForSearch
         return self::$bottinRepositoryStatic;
     }
 
+    /**
+     * @param int $idSite
+     * @param int|null $categoryId
+     * @return array<int,Document>
+     */
     public function getPosts(int $idSite, int $categoryId = null): array
     {
         $args = array(
@@ -53,6 +58,10 @@ class DataForSearch
         return $data;
     }
 
+    /**
+     * @param int $idSite
+     * @return array<int,Document>
+     */
     public function getCategoriesBySite(int $idSite): array
     {
         $args = array(

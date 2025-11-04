@@ -23,20 +23,27 @@ class AdlRepository
         $this->client = HttpClient::createForBaseUri($_ENV['ADL_URL']);
     }
 
+    /**
+     * @return array<int,Document>
+     * @throws Exception
+     */
     public function getAllPosts(): array
     {
         $dataString = $this->executeRequest('/posts/?per_page=100');
         $posts = json_decode($dataString);
-
+        $documents = [];
         foreach ($posts as $post) {
             $this->preparePost($post);
-
-            Document::documentFromPost($post, Theme::ECONOMIE);
+            $documents[] = Document::documentFromPost($post, Theme::ECONOMIE);
         }
 
-        return json_decode($dataString);
+        return $documents;
     }
 
+    /**
+     * @return array<int,Document>
+     * @throws Exception
+     */
     public function getAllCategories(): array
     {
         $dataString = $this->executeRequest('/categories');
@@ -104,7 +111,7 @@ class AdlRepository
         $post->post_title = Cleaner::cleandata($post->title->rendered);
         $post->post_excerpt = Cleaner::cleandata($post->excerpt->rendered);
         $today = new \DateTime();
-        $post->post_date = $today->format('Y-m-d'). " ";
+        $post->post_date = $today->format('Y-m-d')." ";
         $post->paths = [];
     }
 

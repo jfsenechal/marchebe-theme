@@ -133,14 +133,14 @@ class MeiliCommand extends Command
     {
         $documents = [];
         $adlIndexer = new AdlRepository();
-        foreach ($adlIndexer->getAllCategories() as $documentElastic) {
-            $documentElastic->id = 'adl_cat_'.$documentElastic->id;
-            $documents[] = $documentElastic;
+        foreach ($adlIndexer->getAllCategories() as $document) {
+            $document->id = 'adl_cat_'.$document->id;
+            $documents[] = $document;
         }
 
-        foreach ($adlIndexer->getAllPosts() as $documentElastic) {
-            $documentElastic->id = 'adl_post_'.$documentElastic->id;
-            $documents[] = $documentElastic;
+        foreach ($adlIndexer->getAllPosts() as $document) {
+            $document->id = 'adl_post_'.$document->id;
+            $documents[] = $document;
         }
         $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
     }

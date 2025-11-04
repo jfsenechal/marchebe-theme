@@ -2,7 +2,6 @@
 
 namespace AcMarche\Theme\Lib\Search;
 
-use AcMarche\Bottin\SearchData\Data\ElasticData;
 use AcMarche\Theme\Repository\WpRepository;
 use Meilisearch\Contracts\DeleteTasksQuery;
 use Meilisearch\Endpoints\Keys;

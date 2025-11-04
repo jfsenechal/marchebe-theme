@@ -18,12 +18,12 @@ class ApiRepository
         $this->client = $client ?? HttpClient::create();
     }
 
-    public function getEnquetesPubliques(): array
+    public function getPosts(): array
     {
         try {
             $response = $this->client->request(
                 'GET',
-                'https://extranet.marche.be/enquete/api/'
+                'https://www.marche.be/nuxt/posts.php?site=1'
             );
         } catch (TransportExceptionInterface $e) {
             return [];
