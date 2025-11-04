@@ -6,7 +6,7 @@
         <li class="flex flex-row gap-2">
             {% if dateEvent.isSameDate() %}
                 {% if dateEvent.dateBegin %}
-                    <span>     {{ dateEvent.dateBegin.date|format_date('full') }}</span>
+                    <span>{{ dateEvent.dateBegin.date|format_date('full') }}</span>
                 {% endif %}
             {% else %}
                 {% if dateEvent.dateRange %}
