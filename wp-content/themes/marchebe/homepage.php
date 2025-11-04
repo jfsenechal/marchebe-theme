@@ -20,8 +20,13 @@ $wpRepository = new WpRepository();
 $pivotRepository = new PivotRepository();
 try {
     $events = $pivotRepository->loadEvents();
+    foreach ($events as $key => $event) {
+        if (in_array($event->codeCgt, Data::$eventsToSkip)) {
+            unset($events[$key]);
+        }
+    }
 } catch (\JsonException|\Throwable $e) {
-    $events =[];
+    $events = [];
 }
 
 $events = array_slice($events, 0, 8);

@@ -43,8 +43,10 @@ class PivotRepository
      * @throws \JsonException
      * @throws \Throwable
      */
-    public function loadEvents(int $level = ContentEnum::LVL4->value, bool $purgeCache = false): array
-    {
+    public function loadEvents(
+        int $level = ContentEnum::LVL4->value,
+        bool $purgeCache = false
+    ): array {
         $cacheKey = Cache::generateKey('all-events-marche-be-'.$level);
         if ($purgeCache) {
             Cache::delete($cacheKey);

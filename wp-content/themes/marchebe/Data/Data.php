@@ -4,6 +4,9 @@ namespace AcMarche\Theme\Data;
 
 class Data
 {
+    //st loup,marche public
+    public static array $eventsToSkip = ['EVT-01-0AVJ-324P','EVT-A0-008E-101W'];
+
     const shortcuts = [
         [
             'name' => 'Horaire Contact',
