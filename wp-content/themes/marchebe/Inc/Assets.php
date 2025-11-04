@@ -4,6 +4,9 @@ namespace AcMarche\Theme\Inc;
 
 class Assets
 {
+    const leaflet_js = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    const leaflet_css = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+
     public function __construct()
     {
         add_action('wp_enqueue_scripts', [$this,'remove_unnecessary_core_styles'], 9999);

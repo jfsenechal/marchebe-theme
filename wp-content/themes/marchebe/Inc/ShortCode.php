@@ -13,6 +13,9 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use function json_decode;
 
 class ShortCode
@@ -98,14 +101,35 @@ class ShortCode
 
     public function googleMap(array $args): string
     {
-        $latitude = $args['lat']??null;
-        $longitude = $args['long']??null;
+        $latitude = $args['lat'] ?? null;
+        $longitude = $args['long'] ?? null;
+
+        if (!$latitude || !$longitude) {
+            return '';
+        }
+
+        // Enqueue Leaflet CSS and JS only when shortcode is used
+        wp_enqueue_style(
+            'leaflet-css',
+            Assets::leaflet_css,
+            [],
+            '1.9.4'
+        );
+
+        wp_enqueue_script(
+            'leaflet-js',
+            Assets::leaflet_js,
+            [],
+            '1.9.4',
+            true // Load in footer
+        );
+
         $twig = Twig::LoadTwig();
         $post = get_post();
         $title = $post ? $post->post_title : '';
 
-        if ($latitude && $longitude) {
-            $t = $twig->render(
+        try {
+            $content = $twig->render(
                 '@AcMarche/widgets/_map.html.twig',
                 [
                     'latitude' => $latitude,
@@ -113,12 +137,13 @@ class ShortCode
                     'title' => $title,
                 ]
             );
-            $t = preg_replace("#\n#", "", $t);//bug avec raw de twig
-
-            return $t;
+        } catch (LoaderError|RuntimeError|SyntaxError $e) {
+            return "Erreur de chargement de la carte. ".$e->getMessage();
         }
 
-        return '';
+        //bug avec raw de twig
+
+        return preg_replace("#\n#", "", $content);
     }
 
     public function capteurList(): string
