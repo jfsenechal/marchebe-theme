@@ -3,6 +3,7 @@
 namespace AcMarche\Theme\Lib\Search;
 
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
+use AcMarche\Theme\Lib\Helper\BreadcrumbHelper;
 use AcMarche\Theme\Repository\BottinRepository;
 use AcMarche\Theme\Repository\WpRepository;
 
@@ -98,10 +99,12 @@ class DataForSearch
                 $tags[] = ['id' => $parent->term_id, 'name' => $parent->name];
             }
 
+            $path = BreadcrumbHelper::category($category->cat_ID);
+
             $category->content = $content;
             $category->tags = $tags;
-            $category->paths = $tags;
-            $category->link= get_category_link($category);
+            $category->paths = $path;
+            $category->link = get_category_link($category);
             $data[] = Document::documentFromCategory($category, $idSite);
         }
 
