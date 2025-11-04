@@ -33,4 +33,5 @@ enum UrnEnum: string
     case PHONE2 = "urn:fld:phone2";
     case MOBI1 = "urn:fld:mobi1";
     case MOBI2 = "urn:fld:mobi2";
+    case CLASS = "urn:cat:classlab";//urnCat
 }
