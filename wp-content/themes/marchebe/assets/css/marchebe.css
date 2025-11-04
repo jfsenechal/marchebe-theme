@@ -1762,6 +1762,9 @@
   .text-citoyen {
     color: var(--color-citoyen);
   }
+  .text-cta-brown {
+    color: var(--color-cta-brown);
+  }
   .text-cta-dark {
     color: var(--color-cta-dark);
   }
