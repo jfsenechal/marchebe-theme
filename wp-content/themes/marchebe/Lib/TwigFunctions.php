@@ -11,17 +11,6 @@ class TwigFunctions
         return new TwigFunction(
             'fichePhones',
             function (\stdClass $fiche): array {
-                /**
-                 *   const phoneFields = [
-                 * fiche.telephone,
-                 * fiche.telephone_autre,
-                 * fiche.gsm,
-                 * fiche.contact_gsm,
-                 * fiche.contact_telephone,
-                 * fiche.contact_telephone_autre
-                 * ]
-                 * return phoneFields.filter(Boolean)
-                 */
                 $phoneFields = [
                     $fiche->telephone ?? null,
                     $fiche->telephone_autre ?? null,

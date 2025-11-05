@@ -146,7 +146,7 @@ class DataForSearch
 
     public static function getContentFiche($fiche): string
     {
-        return ' '.$fiche->societe.' '.$fiche->email.' '.$fiche->website.''.$fiche->twitter.' '.$fiche->facebook.' '.$fiche->nom.' '.$fiche->prenom.' '.$fiche->comment1.''.$fiche->comment2.' '.$fiche->comment3;
+        return ' '.$fiche->societe.' '.$fiche->email.' '.$fiche->website.' '.$fiche->twitter.' '.$fiche->facebook.' '.$fiche->nom.' '.$fiche->prenom.' '.$fiche->comment1.' '.$fiche->comment2.' '.$fiche->comment3;
     }
 
     /**
