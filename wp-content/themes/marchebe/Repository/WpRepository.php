@@ -126,6 +126,14 @@ class WpRepository
             }
         }
 
+        if ($currentSite === Theme::ADMINISTRATION && $catId === Theme::ORDONNANCE_POLICE) {
+            $apiRepository = new ApiRepository();
+            $ordonnances = $apiRepository->getOrdonnancesPolice();
+            foreach ($ordonnances as $item) {
+                $documents[] = Document::documentFromPublication($item);
+            }
+        }
+
         return SortingHelper::sortDocuments($documents);
     }
 

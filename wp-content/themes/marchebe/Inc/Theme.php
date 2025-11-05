@@ -48,7 +48,7 @@ class Theme
     const PAGE_CARTO = 20644;//tourisme
     const ENQUETE_DIRECTORY_URBA = 61;
     const ENQUETE_DIRECTORY_INSTIT = 60;
-    const PUBLICATIOCOMMUNAL_CATEGORY = 15;
+    const ORDONNANCE_POLICE = 71;
 
     static function isHomePage(): bool
     {
