@@ -92,21 +92,21 @@ class WpRepository
     }
 
     /**
-     * @param int $catId
+     * @param int $categoryIdSelected
      * @return array<int,Document>
      */
-    public function getPostsAndFiches(int $catId): array
+    public function getPostsAndFiches(int $categoryIdSelected): array
     {
         $documents = [];
         $currentSite = get_current_blog_id();
-        $posts = $this->getPostsByCategory($catId);
+        $posts = $this->getPostsByCategory($categoryIdSelected);
         foreach ($posts as $post) {
             $this->preparePost($post);
             $document = Document::documentFromPost($post, $currentSite);
             $documents[] = $document;
         }
 
-        $categoryBottinId = get_term_meta($catId, BottinCategoryMetaBox::KEY_NAME, true);
+        $categoryBottinId = get_term_meta($categoryIdSelected, BottinCategoryMetaBox::KEY_NAME, true);
 
         if ($categoryBottinId) {
             $bottinRepository = new BottinRepository();
@@ -118,7 +118,7 @@ class WpRepository
             }
         }
 
-        if ($currentSite === Theme::ADMINISTRATION && $catId === Theme::ENQUETE_DIRECTORY_URBA) {
+        if ($currentSite === Theme::ADMINISTRATION && $categoryIdSelected === Theme::ENQUETE_DIRECTORY_URBA) {
             $apiRepository = new ApiRepository();
             $enquetes = $apiRepository->getEnquetesPubliques();
             foreach ($enquetes as $enquete) {
@@ -126,7 +126,7 @@ class WpRepository
             }
         }
 
-        if ($currentSite === Theme::ADMINISTRATION && $catId === Theme::ORDONNANCE_POLICE) {
+        if ($currentSite === Theme::ADMINISTRATION && $categoryIdSelected === Theme::ORDONNANCE_POLICE) {
             $apiRepository = new ApiRepository();
             $ordonnances = $apiRepository->getOrdonnancesPolice();
             foreach ($ordonnances as $item) {
