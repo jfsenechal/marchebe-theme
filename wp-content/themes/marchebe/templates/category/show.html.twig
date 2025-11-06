@@ -1,4 +1,4 @@
-<section x-data="
+<section class="container mx-auto flex flex-col pt-16" x-data="
 {
   currentSite: {{ currentSite }},
   categorySelected: {{ category.term_id }},
@@ -54,6 +54,7 @@
     }
   }
 }">
+    {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
     {% include '@AcMarche/category/_header.html.twig' %}
     {% include '@AcMarche/category/_posts.html.twig' %}
 </section>
