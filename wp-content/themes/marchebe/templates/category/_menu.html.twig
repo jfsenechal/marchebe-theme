@@ -1,9 +1,11 @@
 {% if children|length > 0 %}
-    <nav aria-label="Filtrer les articles par catégorie" class="mx-auto p-8 bg-blue-50">
+    <nav aria-label="Filtrer les articles par catégorie" class="mx-auto p-8 bg-blue-50          animate-fade-in-up my-4"
+         id="category-filter-menu"
+         style="animation: fade-in-up 1s ease-out forwards;">
         <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-            {% include '@AcMarche/category/_btn_all.html.twig' with {'item':category, 'name': 'Tous'} %}
+            {% include '@AcMarche/category/_child_item.html.twig' with {'item':category, 'name': 'Tous'} %}
             {% for child in children %}
-                {% include '@AcMarche/category/_btn_all.html.twig' with {'item':child} %}
+                {% include '@AcMarche/category/_child_item.html.twig' with {'item':child} %}
             {% endfor %}
         </ul>
     </nav>

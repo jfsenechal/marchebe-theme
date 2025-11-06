@@ -24,7 +24,7 @@ $currentSite = get_current_blog_id();
 $posts = $wpRepository->getPostsAndFiches($cat_ID);
 
 $twig = Twig::loadTwig();
-$thumbnail = "https://picsum.photos/2070";
+$thumbnail = null;
 $paths = BreadcrumbHelper::category($cat_ID);
 
 try {
@@ -33,6 +33,8 @@ try {
         'posts' => $posts,
         'postsSerialized' => json_encode($posts),
         'thumbnail' => $thumbnail,
+        'thumbnail_srcset' => null,
+        'thumbnail_sizes' => null,
         'paths' => $paths,
         'title' => $title,
         'description' => $description,

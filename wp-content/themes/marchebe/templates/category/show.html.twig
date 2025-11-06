@@ -1,6 +1,7 @@
-<section class="container mx-auto flex flex-col pt-16" x-data="
+<div class="bg-slate-50 pt-16" x-data="
 {
   currentSite: {{ currentSite }},
+  currentCategory: {{ category.term_id }},
   categorySelected: {{ category.term_id }},
   loading: false,
   categoryName: '{{ category.name }}',
@@ -54,7 +55,17 @@
     }
   }
 }">
-    {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
-    {% include '@AcMarche/category/_header.html.twig' %}
-    {% include '@AcMarche/category/_posts.html.twig' %}
-</section>
+    <!-- HERO HEADER SECTION -->
+    {% include '@AcMarche/article/_header.html.twig' %}
+    <!-- MAIN CONTENT SECTION -->
+    <main id="main-content" class="relative z-20 -mt-16 md:-mt-24">
+        <section class="container mx-auto bg-white rounded-xl shadow-2xl p-4 md:p-10 mb-3">
+            {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
+            <div class="text-center mb-4">
+                {% include '@AcMarche/article/_title.html.twig' %}
+            </div>
+            {% include '@AcMarche/category/_menu.html.twig' %}
+            {% include '@AcMarche/category/_posts.html.twig' %}
+        </section>
+    </main>
+</div>

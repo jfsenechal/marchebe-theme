@@ -1,5 +1,8 @@
 <section class="py-4 lg:py-4 bg-background mt-3" id="posts">
     <div class="container mx-auto px-6">
+        <p class="text-lg lg:text-2xl font-bold text-cta-brown mb-4" x-show="categorySelected !== currentCategory">
+            <span x-text="filteredPosts.length"></span> article(s) dans <span x-html="categoryName"></span>
+        </p>
         <!-- Loading State -->
         <div x-show="loading" class="flex justify-center items-center py-12">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cta-dark"></div>
@@ -9,17 +12,17 @@
         <!-- Posts Grid -->
         <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 ml-0 md:ml-4">
             <template x-for="post in filteredPosts" :key="post.id">
-                <div
+                <article
                         class="group bg-white p-8 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-in-out animated-element">
-                    <h3 class="text-lg md:text-xl font-bold">
+                    <h2 class="text-lg md:text-xl font-bold">
                         <a :href="post.link" x-text="post.name"></a>
-                    </h3>
+                    </h2>
                     <div class="mt-2  line-clamp-3" x-html="post.excerpt" x-show="post.excerpt"></div>
                     <a :href="post.link"
                        class="inline-block font-semibold text-primary mt-6 group-hover:underline group-hover:text-citoyen">
                         En savoir plus →
                     </a>
-                </div>
+                </article>
             </template>
             <div x-show="!loading && filteredPosts.length === 0" class="text-center col-span-full">
                 Aucun article pour le moment.

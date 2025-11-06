@@ -50,7 +50,7 @@ body {
     @apply antialiased text-cta-dark;
 }
 
-#homepage a, #main-header a, #desktop-menu a, #mobile-menu a, #shortcuts a, #widgets a {
+#homepage a, #main-header a, #desktop-menu a, #mobile-menu a, #shortcuts a, #widgets a, #category-filter-menu a {
     text-decoration: none;
 }
 
@@ -60,7 +60,7 @@ img, video, iframe {
     /* see https://web.dev/learn/design/responsive-"/images/ */
 }
 
-article h2, article h3 {
+article h2:not(:has(a)), article h3 {
     @apply text-cta-light;
 }
 
