@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Repository;
 
+use AcMarche\Theme\Lib\Search\Document;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -39,5 +40,23 @@ class ApiRepository
         } catch (\JsonException $e) {
             return [];
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getOrdonnancesPolice(): array
+    {
+        global $wpdb;
+
+        $results = $wpdb->get_results(
+            "SELECT * FROM publication.publication ORDER BY createdAt DESC",
+            OBJECT
+        );
+
+        if (!$results) {
+            return [];
+        }
+        return $results;
     }
 }

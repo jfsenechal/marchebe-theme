@@ -126,6 +126,24 @@ class Document
         return $document;
     }
 
+    public static function documentFromPublication(\stdClass $item): Document
+    {
+        $document = new Document();
+        $nameSite = Theme::getTitleBlog(Theme::ADMINISTRATION);
+        $document->id = self::createId($item->id, "publication", Theme::ADMINISTRATION);
+        $document->name = Cleaner::cleandata($item->title);
+        $document->excerpt = "";
+        $document->content = "";
+        $document->site = ['name' => $nameSite, 'id' => Theme::ADMINISTRATION];
+        $document->tags = [];
+        $document->paths = [];
+        $document->date = $item->createdAt;
+        $document->type = 'publication';
+        $document->link = $item->url;
+
+        return $document;
+    }
+
     public static function createId(int $id, string $type, ?int $siteId = 0): string
     {
         $id = $type.'-'.$id;
