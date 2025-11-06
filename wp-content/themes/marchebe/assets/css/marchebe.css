@@ -1560,6 +1560,9 @@
   .object-cover {
     object-fit: cover;
   }
+  .p-0 {
+    padding: calc(var(--spacing) * 0);
+  }
   .p-2 {
     padding: calc(var(--spacing) * 2);
   }
@@ -2676,6 +2679,11 @@
   .md\:rounded-xl {
     @media (width >= 48rem) {
       border-radius: var(--radius-xl);
+    }
+  }
+  .md\:p-6 {
+    @media (width >= 48rem) {
+      padding: calc(var(--spacing) * 6);
     }
   }
   .md\:p-8 {

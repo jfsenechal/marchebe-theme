@@ -59,13 +59,16 @@
     {% include '@AcMarche/article/_header.html.twig' %}
     <!-- MAIN CONTENT SECTION -->
     <main id="main-content" class="relative z-20 -mt-16 md:-mt-24">
-        <section class="container mx-auto bg-white rounded-xl shadow-2xl p-4 md:p-10 mb-3">
-            {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
-            <div class="text-center mb-4">
-                {% include '@AcMarche/article/_title.html.twig' %}
+        <section class="container mx-auto bg-white rounded-xl shadow-2xl mb-3">
+            <div class="p-4 md:p-6 ">
+                {% include '@AcMarche/widgets/_breadcrumbs.html.twig' %}
+                <div class="text-center">
+                    {% include '@AcMarche/article/_title.html.twig' %}
+                </div>
             </div>
             {% include '@AcMarche/category/_menu.html.twig' %}
             {% include '@AcMarche/category/_posts.html.twig' %}
         </section>
     </main>
 </div>
+{% include '@AcMarche/widgets/_animation_script.html.twig' %}
