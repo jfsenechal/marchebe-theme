@@ -127,7 +127,7 @@ class WpRepository
         }
 
         if ($currentSite === Theme::ADMINISTRATION) {
-            $publications = self::getPublications($categoryIdSelected);
+            $publications = ApiRepository::getPublications($categoryIdSelected);
             foreach ($publications as $item) {
                 $documents[] = Document::documentFromPublication($item);
             }
@@ -272,39 +272,4 @@ class WpRepository
         return [];
     }
 
-    public static function getPublications(int $wpCategoryId): array
-    {
-        global $wpdb;
-
-        $category = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM publication.category WHERE publication.category.wpCategoryId = %d",
-                $wpCategoryId
-            ),
-            OBJECT
-        );
-
-        if (empty($category)) {
-            return [];
-        }
-
-        $categoryId = $category[0]->id ?? null;
-        if (!$categoryId) {
-            return [];
-        }
-
-        $results = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM publication.publication WHERE publication.publication.category_id = %d ORDER BY createdAt DESC",
-                $categoryId
-            ),
-            OBJECT
-        );
-
-        if (!$results) {
-            return [];
-        }
-
-        return $results;
-    }
 }
