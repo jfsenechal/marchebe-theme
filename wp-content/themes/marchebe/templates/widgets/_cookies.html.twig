@@ -6,26 +6,31 @@
           }">
 
     <section
-            class="isolate z-10 fixed max-w-md p-4 mx-auto bg-white border border-gray-200  left-12 bottom-16  rounded-2xl">
-        <h4 class="font-semibold text-gray-800 dark:text-white">🍪 Cookie Notice</h4>
+            class="isolate z-30 fixed max-w-md p-5 mx-auto bg-white border border-gray-200 shadow-2xl left-4 md:left-12 bottom-4 md:bottom-16 rounded-2xl">
+        <div class="flex items-start gap-3">
+            <span class="text-3xl flex-shrink-0">🍪</span>
+            <div class="flex-1">
+                <h4 class="font-bold text-gray-900 text-lg">Cookie Notice</h4>
 
-        <p class="mt-4 text-gray-600 dark:text-gray-300">
-            Ce site utilise des cookies pour vous fournir une expérience optimale.
-            <a href="/administration/rgpd" class="text-esquare-blue hover:underline">
-                Mentions légales et RGPD.
-            </a>
-        </p>
+                <p class="mt-2 text-gray-700 text-sm leading-relaxed">
+                    Ce site utilise des cookies pour vous fournir une expérience optimale.
+                    <a href="/administration/rgpd" class="text-citoyen hover:underline font-medium">
+                        Mentions légales et RGPD
+                    </a>
+                </p>
 
-        <div class="flex items-center justify-between mt-4 gap-x-4 shrink-0">
-            <button @click="togglePopupCookie"
-                    class="cursor-pointer text-gray-800 underline transition-colors duration-300  hover:text-gray-600 focus:outline-none">
-                En savoir plus et personaliser
-            </button>
-            <button
-                    class=" text-xs bg-gray-900 font-medium rounded-lg hover:bg-gray-700 text-white px-4 py-2.5 duration-300 transition-colors focus:outline-none"
-                    @click="togglePopupCookie">
-                Tout accepter
-            </button>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-4">
+                    <button @click="togglePopupCookie"
+                            class="text-sm font-medium text-gray-700 hover:text-gray-900 underline transition-colors focus:outline-none">
+                        Personnaliser
+                    </button>
+                    <button
+                            class="text-sm bg-citoyen font-semibold rounded-lg hover:bg-opacity-90 text-white px-5 py-2.5 transition-all focus:outline-none focus:ring-2 focus:ring-citoyen focus:ring-offset-2 shadow-md"
+                            @click="togglePopupCookie">
+                        Tout accepter
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
     {% include '@AcMarche/widgets/_cookies_popup.html.twig' %}
