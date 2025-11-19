@@ -1,12 +1,60 @@
 <div x-data="{
     isPopupCookieOpen: false,
+    showBanner: false,
+    preferences: {
+        essential: true,
+        statistics: true,
+        encapsulated: true
+    },
+    init() {
+        // Check if preferences are already saved
+        const saved = localStorage.getItem('cookiePreferences');
+        if (saved) {
+            this.preferences = JSON.parse(saved);
+            this.showBanner = false;
+            this.applyPreferences();
+        } else {
+            this.showBanner = true;
+        }
+    },
     togglePopupCookie() {
         this.isPopupCookieOpen = !this.isPopupCookieOpen;
     },
+    acceptAll() {
+        this.preferences = {
+            essential: true,
+            statistics: true,
+            encapsulated: true
+        };
+        this.savePreferences();
+    },
+    savePreferences() {
+        localStorage.setItem('cookiePreferences', JSON.stringify(this.preferences));
+        this.showBanner = false;
+        this.isPopupCookieOpen = false;
+        this.applyPreferences();
+        window.location.reload(); // Reload to apply analytics changes
+    },
+    applyPreferences() {
+        // Apply analytics based on preferences
+        if (this.preferences.statistics) {
+            window.cookieConsent_statistics = true;
+        } else {
+            window.cookieConsent_statistics = false;
+        }
+        if (this.preferences.encapsulated) {
+            window.cookieConsent_encapsulated = true;
+        } else {
+            window.cookieConsent_encapsulated = false;
+        }
+    }
           }">
 
-    <section
-            class="isolate z-30 fixed max-w-md p-5 mx-auto bg-white border border-gray-200 shadow-2xl left-4 md:left-12 bottom-4 md:bottom-16 rounded-2xl">
+    <section x-show="showBanner"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="isolate z-30 fixed max-w-md p-5 mx-auto bg-white border border-gray-200 shadow-2xl left-4 md:left-12 bottom-4 md:bottom-16 rounded-2xl">
         <div class="flex items-start gap-3">
             <span class="text-3xl flex-shrink-0">🍪</span>
             <div class="flex-1">
@@ -19,12 +67,13 @@
                 </p>
                 <div class="flex flex-row sm:flex-row items-stretch sm:items-center gap-2 mt-4">
                     <button @click="togglePopupCookie"
+                            type="button"
                             class="cursor-pointer font-medium text-gray-700 hover:text-gray-900 underline transition-colors focus:outline-none">
                         Personnaliser
                     </button>
-                    <button
-                            class="cursor-pointer bg-citoyen font-semibold rounded-lg hover:bg-opacity-90 text-white px-5 py-2.5 transition-all focus:outline-none focus:ring-2 focus:ring-citoyen focus:ring-offset-2 shadow-md"
-                            @click="togglePopupCookie">
+                    <button @click="acceptAll"
+                            type="button"
+                            class="cursor-pointer bg-citoyen font-semibold rounded-lg hover:bg-opacity-90 text-white px-5 py-2.5 transition-all focus:outline-none focus:ring-2 focus:ring-citoyen focus:ring-offset-2 shadow-md">
                         Tout accepter
                     </button>
                 </div>

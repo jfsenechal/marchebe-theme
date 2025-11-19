@@ -57,12 +57,12 @@
                         </p>
                         <div class="flex items-center gap-4">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-essential" checked value="1"
+                                <input type="radio" name="cookies-essential" checked value="true" disabled
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Accepter</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-not-allowed opacity-50">
-                                <input type="radio" name="cookies-essential" value="0" disabled
+                                <input type="radio" name="cookies-essential" value="false" disabled
                                        class="w-4 h-4 text-gray-400">
                                 <span class="font-medium text-gray-500">Refuser</span>
                             </label>
@@ -78,12 +78,12 @@
                         </p>
                         <div class="flex items-center gap-4">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-statistics" checked value="1"
+                                <input type="radio" name="cookies-statistics" x-model="preferences.statistics" value="true"
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Accepter</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-statistics" value="0"
+                                <input type="radio" name="cookies-statistics" x-model="preferences.statistics" value="false"
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Refuser</span>
                             </label>
@@ -101,12 +101,12 @@
                         </p>
                         <div class="flex items-center gap-4">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-encapsulated" checked value="1"
+                                <input type="radio" name="cookies-encapsulated" x-model="preferences.encapsulated" value="true"
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Accepter</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-encapsulated" value="0"
+                                <input type="radio" name="cookies-encapsulated" x-model="preferences.encapsulated" value="false"
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Refuser</span>
                             </label>
@@ -123,7 +123,7 @@
                             class="px-6 py-2.5 text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors">
                         Annuler
                     </button>
-                    <button @click="togglePopupCookie"
+                    <button @click.prevent="savePreferences()"
                             type="submit"
                             class="cursor-pointer px-6 py-2.5 bg-citoyen text-white font-medium rounded-lg hover:bg-opacity-90 transition-colors shadow-lg">
                         Enregistrer mes préférences
