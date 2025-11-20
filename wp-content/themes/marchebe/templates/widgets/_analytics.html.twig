@@ -1,31 +1,34 @@
 <!-- Google tag (gtag.js) - Loaded conditionally based on cookie preferences -->
 <script>
-  // Check if user has consented to statistics cookies
-  (function() {
-    const cookiePreferences = localStorage.getItem('cookiePreferences');
+    // Check if user has consented to statistics cookies
+    (function () {
+        const cookiePreferences = localStorage.getItem('cookiePreferences');
 
-    if (cookiePreferences) {
-      const preferences = JSON.parse(cookiePreferences);
+        if (cookiePreferences) {
+            const preferences = JSON.parse(cookiePreferences);
 
-      // Only load Google Analytics if statistics cookies are accepted
-      if (preferences.statistics === true || preferences.statistics === 'true') {
-        // Load Google Analytics script
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-VF2FHEY1S7';
-        document.head.appendChild(script);
+            // Only load Google Analytics if statistics cookies are accepted
+            if (preferences.statistics === true || preferences.statistics === 'true') {
+                // Load Google Analytics script
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://www.googletagmanager.com/gtag/js?id=G-VF2FHEY1S7';
+                document.head.appendChild(script);
 
-        // Initialize Google Analytics
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-VF2FHEY1S7', {
-          'anonymize_ip': true
-        });
-      } else {
-        console.log('Google Analytics disabled - statistics cookies refused');
-      }
-    }
-    // If no preferences saved yet, don't load analytics (wait for user choice)
-  })();
+                // Initialize Google Analytics
+                window.dataLayer = window.dataLayer || [];
+
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+
+                gtag('js', new Date());
+                gtag('config', 'G-VF2FHEY1S7', {
+                    'anonymize_ip': true
+                });
+            } else {
+                console.log('Google Analytics disabled - statistics cookies refused');
+            }
+        }
+    })();
 </script>
