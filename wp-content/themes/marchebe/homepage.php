@@ -7,7 +7,6 @@
 namespace AcMarche\Theme\Templates;
 
 use AcMarche\Theme\Data\Data;
-use AcMarche\Theme\Lib\Helper\CookieHelper;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Lib\Twig;
 use AcMarche\Theme\Repository\WpRepository;
@@ -35,7 +34,6 @@ $news = $wpRepository->getNews();
 $news = array_slice($news, 0, 6);
 
 $twig = Twig::loadTwig();
-dump(CookieHelper::getAll());
 try {
     echo $twig->render('@AcMarche/homepage.html.twig', [
         'events' => $events,

@@ -42,7 +42,7 @@ class CookieHelper
     {
         // Set cookie for 365 days
         $expiry = time() + (365 * 24 * 60 * 60);
-        setcookie(
+        @setcookie(
             self::COOKIE_PREFERENCES,
             self::encodeData($preferences),
             $expiry,
