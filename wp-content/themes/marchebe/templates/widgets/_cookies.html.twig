@@ -4,12 +4,13 @@
      data-encapsulated="{{  cookieIsAuthorizedByName('encapsulated') }}"
      x-data="{
     isPopupCookieOpen: false,
-    showBanner: this.$el.dataset.essential,
+    showBanner: false,
     essential: false,
     statistics: false,
     encapsulated: false,
     init() {
         this.showBanner = true
+        //this.showBanner= this.$el.dataset.showBanner
     },
     togglePopupCookie() {
         this.isPopupCookieOpen = !this.isPopupCookieOpen;
