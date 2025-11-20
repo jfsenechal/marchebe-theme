@@ -53,7 +53,7 @@ class ShortCode
 
     public function enaos(): ?string
     {
-        if (CookieHelper::isAuthorizedByName(CookieHelper::$encapsulated)) {
+        if (!CookieHelper::isAuthorizedByName(CookieHelper::$encapsulated)) {
             return '';
         }
         $cacheKey = Cache::generateKey('enaos');
@@ -110,25 +110,26 @@ class ShortCode
             return '';
         }
 
-        if (CookieHelper::isAuthorizedByName(CookieHelper::$encapsulated)) {
-            return '';
-        }
+        // Check if encapsulated cookies are authorized
+        $encapsulatedAllowed = CookieHelper::isAuthorizedByName(CookieHelper::$encapsulated);
 
         // Enqueue Leaflet CSS and JS only when shortcode is used and encapsulated cookies are allowed
-        wp_enqueue_style(
-            'leaflet-css',
-            Assets::leaflet_css,
-            [],
-            '1.9.4'
-        );
+        if ($encapsulatedAllowed) {
+            wp_enqueue_style(
+                'leaflet-css',
+                Assets::leaflet_css,
+                [],
+                '1.9.4'
+            );
 
-        wp_enqueue_script(
-            'leaflet-js',
-            Assets::leaflet_js,
-            [],
-            '1.9.4',
-            true // Load in footer
-        );
+            wp_enqueue_script(
+                'leaflet-js',
+                Assets::leaflet_js,
+                [],
+                '1.9.4',
+                true // Load in footer
+            );
+        }
 
         $twig = Twig::LoadTwig();
         $post = get_post();
@@ -141,6 +142,7 @@ class ShortCode
                     'latitude' => $latitude,
                     'longitude' => $longitude,
                     'title' => $title,
+                    'encapsulatedAllowed' => $encapsulatedAllowed,
                 ]
             );
         } catch (LoaderError|RuntimeError|SyntaxError $e) {

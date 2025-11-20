@@ -10,8 +10,9 @@
     encapsulated: false,
     init() {
         // Show banner only if preferences haven't been set
-        this.showBanner = this.$el.dataset.showBanner === '' || this.$el.dataset.showBanner === '0' || this.$el.dataset.showBanner === 'false';
+        //this.showBanner = this.$el.dataset.showBanner === '' || this.$el.dataset.showBanner === '0' || this.$el.dataset.showBanner === 'false';
 
+        this.showBanner = true;
         // Load current preferences from data attributes
         this.essential = this.$el.dataset.essential === '1' || this.$el.dataset.essential === 'true';
         this.statistics = this.$el.dataset.statistics === '1' || this.$el.dataset.statistics === 'true';

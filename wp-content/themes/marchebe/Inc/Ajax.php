@@ -76,7 +76,10 @@ class Ajax
 
         $essential = isset($_POST['essential']) ? filter_var($_POST['essential'], FILTER_VALIDATE_BOOLEAN) : true;
         $statistics = isset($_POST['statistics']) ? filter_var($_POST['statistics'], FILTER_VALIDATE_BOOLEAN) : false;
-        $encapsulated = isset($_POST['encapsulated']) ? filter_var($_POST['encapsulated'], FILTER_VALIDATE_BOOLEAN) : false;
+        $encapsulated = isset($_POST['encapsulated']) ? filter_var(
+            $_POST['encapsulated'],
+            FILTER_VALIDATE_BOOLEAN
+        ) : false;
 
         $preferences = [
             'essential' => $essential,
@@ -84,7 +87,8 @@ class Ajax
             'encapsulated' => $encapsulated,
         ];
 
-        CookieHelper::setAll($preferences);
+        // Save all preferences at once
+        CookieHelper::saveAll($preferences);
 
         wp_send_json_success([
             'message' => 'Cookie preferences saved',

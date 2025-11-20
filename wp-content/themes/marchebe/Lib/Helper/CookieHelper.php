@@ -11,12 +11,10 @@ class CookieHelper
     public static function getAll(): array
     {
         if (!isset($_COOKIE[self::COOKIE_PREFERENCES])) {
-            self::setAll([]);
-
             return [];
         }
 
-        $decoded = json_decode($_COOKIE[self::COOKIE_PREFERENCES], true);
+        $decoded = json_decode(urldecode($_COOKIE[self::COOKIE_PREFERENCES]), true);
 
         return is_array($decoded) ? $decoded : [];
     }
@@ -37,21 +35,41 @@ class CookieHelper
     {
         $preferences = self::getAll();
         $preferences[$name] = $value;
-        self::setAll($preferences);
+        self::saveAll($preferences);
     }
 
-    public static function setAll(array $preferences): void
+    public static function saveAll(array $preferences): void
     {
         // Set cookie for 365 days
         $expiry = time() + (365 * 24 * 60 * 60);
         setcookie(
-            'cookiePreferences',
-            urlencode(json_encode($preferences)),
+            self::COOKIE_PREFERENCES,
+            self::encodeData($preferences),
             $expiry,
             '/',
             '',
             true, // Secure (HTTPS only)
             false  // HttpOnly - set to false so JavaScript can read it
         );
+
+        // Also update $_COOKIE for immediate availability in current request
+        $_COOKIE[self::COOKIE_PREFERENCES] = self::encodeData($preferences);
+    }
+
+    public static function createCookie(array $data = []): void
+    {
+        if (!isset($_COOKIE[self::COOKIE_PREFERENCES])) {
+            self::saveAll($data);
+        }
+    }
+
+    private static function encodeData(array $data): string
+    {
+        return urlencode(json_encode($data));
+    }
+
+    public static function reset(): void
+    {
+        self::saveAll([]);
     }
 }
