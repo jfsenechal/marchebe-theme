@@ -1,7 +1,7 @@
 <div data-show-banner="{{ cookieHasSetPreferences() }}"
-     data-essential="{{  cookieIsAuthorizedByName('essential') }}"
-     data-statistics="{{  cookieIsAuthorizedByName('statistics') }}"
-     data-encapsulated="{{  cookieIsAuthorizedByName('encapsulated') }}"
+     data-essential="{{ cookieIsAuthorizedByName('essential') }}"
+     data-statistics="{{ cookieIsAuthorizedByName('statistics') }}"
+     data-encapsulated="{{ cookieIsAuthorizedByName('encapsulated') }}"
      x-data="{
     isPopupCookieOpen: false,
     showBanner: false,
@@ -9,25 +9,30 @@
     statistics: false,
     encapsulated: false,
     init() {
-        this.showBanner = true
-        //this.showBanner= this.$el.dataset.showBanner
+        // Show banner only if preferences haven't been set
+        this.showBanner = this.$el.dataset.showBanner === '' || this.$el.dataset.showBanner === '0' || this.$el.dataset.showBanner === 'false';
+
+        // Load current preferences from data attributes
+        this.essential = this.$el.dataset.essential === '1' || this.$el.dataset.essential === 'true';
+        this.statistics = this.$el.dataset.statistics === '1' || this.$el.dataset.statistics === 'true';
+        this.encapsulated = this.$el.dataset.encapsulated === '1' || this.$el.dataset.encapsulated === 'true';
     },
     togglePopupCookie() {
         this.isPopupCookieOpen = !this.isPopupCookieOpen;
     },
     async acceptAll() {
-        this.essential = this.$el.dataset.essential
-        this.statistics = this.$el.dataset.statistics
-        this.encapsulated = this.$el.dataset.encapsulated
+        this.essential = true
+        this.statistics = true
+        this.encapsulated = true
         await this.savePreferences()
     },
     async savePreferences() {
         const formData = new FormData()
         formData.append('action', 'set_cookie_action')
         formData.append('nonce', wpData.nonce)
-        formData.append('essential', this.essential)
-        formData.append('encapsulated', this.encapsulated)
-        formData.append('statistics', this.statistics)
+        formData.append('essential', this.essential ? '1' : '0')
+        formData.append('encapsulated', this.encapsulated ? '1' : '0')
+        formData.append('statistics', this.statistics ? '1' : '0')
 
         try {
             const response = await fetch(wpData.ajaxUrl, {
@@ -38,17 +43,17 @@
             const result = await response.json();
 
             if (result.success && result.data) {
-                console.log(result.data);
-
+                console.log('Cookie preferences saved:', result.data);
+                // Hide banner and popup
+                this.showBanner = false;
+                this.isPopupCookieOpen = false;
+                // Reload page to apply changes
+                window.location.reload();
             } else {
-                console.error('Error fetching posts:', result.data?.message || 'Unknown error');
-
+                console.error('Error saving cookie preferences:', result.data?.message || 'Unknown error');
             }
         } catch (error) {
-            console.error('Error:', error);
-
-        } finally {
-
+            console.error('Error saving cookie preferences:', error);
         }
     }
 }">
@@ -61,7 +66,7 @@
         <div class="flex items-start gap-3">
             <span class="text-3xl flex-shrink-0">🍪</span>
             <div class="flex-1">
-                <h4 class="font-bold text-gray-900 text-lg">Cookie Notice</h4>
+                <h4 class="font-bold text-gray-900 text-lg">Informations sur nos cookies</h4>
                 <p class="mt-2 text-gray-700 leading-relaxed">
                     Ce site utilise des cookies pour vous fournir une expérience optimale.
                     <a href="/administration/rgpd" class="text-citoyen hover:underline">

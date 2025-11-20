@@ -77,12 +77,12 @@
                         </p>
                         <div class="flex items-center gap-4">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-statistics" x-model="statistics" value="true"
+                                <input type="radio" name="cookies-statistics" @click="statistics = true" :checked="statistics === true"
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Accepter</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-statistics" x-model="statistics" value="false"
+                                <input type="radio" name="cookies-statistics" @click="statistics = false" :checked="statistics === false"
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Refuser</span>
                             </label>
@@ -100,12 +100,12 @@
                         </p>
                         <div class="flex items-center gap-4">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-encapsulated" x-model="encapsulated" value="true"
+                                <input type="radio" name="cookies-encapsulated" @click="encapsulated = true" :checked="encapsulated === true"
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Accepter</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="cookies-encapsulated" x-model="encapsulated" value="false"
+                                <input type="radio" name="cookies-encapsulated" @click="encapsulated = false" :checked="encapsulated === false"
                                        class="w-4 h-4 text-citoyen focus:ring-citoyen">
                                 <span class="font-medium text-gray-900">Refuser</span>
                             </label>
