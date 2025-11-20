@@ -5,6 +5,7 @@ namespace AcMarche\Theme\Inc;
 use AcMarche\Issep\Indice\IndiceEnum;
 use AcMarche\Theme\Lib\Cache;
 use AcMarche\Theme\Lib\Capteur;
+use AcMarche\Theme\Lib\CookieHelper;
 use AcMarche\Theme\Lib\Twig;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -20,7 +21,6 @@ use function json_decode;
 
 class ShortCode
 {
-    private CacheInterface $cache;
     private HttpClientInterface $httpClient;
 
     public function __construct()
@@ -54,6 +54,9 @@ class ShortCode
 
     public function enaos(): ?string
     {
+        if (CookieHelper::getByName(CookieHelper::$encapsulated)) {
+            return '';
+        }
         $cacheKey = Cache::generateKey('enaos');
 
         return Cache::get($cacheKey, function () {
@@ -108,7 +111,11 @@ class ShortCode
             return '';
         }
 
-        // Enqueue Leaflet CSS and JS only when shortcode is used
+        if (CookieHelper::getByName(CookieHelper::$encapsulated)) {
+            return '';
+        }
+
+        // Enqueue Leaflet CSS and JS only when shortcode is used and encapsulated cookies are allowed
         wp_enqueue_style(
             'leaflet-css',
             Assets::leaflet_css,
