@@ -1,54 +1,56 @@
-<div x-data="{
+<div data-show-banner="{{ cookieHasSetPreferences() }}"
+     data-essential="{{  cookieIsAuthorizedByName('essential') }}"
+     data-statistics="{{  cookieIsAuthorizedByName('statistics') }}"
+     data-encapsulated="{{  cookieIsAuthorizedByName('encapsulated') }}"
+     x-data="{
     isPopupCookieOpen: false,
-    showBanner: false,
-    preferences: {
-        essential: true,
-        statistics: true,
-        encapsulated: true
-    },
+    showBanner: this.$el.dataset.essential,
+    essential: false,
+    statistics: false,
+    encapsulated: false,
     init() {
-        // Check if preferences are already saved
-        const saved = localStorage.getItem('cookiePreferences');
-        if (saved) {
-            this.preferences = JSON.parse(saved);
-            this.showBanner = false;
-            this.applyPreferences();
-        } else {
-            this.showBanner = true;
-        }
+        this.showBanner = true
     },
     togglePopupCookie() {
         this.isPopupCookieOpen = !this.isPopupCookieOpen;
     },
-    acceptAll() {
-        this.preferences = {
-            essential: true,
-            statistics: true,
-            encapsulated: true
-        };
-        this.savePreferences();
+    async acceptAll() {
+        this.essential = this.$el.dataset.essential
+        this.statistics = this.$el.dataset.statistics
+        this.encapsulated = this.$el.dataset.encapsulated
+        await this.savePreferences()
     },
-    savePreferences() {
-        localStorage.setItem('cookiePreferences', JSON.stringify(this.preferences));
-        this.showBanner = false;
-        this.isPopupCookieOpen = false;
-        this.applyPreferences();
-        window.location.reload(); // Reload to apply analytics changes
-    },
-    applyPreferences() {
-        // Apply analytics based on preferences
-        if (this.preferences.statistics) {
-            window.cookieConsent_statistics = true;
-        } else {
-            window.cookieConsent_statistics = false;
-        }
-        if (this.preferences.encapsulated) {
-            window.cookieConsent_encapsulated = true;
-        } else {
-            window.cookieConsent_encapsulated = false;
+    async savePreferences() {
+        const formData = new FormData()
+        formData.append('action', 'set_cookie_action')
+        formData.append('nonce', wpData.nonce)
+        formData.append('essential', this.essential)
+        formData.append('encapsulated', this.encapsulated)
+        formData.append('statistics', this.statistics)
+
+        try {
+            const response = await fetch(wpData.ajaxUrl, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                console.log(result.data);
+
+            } else {
+                console.error('Error fetching posts:', result.data?.message || 'Unknown error');
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+
+        } finally {
+
         }
     }
-          }">
+}">
 
     <section x-show="showBanner"
              x-transition:enter="transition ease-out duration-300"

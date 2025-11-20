@@ -54,6 +54,8 @@ class Twig
         $twig->addFunction(TwigFunctions::fichePhones());
         $twig->addFunction(TwigFunctions::ficheEmails());
         $twig->addFunction(TwigFunctions::ficheUrlMap());
+        $twig->addFunction(TwigFunctions::cookieIsAuthorizedByName());
+        $twig->addFunction(TwigFunctions::cookieHasSetPreferences());
         $twig->addGlobal('template_directory', Assets::getThemeUri());
 
         return $twig;

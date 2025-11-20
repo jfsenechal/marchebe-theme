@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Lib;
 
+use AcMarche\Theme\Lib\Helper\CookieHelper;
 use Twig\TwigFunction;
 
 class TwigFunctions
@@ -53,6 +54,26 @@ class TwigFunctions
 
                 return "https://www.google.com/maps/search/?api=1&query=".urlencode($address);
 
+            }
+        );
+    }
+
+    public static function cookieIsAuthorizedByName(): TwigFunction
+    {
+        return new TwigFunction(
+            'cookieIsAuthorizedByName',
+            function (string $name): bool {
+                return CookieHelper::isAuthorizedByName($name);
+            }
+        );
+    }
+
+    public static function cookieHasSetPreferences(): TwigFunction
+    {
+        return new TwigFunction(
+            'cookieHasSetPreferences',
+            function (): bool {
+                return CookieHelper::hasSetPreferences();
             }
         );
     }

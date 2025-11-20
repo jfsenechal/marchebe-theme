@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Theme\Lib;
+namespace AcMarche\Theme\Lib\Helper;
 
 class CookieHelper
 {
@@ -20,7 +20,7 @@ class CookieHelper
         return null;
     }
 
-    public static function getByName(string $name): bool
+    public static function isAuthorizedByName(string $name): bool
     {
         $preferences = CookieHelper::get();
         if ($preferences && isset($preferences[$name])) {
@@ -28,5 +28,10 @@ class CookieHelper
         }
 
         return false;
+    }
+
+    public static function hasSetPreferences(): bool
+    {
+        return !(self::get() === null);
     }
 }

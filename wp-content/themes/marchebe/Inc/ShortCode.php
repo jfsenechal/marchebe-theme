@@ -5,10 +5,9 @@ namespace AcMarche\Theme\Inc;
 use AcMarche\Issep\Indice\IndiceEnum;
 use AcMarche\Theme\Lib\Cache;
 use AcMarche\Theme\Lib\Capteur;
-use AcMarche\Theme\Lib\CookieHelper;
+use AcMarche\Theme\Lib\Helper\CookieHelper;
 use AcMarche\Theme\Lib\Twig;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -54,7 +53,7 @@ class ShortCode
 
     public function enaos(): ?string
     {
-        if (CookieHelper::getByName(CookieHelper::$encapsulated)) {
+        if (CookieHelper::isAuthorizedByName(CookieHelper::$encapsulated)) {
             return '';
         }
         $cacheKey = Cache::generateKey('enaos');
@@ -111,7 +110,7 @@ class ShortCode
             return '';
         }
 
-        if (CookieHelper::getByName(CookieHelper::$encapsulated)) {
+        if (CookieHelper::isAuthorizedByName(CookieHelper::$encapsulated)) {
             return '';
         }
 

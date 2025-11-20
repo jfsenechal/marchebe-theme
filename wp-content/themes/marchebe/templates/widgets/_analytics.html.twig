@@ -2,33 +2,26 @@
 <script>
     // Check if user has consented to statistics cookies
     (function () {
-        const cookiePreferences = localStorage.getItem('cookiePreferences');
+        {% if not cookieIsAuthorizedByName('statistics') %}
+            // Load Google Analytics script
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-VF2FHEY1S7';
+            document.head.appendChild(script);
 
-        if (cookiePreferences) {
-            const preferences = JSON.parse(cookiePreferences);
+            // Initialize Google Analytics
+            window.dataLayer = window.dataLayer || [];
 
-            // Only load Google Analytics if statistics cookies are accepted
-            if (preferences.statistics === true || preferences.statistics === 'true') {
-                // Load Google Analytics script
-                const script = document.createElement('script');
-                script.async = true;
-                script.src = 'https://www.googletagmanager.com/gtag/js?id=G-VF2FHEY1S7';
-                document.head.appendChild(script);
-
-                // Initialize Google Analytics
-                window.dataLayer = window.dataLayer || [];
-
-                function gtag() {
-                    dataLayer.push(arguments);
-                }
-
-                gtag('js', new Date());
-                gtag('config', 'G-VF2FHEY1S7', {
-                    'anonymize_ip': true
-                });
-            } else {
-                console.log('Google Analytics disabled - statistics cookies refused');
+            function gtag() {
+                dataLayer.push(arguments);
             }
-        }
+
+            gtag('js', new Date());
+            gtag('config', 'G-VF2FHEY1S7', {
+                'anonymize_ip': true
+            });
+        {% else %}
+             console.log('Google Analytics disabled - statistics cookies refused');
+        {% endif %}
     })();
 </script>
