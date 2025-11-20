@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Inc;
 
+use AcMarche\Theme\Lib\Helper\CookieHelper;
 use AcMarche\Theme\Repository\WpRepository;
 
 class Ajax
@@ -41,10 +42,9 @@ class Ajax
     {
         check_ajax_referer('set_category_nonce', 'nonce');
 
-        $categoryId = isset($_POST['statistics']) ? intval($_POST['statistics']) : 0;
-        $currentSite = isset($_POST['encapsulated']) ? intval($_POST['encapsulated']) : 0;
+        $categoryId = isset($_POST['categorySelected']) ? intval($_POST['categorySelected']) : 0;
+        $currentSite = isset($_POST['currentSite']) ? intval($_POST['currentSite']) : Theme::CITOYEN;
 
-        dd($categoryId, $currentSite);
         if (!$categoryId) {
             wp_send_json_error(['message' => 'Invalid category ID']);
 
@@ -74,19 +74,21 @@ class Ajax
     {
         check_ajax_referer('set_cookie_nonce', 'nonce');
 
-        $categoryId = isset($_POST['categorySelected']) ? intval($_POST['categorySelected']) : 0;
-        $currentSite = isset($_POST['currentSite']) ? intval($_POST['currentSite']) : Theme::CITOYEN;
+        $essential = isset($_POST['essential']) ? filter_var($_POST['essential'], FILTER_VALIDATE_BOOLEAN) : true;
+        $statistics = isset($_POST['statistics']) ? filter_var($_POST['statistics'], FILTER_VALIDATE_BOOLEAN) : false;
+        $encapsulated = isset($_POST['encapsulated']) ? filter_var($_POST['encapsulated'], FILTER_VALIDATE_BOOLEAN) : false;
 
-        if (!$categoryId) {
-            wp_send_json_error(['message' => 'Invalid category ID']);
+        $preferences = [
+            'essential' => $essential,
+            'statistics' => $statistics,
+            'encapsulated' => $encapsulated,
+        ];
 
-            return;
-        }
+        CookieHelper::setAll($preferences);
 
-        $wpRepository = new WpRepository();
-        switch_to_blog($currentSite);
-        $posts = $wpRepository->getPostsAndFiches($categoryId);
-
-        wp_send_json_success(['posts' => $posts]);
+        wp_send_json_success([
+            'message' => 'Cookie preferences saved',
+            'preferences' => $preferences,
+        ]);
     }
 }
