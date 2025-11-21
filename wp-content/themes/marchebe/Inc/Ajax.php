@@ -74,7 +74,7 @@ class Ajax
     {
         check_ajax_referer('set_cookie_nonce', 'nonce');
 
-        $essential = isset($_POST['essential']) ? filter_var($_POST['essential'], FILTER_VALIDATE_BOOLEAN) : true;
+        $essential =  true;
         $statistics = isset($_POST['statistics']) ? filter_var($_POST['statistics'], FILTER_VALIDATE_BOOLEAN) : false;
         $encapsulated = isset($_POST['encapsulated']) ? filter_var(
             $_POST['encapsulated'],
