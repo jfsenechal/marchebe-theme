@@ -13,8 +13,8 @@
         <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 ml-0 md:ml-4">
             <template x-for="post in filteredPosts" :key="post.id">
                 <article
-                        class="group bg-white p-8 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-in-out animated-element">
-                    <h2 class="text-lg md:text-xl font-bold">
+                        class="group bg-white p-2 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 ease-in-out animated-element">
+                    <h2 class="text-lg md:text-lg font-bold">
                         <a :href="post.link" x-text="post.name"></a>
                     </h2>
                     <div class="mt-2  line-clamp-3" x-html="post.excerpt" x-show="post.excerpt"></div>
