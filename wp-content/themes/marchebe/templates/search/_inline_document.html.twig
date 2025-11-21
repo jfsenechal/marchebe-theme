@@ -1,0 +1,23 @@
+<li class="py-4 flex items-center justify-between">
+    <div class="group block w-full">
+        <a href="{{ result.link }}" class="font-semibold text-cta-dark group-hover:text-citoyen transition-colors">
+            {{ result.name }}
+        </a>
+        <div class="flex flex-row gap-2 mt-2">
+        <span class="text-sm text-gray-500">
+                                       {% if result.site|length > 0 %}
+                                           {{ result.site.name }}
+                                       {% endif %}
+         </span>
+        {% for path in result.paths %}
+            <span class=" text-gray-500">
+              > {{ path.name }}
+            </span>
+        {% endfor %}
+        </div>
+    </div>
+    <svg class="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+    </svg>
+</li>

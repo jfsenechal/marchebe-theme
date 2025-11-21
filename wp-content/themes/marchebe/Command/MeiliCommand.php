@@ -70,6 +70,7 @@ class MeiliCommand extends Command
             $this->indexCategories();
             $this->indexBottin();
             $this->indexEnquetes();
+            $this->indexPublications();
             $this->indexAdl();
 
             return Command::SUCCESS;
@@ -125,6 +126,16 @@ class MeiliCommand extends Command
         foreach ($this->dataForSearch->getEnqueteDocuments() as $documentElastic) {
             $documentElastic->id = 'enquete_'.$documentElastic->id;
             $documents[] = $documentElastic;
+        }
+        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
+    }
+
+    private function indexPublications(): void
+    {
+        switch_to_blog(Theme::ADMINISTRATION);
+        foreach ($this->dataForSearch->getAllPublications() as $document) {
+            $document->id = 'publication_'.$document->id;
+            $documents[] = $document;
         }
         $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
     }

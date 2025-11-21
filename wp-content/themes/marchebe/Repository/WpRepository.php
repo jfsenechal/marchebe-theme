@@ -122,13 +122,15 @@ class WpRepository
             $apiRepository = new ApiRepository();
             $enquetes = $apiRepository->getEnquetesPubliques();
             foreach ($enquetes as $enquete) {
+                $enquete->paths = [];
                 $documents[] = Document::documentFromEnquete($enquete);
             }
         }
 
         if ($currentSite === Theme::ADMINISTRATION) {
-            $publications = ApiRepository::getPublications($categoryIdSelected);
+            $publications = ApiRepository::getPublicationsByCategoryWp($categoryIdSelected);
             foreach ($publications as $item) {
+                $item->paths = [];
                 $documents[] = Document::documentFromPublication($item);
             }
         }

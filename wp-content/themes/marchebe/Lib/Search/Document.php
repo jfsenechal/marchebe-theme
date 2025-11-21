@@ -64,6 +64,10 @@ class Document
     public static function documentFromFiche(\stdClass $fiche, int $idSite): Document
     {
         $categories = DataForSearch::getCategoriesFiche($fiche);
+        $path = [];
+        if (count($categories) > 0) {
+            $path = [$categories[0]];
+        }
 
         $document = new Document();
         $nameSite = Theme::getTitleBlog($idSite);
@@ -73,7 +77,7 @@ class Document
         $document->content = DataForSearch::getContentFiche($fiche);
         $document->site = ['name' => $nameSite, 'id' => $idSite];
         $document->tags = $categories;
-        $document->paths = [];//todo
+        $document->paths = $path;
         list($date, $heure) = explode(' ', $fiche->created_at);
         $document->date = $date;
         $document->type = 'fiche';
@@ -91,8 +95,8 @@ class Document
         $document->id = self::createId($category->id, "category-bottin", Theme::ECONOMIE);
         $document->name = $category->name;
         $document->excerpt = $category->description;
-        $document->tags = [];//todo
-        $document->paths = [];
+        $document->tags = $category->tags;
+        $document->paths = $category->paths;
         $document->date = $created[0];
         $document->type = 'category';
         $document->link = RouterBottin::getUrlCategoryBottin($category);
@@ -107,7 +111,6 @@ class Document
     public static function documentFromEnquete(\stdClass $enquete): Document
     {
         $categories = [];
-
         $document = new Document();
         $nameSite = Theme::getTitleBlog(Theme::ADMINISTRATION);
         $document->id = self::createId($enquete->id, "enquete", Theme::ADMINISTRATION);
@@ -116,7 +119,7 @@ class Document
         $document->content = $enquete->demandeur." ".$enquete->localite." ".$enquete->rue;
         $document->site = ['name' => $nameSite, 'id' => Theme::ADMINISTRATION];
         $document->tags = $categories;
-        $document->paths = [];//todo
+        $document->paths = $enquete->paths;
         $document->date = $enquete->date_debut;
         $document->type = 'enquete';
         $document->link = get_category_link(Theme::ENQUETE_DIRECTORY_URBA).'enquete/'.$enquete->id;
@@ -136,7 +139,7 @@ class Document
         $document->content = "";
         $document->site = ['name' => $nameSite, 'id' => Theme::ADMINISTRATION];
         $document->tags = [];
-        $document->paths = [];
+        $document->paths = $item->paths;
         $document->date = $item->createdAt;
         $document->type = 'publication';
         $document->link = $item->url;

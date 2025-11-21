@@ -3,7 +3,9 @@
 namespace AcMarche\Theme\Lib\Search;
 
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
+use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Helper\BreadcrumbHelper;
+use AcMarche\Theme\Repository\ApiRepository;
 use AcMarche\Theme\Repository\BottinRepository;
 use AcMarche\Theme\Repository\WpRepository;
 
@@ -224,15 +226,64 @@ class DataForSearch
         $data = $this->bottinRepository->getAllCategories();
         $documents = [];
         foreach ($data as $category) {
+            $paths = [];
+            if ($category->parent_id > 0) {
+                $parent = $this->bottinRepository->getCategory($category->parent_id);
+                if ($parent) {
+                    $paths[] = ['id' => $parent->id, 'name' => $parent->name];
+                    $parent2 = $this->bottinRepository->getCategory($category->parent_id);
+                    if ($parent2) {
+                        $paths[] = ['id' => $parent2->id, 'name' => $parent2->name];
+                    }
+                }
+            }
+            $category->tags = [];
+            $category->paths = $paths;
             $documents[] = Document::documentFromCategoryBottin($category);
         }
 
         return $documents;
     }
 
+    /**
+     * @return Document[]
+     */
     public function getEnqueteDocuments(): array
     {
-        return [];
+        $apiRepository = new ApiRepository();
+        $enquetes = $apiRepository->getEnquetesPubliques();
+        $category = get_category(Theme::ENQUETE_DIRECTORY_URBA);
+        $paths = [];
+        $documents = [];
+        if ($category) {
+            $paths = [['id' => $category->term_id, 'name' => $category->name]];
+        }
+        foreach ($enquetes as $enquete) {
+            $enquete->paths = $paths;
+            $documents[] = Document::documentFromEnquete($enquete);
+        }
 
+        return $documents;
+
+    }
+
+    /**
+     * @return Document[]
+     */
+    public function getAllPublications(): array
+    {
+        $apiRepository = new ApiRepository();
+        $publications = $apiRepository->getAllPublications();
+        $documents = [];
+        foreach ($publications as $publication) {
+            $category = get_category($publication->category->wpCategoryId);
+            $publication->paths = [];
+            if ($category) {
+                $publication->paths = [['id' => $category->term_id, 'name' => $category->name]];
+            }
+            $documents[] = Document::documentFromPublication($publication);
+        }
+
+        return $documents;
     }
 }

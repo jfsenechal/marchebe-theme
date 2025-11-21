@@ -41,7 +41,31 @@ class ApiRepository
         }
     }
 
-    public static function getPublications(int $wpCategoryId): array
+    public function getAllPublications(): array
+    {
+        global $wpdb;
+
+        $categories = $wpdb->get_results("SELECT * FROM publication.category");
+
+        $publications = [];
+        foreach ($categories as $category) {
+            $results = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM publication.publication WHERE publication.category_id = %d ORDER BY createdAt DESC",
+                    $category->id
+                ),
+                OBJECT
+            );
+            foreach ($results as $result) {
+                $result->category = $category;
+                $publications[] = $result;
+            }
+        }
+
+        return $publications;
+    }
+
+    public static function getPublicationsByCategoryWp(int $wpCategoryId): array
     {
         global $wpdb;
 
