@@ -32,7 +32,7 @@ class ShortCode
     {
         add_shortcode('taxe', [$this, 'taxe']);
         add_shortcode('enaos', [$this, 'enaos']);
-        add_shortcode('conseil_pv', [$this, 'conseilPv']);
+        add_shortcode('conseil_archive', [$this, 'conseilPv']);
         add_shortcode('conseil_ordre', [$this, 'conseilOrdre']);
         add_shortcode('google_map', [$this, 'googleMap']);
         add_shortcode('capteur_list', [$this, 'capteurList']);
@@ -61,7 +61,7 @@ class ShortCode
         $all = [...$pvs, ...$files];
         $allGrouped = [];
         foreach ($all as $item) {
-            $allGrouped[$item->year][] = $item;
+            $allGrouped[$item['year']][] = $item;
         }
 
         $twig = Twig::LoadTwig();
@@ -69,7 +69,7 @@ class ShortCode
         return $twig->render(
             '@AcMarche/conseil/_pv.html.twig',
             [
-                'pvs' => $all,
+                'pvs' => $allGrouped,
             ]
         );
     }
