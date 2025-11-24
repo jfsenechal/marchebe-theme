@@ -9,6 +9,7 @@ use AcMarche\Theme\Repository\MenuRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+
 CookieHelper::createCookie([]);
 ?>
     <!DOCTYPE html>
@@ -34,11 +35,11 @@ $wpRepository = new MenuRepository();
 $menu = $wpRepository->getMenu();
 
 $twig = Twig::loadTwig();
-
 try {
     echo $twig->render('@AcMarche/_header.html.twig', [
             'menu_data' => json_encode($menu),
             'menuItems' => Data::menuItems,
+            'hasNotAcceptCookie' => !CookieHelper::isAuthorizedByName(CookieHelper::$essential),
     ]);
 } catch (LoaderError|RuntimeError|SyntaxError $e) {
     echo $e->getMessage();

@@ -5,7 +5,8 @@ namespace AcMarche\Theme\Lib\Helper;
 class CookieHelper
 {
     const COOKIE_PREFERENCES = 'cookiePreferences';
-    private static string $analytics = 'analytics';
+    public static string $essential = 'essential';
+    public static string $analytics = 'analytics';
     public static string $encapsulated = 'encapsulated';
 
     public static function getAll(): array
