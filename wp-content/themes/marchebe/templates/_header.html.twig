@@ -1,5 +1,6 @@
 <!-- Main Header -->
-<nav x-data="{
+<nav @click.window="closeOnClickOutside($event)"
+     x-data="{
     // State Management
     isMobileMenuOpen: false,
     activeMobileDrawerId: null,
@@ -73,7 +74,7 @@
         Aller au contenu principal
     </a>
 
-    <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-40" id="main-header">
+    <header class="bg-white shadow-md relative z-40" id="main-header">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <a href="/" class="">
@@ -85,7 +86,7 @@
                 <!-- Desktop Menu Trigger -->
                 <div class="hidden md:flex flex-row items-center justify-center space-x-6">
                     <button
-                            x-ref="desktopMenuButtonRef"
+                            x-ref="desktopMenuButton"
                             @click="toggleDesktopMenu()"
                             type="button"
                             class="flex flex-row items-center justify-center gap-2 h-16 cursor-pointer font-semibold text-cta-dark hover:text-cta-light transition-colors border-b-3 border-transparent hover:border-b-3 hover:border-cta-light leading-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-white"
