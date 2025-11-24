@@ -31,7 +31,7 @@
     async savePreferences() {
         const formData = new FormData()
         formData.append('action', 'set_cookie_action')
-        formData.append('nonce', wpData.nonce)
+        formData.append('nonce', wpData.cookieNonce)
         formData.append('essential', this.essential ? '1' : '0')
         formData.append('encapsulated', this.encapsulated ? '1' : '0')
         formData.append('statistics', this.statistics ? '1' : '0')

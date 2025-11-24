@@ -34,7 +34,8 @@ class Ajax
 
         wp_localize_script('marchebe-alpine', 'wpData', array(
             'ajaxUrl' => $url,
-            'nonce' => wp_create_nonce('set_category_nonce'),
+            'categoryNonce' => wp_create_nonce('set_category_nonce'),
+            'cookieNonce' => wp_create_nonce('set_cookie_nonce'),
         ));
     }
 
@@ -61,13 +62,8 @@ class Ajax
     // Localize script to pass Ajax URL and nonce
     public function setCookieScript(): void
     {
-        // admin_url('admin-ajax.php'), //bug route frankenphp
-        $url = 'https://'.$_ENV['WP_URL_HOME'].'/wp-admin/admin-ajax.php';
-
-        wp_localize_script('marchebe-alpine', 'wpData', array(
-            'ajaxUrl' => $url,
-            'nonce' => wp_create_nonce('set_cookie_nonce'),
-        ));
+        // This method is now redundant as both nonces are set in setCategoryScript()
+        // Keeping it for backwards compatibility but it does nothing
     }
 
     public function setCookieHandler(): void

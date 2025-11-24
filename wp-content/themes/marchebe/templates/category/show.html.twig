@@ -29,7 +29,7 @@
 
     const formData = new FormData();
     formData.append('action', 'set_category_action');
-    formData.append('nonce', wpData.nonce);
+    formData.append('nonce', wpData.categoryNonce);
     formData.append('categorySelected', this.categorySelected);
     formData.append('currentSite', this.currentSite);
 
