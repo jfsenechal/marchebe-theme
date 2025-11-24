@@ -38,7 +38,7 @@ $content = str_replace(']]>', ']]&gt;', $content);
 
 $pivotRepository = new PivotRepository();
 try {
-    $events = $pivotRepository->loadEvents();
+    $events = $pivotRepository->loadEvents(skip:true);
     $events = array_slice($events, 0, 3);
 } catch (\Exception|\Throwable  $e) {
     $events = [];

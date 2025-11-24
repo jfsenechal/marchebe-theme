@@ -35,7 +35,7 @@ class RestApi
     public function getEvents(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         try {
-            $events = $this->pivotRepository->loadEvents();
+            $events = $this->pivotRepository->loadEvents(skip:true);
 
             return new WP_REST_Response([
                 'success' => true,

@@ -15,7 +15,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class PivotRepository
 {
     private PivotApi $pivotApi;
-    private array $eventsToSkip = ['',''];
+    //skip marche public, st loup
+    private array $eventsToSkip = ['EVT-01-0AVJ-324P', 'EVT-A0-008E-101W'];
 
     public function __construct()
     {
@@ -71,10 +72,16 @@ class PivotRepository
         $parser = new EventParser();
         $events = $parser->parseJsonFile($jsonContent);
 
-        if($skip) {
-
+        if ($skip) {
+            $all = [];
+            foreach ($events as $event) {
+                if (!in_array($event->codeCgt, $this->eventsToSkip)) {
+                    $all[] = $event;
+                }
+            }
         }
-        return SortHelper::sortEvents($events);
+
+        return SortHelper::sortEvents($all);
     }
 
     /**

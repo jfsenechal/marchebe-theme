@@ -19,7 +19,7 @@ get_header();
 $wpRepository = new WpRepository();
 $pivotRepository = new PivotRepository();
 try {
-    $events = $pivotRepository->loadEvents();
+    $events = $pivotRepository->loadEvents(skip: true);
     foreach ($events as $key => $event) {
         if (in_array($event->codeCgt, Data::$eventsToSkip)) {
             unset($events[$key]);
