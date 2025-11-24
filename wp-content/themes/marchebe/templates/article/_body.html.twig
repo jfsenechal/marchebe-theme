@@ -1,6 +1,6 @@
 <div class="prose max-w-none prose-lg prose-slate prose-a:text-blue-600 hover:prose-a:text-blue-800" id="contentToListen">
 
-    {% if post.post_excerpt %}
+    {% if post.post_excerpt is defined and post.post_excerpt != '' %}
         <p class="fade-in-up text-shadow-slate-400">{{ post.post_excerpt }}</p>
     {% endif %}
 
