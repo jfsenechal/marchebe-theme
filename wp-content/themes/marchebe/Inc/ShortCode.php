@@ -7,6 +7,7 @@ use AcMarche\Theme\Lib\Cache;
 use AcMarche\Theme\Lib\Capteur;
 use AcMarche\Theme\Lib\Helper\CookieHelper;
 use AcMarche\Theme\Lib\Twig;
+use AcMarche\Theme\Repository\ConseilRepository;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -31,7 +32,8 @@ class ShortCode
     {
         add_shortcode('taxe', [$this, 'taxe']);
         add_shortcode('enaos', [$this, 'enaos']);
-        //add_shortcode('conseil_ordre', [$this, 'conseilOrdre']);
+        add_shortcode('conseil_pv', [$this, 'conseilPv']);
+        add_shortcode('conseil_ordre', [$this, 'conseilOrdre']);
         add_shortcode('google_map', [$this, 'googleMap']);
         add_shortcode('capteur_list', [$this, 'capteurList']);
         add_shortcode('capteur_color', [$this, 'capteurColor']);
@@ -39,14 +41,35 @@ class ShortCode
 
     public function conseilOrdre(): string
     {
-        $conseilDb = new ConseilDb();
+        $conseilDb = new ConseilRepository();
         $ordres = $conseilDb->getAllOrdre();
         $twig = Twig::LoadTwig();
 
         return $twig->render(
-            'conseil/_ordre.html.twig',
+            '@AcMarche/conseil/_ordre.html.twig',
             [
                 'ordres' => $ordres,
+            ]
+        );
+    }
+
+    public function conseilPv(): string
+    {
+        $conseilRepository = new ConseilRepository();
+        $pvs = $conseilRepository->findFromDb();
+        $files = $conseilRepository->findFromDirectory();
+        $all = [...$pvs, ...$files];
+        $allGrouped = [];
+        foreach ($all as $item) {
+            $allGrouped[$item->year][] = $item;
+        }
+
+        $twig = Twig::LoadTwig();
+
+        return $twig->render(
+            '@AcMarche/conseil/_pv.html.twig',
+            [
+                'pvs' => $all,
             ]
         );
     }
