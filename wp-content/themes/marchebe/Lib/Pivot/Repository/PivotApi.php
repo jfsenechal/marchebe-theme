@@ -61,16 +61,4 @@ class PivotApi
             $this->base_uri.'/offer/'.$codeCgt.';content='.$level
         );
     }
-
-    /**
-     * @return ResponseInterface
-     * @throws TransportExceptionInterface
-     */
-    public function loadEvents(): ResponseInterface
-    {
-        return $this->client->request(
-            'GET',
-            $this->base_uri.'/query'
-        );
-    }
 }
