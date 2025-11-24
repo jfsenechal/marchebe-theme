@@ -2,12 +2,12 @@
 
 namespace AcMarche\Theme\Lib;
 
+use Symfony\Component\HttpClient\DecoratorTrait;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Ai
 {
-    private HttpClientInterface $client;
+    use DecoratorTrait;
 
     public function __construct()
     {

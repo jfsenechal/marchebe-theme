@@ -101,4 +101,9 @@ class Event
 
         return null;
     }
+
+    public function url(): string
+    {
+        return '/tourisme/agenda-des-manifestations/manifestation/'.$this->codeCgt;
+    }
 }

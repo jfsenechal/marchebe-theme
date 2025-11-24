@@ -15,6 +15,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class PivotRepository
 {
     private PivotApi $pivotApi;
+    private array $eventsToSkip = ['',''];
 
     public function __construct()
     {
@@ -45,9 +46,10 @@ class PivotRepository
      */
     public function loadEvents(
         int $level = ContentEnum::LVL4->value,
-        bool $purgeCache = false
+        bool $purgeCache = false,
+        bool $skip = false
     ): array {
-        $cacheKey = Cache::generateKey('all-events-marche-be-'.$level);
+        $cacheKey = Cache::generateKey('all-events-marche-be-'.$level.'-'.$skip);
         if ($purgeCache) {
             Cache::delete($cacheKey);
         }
@@ -69,6 +71,9 @@ class PivotRepository
         $parser = new EventParser();
         $events = $parser->parseJsonFile($jsonContent);
 
+        if($skip) {
+
+        }
         return SortHelper::sortEvents($events);
     }
 

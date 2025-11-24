@@ -4,7 +4,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Related Article Card 1 -->
             {% for event in events %}
-                <a href="#"
+                <a href="{{ event.url }}"
                    class="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     <img class="h-48 w-full object-cover"
                          src="{% if event.images|length > 0 %} {{ event.images[0] }} {% else %} 'https://pivotmedia.tourismewallonie.be/OTH-A0-00UE-0HH1/OTH-A0-00UE-0HH1.jpg' {% endif %}"
