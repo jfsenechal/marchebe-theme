@@ -78,7 +78,7 @@
                                     :href="child.url || `#${child.id}`"
                                     @click="toggleMobileMenu()"
                                     class="block p-3 rounded-md hover:bg-gray-700"
-                                    x-text="child.title"
+                                    x-html="child.title"
                             ></a>
                         </li>
                     </template>

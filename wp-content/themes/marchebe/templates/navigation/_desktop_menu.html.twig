@@ -24,7 +24,7 @@
                                 :class="activeDesktopCategory?.blogid === item.blogid ?
                                     `bg-gray-100 font-semibold ${item.color}` :
                                     'hover:bg-gray-100'"
-                                x-text="item.name"
+                                x-html="item.name"
                         ></button>
                     </li>
                 </template>
@@ -45,7 +45,7 @@
                                     :href="child.url || `#${child.id}`"
                                     @click="toggleDesktopMenu()"
                                     class="block p-2 -mx-2 rounded-md hover:bg-gray-100 text-base"
-                                    x-text="child.title"
+                                    x-html="child.title"
                             ></a>
                         </li>
                     </template>
