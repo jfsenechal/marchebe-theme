@@ -20,12 +20,13 @@ x-data="{
 
         if (bodyElement) {
             const clone = bodyElement.cloneNode(true);
-            const buttons = clone.querySelectorAll('button, .hidden');
+            const buttons = clone.querySelectorAll('button, .hidden, script, style');
             buttons.forEach(btn => btn.remove());
-            bodyText = clone.innerText || '';
+            bodyText = clone.innerText || clone.textContent || '';
         }
 
-        return title + '. ' + bodyText;
+        const fullText = title + '. ' + bodyText;
+        return fullText.trim();
     },
 
     toggleSpeech() {
@@ -50,7 +51,7 @@ x-data="{
     startSpeech() {
         const text = this.getArticleText();
 
-        if (!text) {
+        if (!text || text.length < 3) {
             alert('Aucun texte à lire.');
             return;
         }
@@ -59,6 +60,7 @@ x-data="{
         this.utterance.lang = 'fr-FR';
         this.utterance.rate = 1.0;
         this.utterance.pitch = 1.0;
+        this.utterance.volume = 1.0;
 
         this.utterance.onstart = () => {
             this.isPlaying = true;
@@ -70,12 +72,14 @@ x-data="{
             this.isPaused = false;
         };
 
-        this.utterance.onerror = () => {
+        this.utterance.onerror = (event) => {
             this.isPlaying = false;
             this.isPaused = false;
-            alert('Une erreur est survenue lors de la lecture.');
+            console.error('Speech error:', event);
+            alert('Une erreur est survenue lors de la lecture: ' + (event.error || 'inconnue'));
         };
 
+        this.synthesis.cancel();
         this.synthesis.speak(this.utterance);
     },
 
