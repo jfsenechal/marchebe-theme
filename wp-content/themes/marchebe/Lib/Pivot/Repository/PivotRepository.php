@@ -79,9 +79,10 @@ class PivotRepository
                     $all[] = $event;
                 }
             }
+            $events = $all;
         }
 
-        return SortHelper::sortEvents($all);
+        return SortHelper::sortEvents($events);
     }
 
     /**
