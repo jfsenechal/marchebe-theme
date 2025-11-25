@@ -2,6 +2,7 @@
 
 namespace AcMarche\Theme\Repository;
 
+use AcMarche\Theme\Inc\Theme;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -41,6 +42,18 @@ class ApiRepository
         }
     }
 
+    public function getEnquetePublique(int $enqueteId): ?\stdClass
+    {
+        $enquetes = $this->getEnquetesPubliques();
+        foreach ($enquetes as $enquete) {
+            if ($enquete->id == $enqueteId) {
+                return $enquete;
+            }
+        }
+
+        return null;
+    }
+
     public function getAllPublications(): array
     {
         global $wpdb;
@@ -63,6 +76,11 @@ class ApiRepository
         }
 
         return $publications;
+    }
+
+    public  function getCategoryEnquete(): \WP_Term
+    {
+        return get_category(Theme::ENQUETE_DIRECTORY_URBA);
     }
 
     public static function getPublicationsByCategoryWp(int $wpCategoryId): array
