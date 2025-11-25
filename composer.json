@@ -7,7 +7,7 @@
     }
   ],
   "require": {
-    "php": ">=8.2",
+    "php": ">=8.3",
     "ext-intl": "*",
     "guzzlehttp/guzzle": "^7.10",
     "meilisearch/meilisearch-php": "^v1.16.0",
