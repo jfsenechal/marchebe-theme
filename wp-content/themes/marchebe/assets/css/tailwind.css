@@ -197,3 +197,10 @@ article h2:not(:has(a)), article h3 {
     animation: fadeInDown 0.8s ease-out 0.2s forwards;
     opacity: 0; /* Start hidden */
 }
+
+.icon-menu-mobile {
+  @apply my-4 flex flex-col flex-wrap items-center justify-center font-montserrat-semi-bold;
+}
+.musshadow {
+  box-shadow: 0 -0.125rem 0.45rem rgba(0, 0, 0, 0.75);
+}
