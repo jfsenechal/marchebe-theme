@@ -1582,6 +1582,9 @@
   .bg-cta-dark {
     background-color: var(--color-cta-dark);
   }
+  .bg-cta-light {
+    background-color: var(--color-cta-light);
+  }
   .bg-gray-50 {
     background-color: var(--color-gray-50);
   }
