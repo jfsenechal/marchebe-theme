@@ -41,10 +41,12 @@
         {# Column 2 & 3: Child Items #}
         <div class="col-span-2">
             <div x-show="activeDesktopCategory">
-                <h2
+                <p
                         :class="`text-sm font-semibold ${activeDesktopCategory?.color} tracking-wider uppercase`"
                         x-text="activeDesktopCategory?.name ?? 'select a category'"
-                ></h2>
+                        role="status"
+                        aria-live="polite"
+                ></p>
                 <ul class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
                     <template x-for="(child, index) in activeDesktopCategory?.items" :key="child.id">
                         <li>
