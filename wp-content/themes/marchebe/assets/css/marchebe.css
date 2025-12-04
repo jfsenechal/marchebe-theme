@@ -1055,6 +1055,9 @@
   .mt-12 {
     margin-top: calc(var(--spacing) * 12);
   }
+  .mt-16 {
+    margin-top: calc(var(--spacing) * 16);
+  }
   .-mr-2 {
     margin-right: calc(var(--spacing) * -2);
   }
@@ -1581,9 +1584,6 @@
   }
   .bg-cta-dark {
     background-color: var(--color-cta-dark);
-  }
-  .bg-cta-light {
-    background-color: var(--color-cta-light);
   }
   .bg-gray-50 {
     background-color: var(--color-gray-50);
