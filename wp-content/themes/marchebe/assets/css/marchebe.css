@@ -2601,6 +2601,11 @@
       margin-left: calc(var(--spacing) * 4);
     }
   }
+  .sm\:inline-block {
+    @media (width >= 40rem) {
+      display: inline-block;
+    }
+  }
   .sm\:max-w-\[300px\] {
     @media (width >= 40rem) {
       max-width: 300px;
@@ -2900,6 +2905,11 @@
   .lg\:hidden {
     @media (width >= 64rem) {
       display: none;
+    }
+  }
+  .lg\:inline {
+    @media (width >= 64rem) {
+      display: inline;
     }
   }
   .lg\:grid-cols-2 {

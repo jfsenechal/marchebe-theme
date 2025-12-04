@@ -11,6 +11,20 @@
     results: [],
     isLoading: false,
     error: '',
+    // Init
+    init() {
+        // Listen for CTRL + K to open search modal
+        window.addEventListener('keydown', (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+                event.preventDefault();
+                this.openSearchModal();
+            }
+            // Listen for ESC to close search modal
+            if (event.key === 'Escape' && this.isSearchModalOpen) {
+                this.closeSearchModal();
+            }
+        });
+    },
     // Computed
     get activeMobileCategoryData() {
         if (!this.activeMobileDrawerId || !this.menuData) return null;
