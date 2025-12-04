@@ -2224,6 +2224,13 @@
       }
     }
   }
+  .hover\:bg-citoyen {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-citoyen);
+      }
+    }
+  }
   .hover\:bg-cta-dark {
     &:hover {
       @media (hover: hover) {
