@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.16 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.14 | MIT License | https://tailwindcss.com */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @layer properties;
 @layer theme, base, components, utilities;
@@ -315,9 +315,6 @@
   .top-16 {
     top: calc(var(--spacing) * 16);
   }
-  .top-auto {
-    top: auto;
-  }
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
@@ -329,9 +326,6 @@
   }
   .bottom-4 {
     bottom: calc(var(--spacing) * 4);
-  }
-  .bottom-52 {
-    bottom: calc(var(--spacing) * 52);
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
@@ -2889,6 +2883,11 @@
   .lg\:mb-6 {
     @media (width >= 64rem) {
       margin-bottom: calc(var(--spacing) * 6);
+    }
+  }
+  .lg\:hidden {
+    @media (width >= 64rem) {
+      display: none;
     }
   }
   .lg\:grid-cols-2 {
