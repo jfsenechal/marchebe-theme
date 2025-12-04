@@ -1,6 +1,7 @@
 {# Desktop Menu Panel #}
 <div x-show="isDesktopMenuOpen"
      x-ref="desktopMenuPanel"
+     @keydown="handleDesktopMenuKeydown($event)"
      x-transition:enter="transition ease-out duration-200"
      x-transition:enter-start="opacity-0"
      x-transition:enter-end="opacity-100"
@@ -9,18 +10,24 @@
      x-transition:leave-end="opacity-0"
      id="desktop-menu"
      class="hidden md:block absolute top-16 left-0 w-full bg-white text-gray-900 shadow-lg z-30"
-     style="display: none;">
+     style="display: none;"
+     role="navigation"
+     aria-label="Menu principal">
 
     <div class="container mx-auto grid grid-cols-3 gap-8 p-8">
         {# Column 1: Parent Categories #}
         <div class="col-span-1 border-r border-gray-200 pr-8">
-            <ul class="mt-4 space-y-1">
-                <template x-for="item in menuData" :key="item.blogid">
-                    <li>
+            <ul class="mt-4 space-y-1" role="menu" aria-label="Catégories">
+                <template x-for="(item, index) in menuData" :key="item.blogid">
+                    <li role="none">
                         <button
-                                @click="selectDesktopCategory(item)"
+                                @click="selectDesktopCategory(item); focusedCategoryIndex = index;"
+                                @focus="focusContext = 'categories'; focusedCategoryIndex = index;"
                                 type="button"
-                                class="cursor-pointer w-full text-left px-4 py-2 text-base rounded-md"
+                                role="menuitem"
+                                :data-category-index="index"
+                                :tabindex="index === 0 ? 0 : -1"
+                                class="cursor-pointer w-full text-left px-4 py-2 text-base rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 :class="activeDesktopCategory?.blogid === item.blogid ?
                                     `bg-gray-100 font-semibold ${item.color}` :
                                     'hover:bg-gray-100'"
@@ -38,13 +45,17 @@
                         :class="`text-sm font-semibold ${activeDesktopCategory?.color} tracking-wider uppercase`"
                         x-text="activeDesktopCategory?.name ?? 'select a category'"
                 ></h2>
-                <ul class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
-                    <template x-for="child in activeDesktopCategory?.items" :key="child.id">
-                        <li>
+                <ul class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4" role="menu" aria-label="Éléments du menu">
+                    <template x-for="(child, index) in activeDesktopCategory?.items" :key="child.id">
+                        <li role="none">
                             <a
                                     :href="child.url || `#${child.id}`"
                                     @click="toggleDesktopMenu()"
-                                    class="block p-2 -mx-2 rounded-md hover:bg-gray-100 text-base"
+                                    @focus="focusContext = 'children'; focusedChildIndex = index;"
+                                    role="menuitem"
+                                    :data-child-index="index"
+                                    tabindex="-1"
+                                    class="block p-2 -mx-2 rounded-md hover:bg-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     x-html="child.title"
                             ></a>
                         </li>
