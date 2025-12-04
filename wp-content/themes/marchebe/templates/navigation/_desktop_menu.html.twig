@@ -17,16 +17,16 @@
     <div class="container mx-auto grid grid-cols-3 gap-8 p-8">
         {# Column 1: Parent Categories #}
         <div class="col-span-1 border-r border-gray-200 pr-8">
-            <ul class="mt-4 space-y-1" role="menu" aria-label="Catégories">
+            <ul class="mt-4 space-y-1" aria-label="Catégories">
                 <template x-for="(item, index) in menuData" :key="item.blogid">
-                    <li role="none">
+                    <li>
                         <button
                                 @click="selectDesktopCategory(item); focusedCategoryIndex = index;"
                                 @focus="focusContext = 'categories'; focusedCategoryIndex = index;"
                                 type="button"
-                                role="menuitem"
                                 :data-category-index="index"
                                 :tabindex="index === 0 ? 0 : -1"
+                                :aria-label="`Catégorie: ${item.name}`"
                                 class="cursor-pointer w-full text-left px-4 py-2 text-base rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 :class="activeDesktopCategory?.blogid === item.blogid ?
                                     `bg-gray-100 font-semibold ${item.color}` :
@@ -45,14 +45,13 @@
                         :class="`text-sm font-semibold ${activeDesktopCategory?.color} tracking-wider uppercase`"
                         x-text="activeDesktopCategory?.name ?? 'select a category'"
                 ></h2>
-                <ul class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4" role="menu" aria-label="Éléments du menu">
+                <ul class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
                     <template x-for="(child, index) in activeDesktopCategory?.items" :key="child.id">
-                        <li role="none">
+                        <li>
                             <a
                                     :href="child.url || `#${child.id}`"
                                     @click="toggleDesktopMenu()"
                                     @focus="focusContext = 'children'; focusedChildIndex = index;"
-                                    role="menuitem"
                                     :data-child-index="index"
                                     tabindex="-1"
                                     class="block p-2 -mx-2 rounded-md hover:bg-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
