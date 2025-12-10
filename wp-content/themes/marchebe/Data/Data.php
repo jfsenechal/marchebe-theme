@@ -5,7 +5,7 @@ namespace AcMarche\Theme\Data;
 class Data
 {
     //st loup,marche public
-    public static array $eventsToSkip = ['EVT-01-0AVJ-324P','EVT-A0-008E-101W'];
+    public static array $eventsToSkip = ['EVT-01-0AVJ-324P', 'EVT-A0-008E-101W'];
 
     const shortcuts = [
         [
@@ -19,7 +19,7 @@ class Data
             'bgcolorhover' => 'group-hover:bg-citoyen',
         ],
         [
-            'name' => 'Eguichet',
+            'name' => 'E-guichet',
             'description' => 'Démarches et commande en ligne',
             'icon' => 'fas fa-id-card',
             'url' => 'https://marche.guichet-citoyen.be/',
@@ -39,10 +39,11 @@ class Data
             'bgcolorhover' => 'group-hover:bg-citoyen',
         ],
         [
-            'name' => 'Parking',
-            'description' => 'Retrouvez la liste des parkins dans notre ville.',
-            'icon' => 'fas fa-square-parking',
-            'url' => '/?p=11139',
+            'name' => 'Avis de publication',
+            'description' => 'Enquêtes publiques, assemblées institutions...',
+            'class' => 'bg-img-widgets-1',
+            'icon' => 'fas fa-paper-plane',
+            'url' => '/administration/?cat=15',
             'id' => 4,
             'color' => 'text-white',
             'bgcolor' => 'bg-citoyen',
@@ -71,11 +72,10 @@ class Data
     ];
     const widgets = [
         [
-            'name' => 'Avis de publication',
-            'intro' => 'Enquêtes publiques, assemblées institutions...',
-            'class' => 'bg-img-widgets-1',
-            'icon' => 'fas fa-paper-plane',
-            'url' => '/administration/?cat=15',
+            'name' => 'Parking',
+            'intro' => 'Retrouvez la liste des parkins dans notre ville.',
+            'icon' => 'fas fa-square-parking',
+            'url' => '/?p=11139',
             'id' => 1,
             'color' => 'text-white',
             'bgcolor' => 'bg-citoyen',
@@ -104,11 +104,11 @@ class Data
             'bgcolorhover' => 'group-hover:bg-citoyen',
         ],
         [
-            'name' => 'Participation citoyenne',
-            'intro' => 'Plateforme de lenveloppe participative, consultations publiques...',
+            'name' => 'Emploi',
+            'intro' => '',
             'class' => 'bg-img-widgets-3',
             'icon' => 'fas fa-person',
-            'url' => 'https://jeparticipe.marche.be/',
+            'url' => '/?cat=132',
             'id' => 4,
             'color' => 'text-white',
             'bgcolor' => 'bg-citoyen',

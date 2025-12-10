@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.16 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.14 | MIT License | https://tailwindcss.com */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @layer properties;
 @layer theme, base, components, utilities;
@@ -315,9 +315,6 @@
   .top-16 {
     top: calc(var(--spacing) * 16);
   }
-  .top-auto {
-    top: auto;
-  }
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
@@ -329,9 +326,6 @@
   }
   .bottom-4 {
     bottom: calc(var(--spacing) * 4);
-  }
-  .bottom-52 {
-    bottom: calc(var(--spacing) * 52);
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
@@ -362,6 +356,12 @@
   }
   .z-1000 {
     z-index: 1000;
+  }
+  .z-\[60\] {
+    z-index: 60;
+  }
+  .z-\[70\] {
+    z-index: 70;
   }
   .col-span-1 {
     grid-column: span 1 / span 1;
@@ -1055,6 +1055,9 @@
   .mt-12 {
     margin-top: calc(var(--spacing) * 12);
   }
+  .mt-16 {
+    margin-top: calc(var(--spacing) * 16);
+  }
   .-mr-2 {
     margin-right: calc(var(--spacing) * -2);
   }
@@ -1714,6 +1717,9 @@
   .pr-16 {
     padding-right: calc(var(--spacing) * 16);
   }
+  .pb-20 {
+    padding-bottom: calc(var(--spacing) * 20);
+  }
   .pl-4 {
     padding-left: calc(var(--spacing) * 4);
   }
@@ -1819,6 +1825,9 @@
   }
   .text-black-base {
     color: var(--color-black-base);
+  }
+  .text-blue-400 {
+    color: var(--color-blue-400);
   }
   .text-blue-600 {
     color: var(--color-blue-600);
@@ -2215,6 +2224,13 @@
       }
     }
   }
+  .hover\:bg-citoyen {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-citoyen);
+      }
+    }
+  }
   .hover\:bg-cta-dark {
     &:hover {
       @media (hover: hover) {
@@ -2595,6 +2611,11 @@
       margin-left: calc(var(--spacing) * 4);
     }
   }
+  .sm\:inline-block {
+    @media (width >= 40rem) {
+      display: inline-block;
+    }
+  }
   .sm\:max-w-\[300px\] {
     @media (width >= 40rem) {
       max-width: 300px;
@@ -2891,6 +2912,16 @@
       margin-bottom: calc(var(--spacing) * 6);
     }
   }
+  .lg\:hidden {
+    @media (width >= 64rem) {
+      display: none;
+    }
+  }
+  .lg\:inline {
+    @media (width >= 64rem) {
+      display: inline;
+    }
+  }
   .lg\:grid-cols-2 {
     @media (width >= 64rem) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2924,6 +2955,11 @@
   .lg\:py-4 {
     @media (width >= 64rem) {
       padding-block: calc(var(--spacing) * 4);
+    }
+  }
+  .lg\:pb-0 {
+    @media (width >= 64rem) {
+      padding-bottom: calc(var(--spacing) * 0);
     }
   }
   .lg\:text-2xl {

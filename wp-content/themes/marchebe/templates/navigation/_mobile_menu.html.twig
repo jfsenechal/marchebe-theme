@@ -17,7 +17,7 @@
              :class="{ '-translate-x-full': activeMobileDrawerId }">
 
             <div class="p-4 flex items-center justify-between border-b border-gray-700">
-                <h2 class="text-lg font-semibold">Menu</h2>
+                <p class="text-lg font-semibold">Menu</p>
                 <button @click="toggleMobileMenu()"
                         type="button"
                         class="p-2 -mr-2"
@@ -68,7 +68,7 @@
                                   clip-rule="evenodd"/>
                         </svg>
                     </button>
-                    <h2 class="text-lg font-semibold" x-text="activeMobileCategoryData?.name ?? 'select a category'"></h2>
+                    <p class="text-lg font-semibold" x-text="activeMobileCategoryData?.name ?? 'select a category'"></p>
                 </div>
 
                 <ul class="p-4 space-y-1">

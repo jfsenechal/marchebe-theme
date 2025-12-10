@@ -1,5 +1,6 @@
 <!-- Main Header -->
-<nav @click.window="closeOnClickOutside($event)"
+<nav class="fixed top-0 left-0 w-full z-50"
+        @click.window="closeOnClickOutside($event)"
      x-data="{
     // State Management
     isMobileMenuOpen: false,
@@ -11,6 +12,24 @@
     results: [],
     isLoading: false,
     error: '',
+    // Keyboard navigation state
+    focusedCategoryIndex: 0,
+    focusedChildIndex: 0,
+    focusContext: 'categories',
+    // Init
+    init() {
+        // Listen for CTRL + K to open search modal
+        window.addEventListener('keydown', (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+                event.preventDefault();
+                this.openSearchModal();
+            }
+            // Listen for ESC to close search modal
+            if (event.key === 'Escape' && this.isSearchModalOpen) {
+                this.closeSearchModal();
+            }
+        });
+    },
     // Computed
     get activeMobileCategoryData() {
         if (!this.activeMobileDrawerId || !this.menuData) return null;
@@ -28,6 +47,16 @@
 
     toggleDesktopMenu() {
         this.isDesktopMenuOpen = !this.isDesktopMenuOpen;
+        if (this.isDesktopMenuOpen) {
+            this.resetDesktopMenuFocus();
+            // Select first category by default
+            if (this.menuData.length > 0) {
+                this.selectDesktopCategory(this.menuData[0]);
+            }
+            this.$nextTick(() => {
+                this.focusCategoryButton(0);
+            });
+        }
     },
 
     openMobileDrawer(id) {
@@ -65,6 +94,106 @@
         if (!isClickOnButton && !isClickInsidePanel) {
             this.isDesktopMenuOpen = false;
         }
+    },
+
+    // Keyboard navigation methods
+    handleDesktopMenuKeydown(event) {
+        if (!this.isDesktopMenuOpen) return;
+
+        const key = event.key;
+
+        // Close menu on Escape
+        if (key === 'Escape') {
+            event.preventDefault();
+            this.isDesktopMenuOpen = false;
+            this.$refs.desktopMenuButton?.focus();
+            return;
+        }
+
+        // Handle arrow keys
+        if (this.focusContext === 'categories') {
+            if (key === 'ArrowDown') {
+                event.preventDefault();
+                this.navigateCategories(1);
+            } else if (key === 'ArrowUp') {
+                event.preventDefault();
+                this.navigateCategories(-1);
+            } else if (key === 'ArrowRight' && this.activeDesktopCategory?.items?.length > 0) {
+                event.preventDefault();
+                this.moveToChildren();
+            } else if (key === 'Enter' || key === ' ') {
+                event.preventDefault();
+                this.activateFocusedCategory();
+            }
+        } else if (this.focusContext === 'children') {
+            if (key === 'ArrowDown') {
+                event.preventDefault();
+                this.navigateChildren(1);
+            } else if (key === 'ArrowUp') {
+                event.preventDefault();
+                this.navigateChildren(-1);
+            } else if (key === 'ArrowLeft') {
+                event.preventDefault();
+                this.moveToCategories();
+            }
+        }
+    },
+
+    navigateCategories(direction) {
+        const maxIndex = this.menuData.length - 1;
+        this.focusedCategoryIndex = Math.max(0, Math.min(maxIndex, this.focusedCategoryIndex + direction));
+        this.focusCategoryButton(this.focusedCategoryIndex);
+        // Auto-select category on navigation
+        this.selectDesktopCategory(this.menuData[this.focusedCategoryIndex]);
+    },
+
+    navigateChildren(direction) {
+        if (!this.activeDesktopCategory?.items) return;
+        const maxIndex = this.activeDesktopCategory.items.length - 1;
+        this.focusedChildIndex = Math.max(0, Math.min(maxIndex, this.focusedChildIndex + direction));
+        this.focusChildLink(this.focusedChildIndex);
+    },
+
+    moveToChildren() {
+        if (!this.activeDesktopCategory?.items?.length) return;
+        this.focusContext = 'children';
+        this.focusedChildIndex = 0;
+        this.$nextTick(() => {
+            this.focusChildLink(0);
+        });
+    },
+
+    moveToCategories() {
+        this.focusContext = 'categories';
+        this.$nextTick(() => {
+            this.focusCategoryButton(this.focusedCategoryIndex);
+        });
+    },
+
+    focusCategoryButton(index) {
+        const buttons = this.$refs.desktopMenuPanel?.querySelectorAll('[data-category-index]');
+        if (buttons && buttons[index]) {
+            buttons[index].focus();
+        }
+    },
+
+    focusChildLink(index) {
+        const links = this.$refs.desktopMenuPanel?.querySelectorAll('[data-child-index]');
+        if (links && links[index]) {
+            links[index].focus();
+        }
+    },
+
+    activateFocusedCategory() {
+        if (this.menuData[this.focusedCategoryIndex]) {
+            this.selectDesktopCategory(this.menuData[this.focusedCategoryIndex]);
+        }
+    },
+
+    resetDesktopMenuFocus() {
+        this.focusedCategoryIndex = 0;
+        this.focusedChildIndex = 0;
+        this.focusContext = 'categories';
     },
     menuData: {{ menu_data }}
     }">
@@ -109,6 +238,6 @@
     {% include '@AcMarche/navigation/_desktop_menu.html.twig' %}
     {# Mobile Menu Panel #}
     {% include '@AcMarche/navigation/_mobile_menu.html.twig' %}
-
+    {% include '@AcMarche/footer/_bottom_navigation.html.twig' %}
 </nav>
 {% include '@AcMarche/widgets/_cookies.html.twig' %}

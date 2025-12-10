@@ -1,19 +1,21 @@
 <section class="bg-blue-50 py-12">
     <div class="container mx-auto px-4 md:px-6 -mt-8 relative z-20">
-        <div class="grid grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,300px))] gap-2 lg:gap-4 justify-center align-center" id="widgets">
+        <ul class="grid grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,300px))] gap-2 lg:gap-4 justify-center align-center" id="widgets">
             {% for item in widgets %}
-                <a
-                        href="{{ item.url }}"
-                        class="group  p-4 rounded-2xl sha4dow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center text-center md:rounded-xl">
-                    <div
-                            class="text-cta-dark  group-hover:text-citoyen transition-colors mb-2 md:mb-4 flex items-center justify-center">
-                        <!-- Icon size is now responsive! -->
-                        <i class="{{ item.icon }} text-3xl md:text-6xl transition-transform group-hover:scale-110"></i>
-                    </div>
-                    <!-- Title size is now responsive! -->
-                    <h2 class="font-bold text-sm text-black-base md:text-xl md:mb-1">{{ item.name }}</h2>
-                </a>
+                <li>
+                    <a
+                            href="{{ item.url }}"
+                            class="group  p-4 rounded-2xl sha4dow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center text-center md:rounded-xl">
+                        <div
+                                class="text-cta-dark  group-hover:text-citoyen transition-colors mb-2 md:mb-4 flex items-center justify-center">
+                            <!-- Icon size is now responsive! -->
+                            <i class="{{ item.icon }} text-3xl md:text-6xl transition-transform group-hover:scale-110"></i>
+                        </div>
+                        <!-- Title size is now responsive! -->
+                        <h2 class="font-bold text-sm text-black-base md:text-xl md:mb-1">{{ item.name }}</h2>
+                    </a>
+                </li>
             {% endfor %}
-        </div>
+        </ul>
     </div>
 </section>

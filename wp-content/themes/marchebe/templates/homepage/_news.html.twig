@@ -1,10 +1,10 @@
 <section>
     <h3 class="text-2xl md:text-3xl font-bold mb-6">Actualités</h3>
-    <div class="space-y-6">
-        <div class="grid md:grid-cols-2 gap-4 md:gap-8">
-            {% for item in news %}
+    <ul class="grid md:grid-cols-2 gap-4 md:gap-8">
+        {% for item in news %}
+            <li class="{% if loop.index > 3 %}hidden md:block{% endif %}">
                 <a
-                        class="{% if loop.index > 3 %}hidden md:block{% endif %}  bg-white shadow rounded-lg overflow-hidden  hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+                        class="block bg-white shadow rounded-lg overflow-hidden  hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
                         href="{{ item.link }}"
                 >
                     <img
@@ -20,9 +20,9 @@
                         <h4 class="font-bold text-lg mb-2"> {{ item.post_title }}</h4>
                     </div>
                 </a>
-            {% endfor %}
-        </div>
-    </div>
+            </li>
+        {% endfor %}
+    </ul>
     <a href="/actualites"
        class="inline-block mt-8  bg-cta-dark text-white font-semibold py-2 px-5 rounded-lg hover:bg-cta-light transition-colors">
         Toutes les actualités
