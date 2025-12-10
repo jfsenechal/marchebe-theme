@@ -17,6 +17,7 @@ class PivotRepository
     private PivotApi $pivotApi;
     //skip marche public, st loup
     private array $eventsToSkip = ['EVT-01-0AVJ-324P', 'EVT-A0-008E-101W'];
+    public static string $keyAll = 'all-events-marche-be';
 
     public function __construct()
     {
@@ -40,6 +41,7 @@ class PivotRepository
         return json_decode($content, flags: JSON_THROW_ON_ERROR);
     }
 
+
     /**
      * @return array<int,Event>
      * @throws \JsonException
@@ -50,20 +52,11 @@ class PivotRepository
         bool $purgeCache = false,
         bool $skip = false
     ): array {
-        $cacheKey = Cache::generateKey('all-events-marche-be-'.$level.'-'.$skip);
+        $cacheKey = self::$keyAll;
         if ($purgeCache) {
             Cache::delete($cacheKey);
         }
-        $jsonContent = Cache::get($cacheKey, function () use ($level) {
-            $pivotApi = new PivotApi();
-            try {
-                $response = $pivotApi->query($level);
-
-                return $response->getContent();
-            } catch (\Exception $e) {
-                return null;
-            }
-        });
+        $jsonContent = Cache::getIfExists($cacheKey);
 
         if (!$jsonContent) {
             return [];
@@ -99,20 +92,11 @@ class PivotRepository
         bool $purgeCache = false,
         int $level = ContentEnum::LVL4->value
     ): Event|string|null {
-        $cacheKey = Cache::generateKey('offer-'.$codeCgt.'-'.$level);
+        $cacheKey = Cache::generateKey(PivotRepository::$keyAll).'-'.$codeCgt;
         if ($purgeCache) {
             Cache::delete($cacheKey);
         }
-        $jsonContent = Cache::get($cacheKey, function () use ($codeCgt, $level) {
-            $pivotApi = new PivotApi();
-            try {
-                $response = $pivotApi->loadEvent($codeCgt, $level);
-
-                return $response->getContent();
-            } catch (\Exception $e) {
-                return null;
-            }
-        });
+        $jsonContent = Cache::getIfExists($cacheKey);
 
         if (!$jsonContent) {
             return null;
@@ -125,8 +109,6 @@ class PivotRepository
         $parser = new EventParser();
         $data = json_decode($jsonContent, associative: true, flags: JSON_THROW_ON_ERROR);
 
-        $event = $parser->parseEvent($data['offre'][0]);
-
-        return $event;
+        return $parser->parseEvent($data['offre'][0]);
     }
 }
