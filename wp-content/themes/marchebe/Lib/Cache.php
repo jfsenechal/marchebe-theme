@@ -2,6 +2,8 @@
 
 namespace AcMarche\Theme\Lib;
 
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -22,7 +24,7 @@ class Cache
     {
         if (!self::$cache) {
             $client = RedisAdapter::createConnection('redis://localhost');
-            self::$cache = new RedisTagAwareAdapter($client);
+            self::$cache = new RedisTagAwareAdapter($client, 'newmarchebe', 60 * 60 * 8);
         }
 
         return self::$cache;
@@ -59,6 +61,23 @@ class Cache
     public static function invalidateTags(array $tags): bool
     {
         return self::instance()->invalidateTags($tags);
+    }
+    // Helper method to get an item from cache only if it exists (no computation)
+    public static function getIfExists(string $cacheKey): mixed
+    {
+        $cache = self::instance();
+
+        // Both ApcuAdapter and FilesystemAdapter implement CacheItemPoolInterface
+        if ($cache instanceof CacheItemPoolInterface) {
+            try {
+                $item = $cache->getItem($cacheKey);
+            } catch (InvalidArgumentException $e) {
+                return null;
+            }
+            return $item->isHit() ? $item->get() : null;
+        }
+
+        return null;
     }
 
     private function sample()
