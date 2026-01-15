@@ -30,7 +30,8 @@ class IntegrityCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $wpRepository = new WpRepository();
 
-        $this->listRoutes();
+        $this->flushRoutes();
+       /* $this->listRoutes();
 
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
@@ -41,7 +42,7 @@ class IntegrityCommand extends Command
                     $this->io->writeln(get_category_link($category));
                 }
             }
-        }
+        }*/
 
         return Command::SUCCESS;
     }
@@ -53,6 +54,19 @@ class IntegrityCommand extends Command
         $routes = $wp_rewrite->wp_rewrite_rules();
         foreach ($routes as $route) {
             $this->io->writeln($route);
+        }
+    }
+    public function flushRoutes(): void
+    {
+        if (is_multisite()) {
+            $current = get_current_blog_id();
+            foreach (Theme::SITES as $site) {
+                switch_to_blog($site);
+                flush_rewrite_rules();
+            }
+            switch_to_blog($current);
+        } else {
+            flush_rewrite_rules();
         }
     }
 
