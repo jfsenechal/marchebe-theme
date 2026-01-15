@@ -30,7 +30,7 @@ try {
     $events = [];
     Mailer::sendError("pivot Error cache full json", $e->getMessage());
 }
-dump(count($events));
+
 $events = array_slice($events, 0, 8);
 $news = $wpRepository->getNews();
 $news = array_slice($news, 0, 6);
