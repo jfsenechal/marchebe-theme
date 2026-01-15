@@ -62,13 +62,11 @@ class IntegrityCommand extends Command
     public function flushRoutes(): void
     {
         $router = new RouterBottin();
-        $router->flush_rules();
 
         $router = new RouterEvent();
-        $router->flush_rules();
 
         $router = new RouterEnquete();
-        $router->flush_rules();
+
 
         if (is_multisite()) {
             $current = get_current_blog_id();
