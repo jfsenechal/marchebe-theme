@@ -27,7 +27,7 @@ CookieHelper::createCookie([]);
         wp_head();
         ?>
     </head>
-<body id="app"  >
+<body id="app" <?php body_class(); ?> >
     <?php
 wp_body_open();
 
