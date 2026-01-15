@@ -1,0 +1,15 @@
+{
+  "name": "acmarche/acsort",
+  "description": "Plugin wordpress sort posts",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "jfsenechal",
+      "email": "jfsenechal@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.0"
+  }
+}
