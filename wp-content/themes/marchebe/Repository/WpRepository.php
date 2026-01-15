@@ -6,6 +6,7 @@ use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Helper\SortingHelper;
 use AcMarche\Theme\Lib\Search\Document;
+use AcSort;
 use WP_Post;
 use WP_Query;
 
@@ -82,7 +83,7 @@ class WpRepository
         switch_to_blog(1);
         wp_reset_postdata();
 
-        // $news = AcSort::trieNews($news);
+        $news = AcSort::trieNews($news);
 
         if (count($news) > $max) {
             $news = array_slice($news, 0, $max);
