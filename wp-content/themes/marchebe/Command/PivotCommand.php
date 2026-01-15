@@ -23,7 +23,7 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[AsCommand(
-    name: 'pivot:query',
+    name: 'pivot:cache',
     description: ' ',
 )]
 class PivotCommand extends Command
