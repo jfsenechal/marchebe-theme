@@ -11,7 +11,7 @@ class RouterEnquete
 
     public function __construct()
     {
-        if (get_current_blog_id() === Theme::TOURISME) {
+        if (get_current_blog_id() === Theme::ADMINISTRATION) {
             add_action('init', [$this, 'add_rewrite_rule']);
 
             add_filter('query_vars', [$this, 'add_query_vars']);

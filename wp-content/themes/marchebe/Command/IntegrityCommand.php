@@ -34,18 +34,19 @@ class IntegrityCommand extends Command
         $wpRepository = new WpRepository();
 
         $this->flushRoutes();
-       /* $this->listRoutes();
 
-        foreach (Theme::SITES as $idSite => $nom) {
-            switch_to_blog($idSite);
-            foreach (get_categories() as $category) {
-                $posts = $wpRepository->getPostsAndFiches($category->cat_ID);
-                if (count($posts) === 0) {
-                    $this->io->writeln($category->name);
-                    $this->io->writeln(get_category_link($category));
-                }
-            }
-        }*/
+        /* $this->listRoutes();
+
+         foreach (Theme::SITES as $idSite => $nom) {
+             switch_to_blog($idSite);
+             foreach (get_categories() as $category) {
+                 $posts = $wpRepository->getPostsAndFiches($category->cat_ID);
+                 if (count($posts) === 0) {
+                     $this->io->writeln($category->name);
+                     $this->io->writeln(get_category_link($category));
+                 }
+             }
+         }*/
 
         return Command::SUCCESS;
     }
@@ -59,15 +60,21 @@ class IntegrityCommand extends Command
             $this->io->writeln($route);
         }
     }
+
     public function flushRoutes(): void
     {
-        $router = new RouterBottin();
+        foreach (Theme::SITES as $site) {
+            switch_to_blog($site);
+            new RouterBottin();
+        }
 
-        $router = new RouterEvent();
+        switch_to_blog(Theme::TOURISME);
+        new RouterEvent();
 
-        $router = new RouterEnquete();
+        switch_to_blog(Theme::ADMINISTRATION);
+        new RouterEnquete();
 
-
+        switch_to_blog(Theme::CITOYEN);
         if (is_multisite()) {
             $current = get_current_blog_id();
             foreach (Theme::SITES as $site) {
