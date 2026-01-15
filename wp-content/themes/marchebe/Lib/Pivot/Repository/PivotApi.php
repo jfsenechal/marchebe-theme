@@ -41,24 +41,37 @@ class PivotApi
      * de données. Les requêtes sont accessibles au moyen d’un code identifiant unique (codeCgt).
      * @throws TransportExceptionInterface
      */
-    public function query(int $level = ContentEnum::LVL2->value): ResponseInterface
+    public function query(int $level = ContentEnum::LVL2->value): ?ResponseInterface
     {
-        return $this->client->request(
+        $t = $this->client->request(
             'GET',
             $this->base_uri.'/query/'.$this->code_query.';content='.$level
         );
+        if ($t->getStatusCode() === 200) {
+            return $t;
+        }
+
+        return null;
     }
 
     /**
      * @param string $codeCgt
-     * @return ResponseInterface
+     * @param int $level
+     * @return ResponseInterface|null
      * @throws TransportExceptionInterface
      */
-    public function loadEvent(string $codeCgt,int $level = ContentEnum::LVL4->value): ResponseInterface
+    public function loadEvent(string $codeCgt, int $level = ContentEnum::LVL4->value): ?ResponseInterface
     {
-        return $this->client->request(
+        $t = $this->client->request(
             'GET',
-            $this->base_uri.'/offer/'.$codeCgt.';content='.$level
+            $this->base_uri.'/offer/'.$codeCgt.';content='.$level,[
+                'timeout' => 10,
+            ]
         );
+        if ($t->getStatusCode() === 200) {
+            return $t;
+        }
+
+        return null;
     }
 }

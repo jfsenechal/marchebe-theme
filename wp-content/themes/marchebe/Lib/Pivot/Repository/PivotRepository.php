@@ -7,6 +7,7 @@ use AcMarche\Theme\Lib\Pivot\Entity\Event;
 use AcMarche\Theme\Lib\Pivot\Enums\ContentEnum;
 use AcMarche\Theme\Lib\Pivot\Helper\SortHelper;
 use AcMarche\Theme\Lib\Pivot\Parser\EventParser;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -18,10 +19,12 @@ class PivotRepository
     //skip marche public, st loup
     private array $eventsToSkip = ['EVT-01-0AVJ-324P', 'EVT-A0-008E-101W'];
     public static string $keyAll = 'all-events-marche-be';
+    private EventParser $parser;
 
     public function __construct()
     {
         $this->pivotApi = new PivotApi();
+        $this->parser = new EventParser();
     }
 
     /**
@@ -41,7 +44,6 @@ class PivotRepository
         return json_decode($content, flags: JSON_THROW_ON_ERROR);
     }
 
-
     /**
      * @return array<int,Event>
      * @throws \JsonException
@@ -57,6 +59,12 @@ class PivotRepository
             Cache::delete($cacheKey);
         }
         $jsonContent = Cache::getIfExists($cacheKey);
+
+        if (!$jsonContent) {
+            if (is_readable($filename = $_ENV['APP_CACHE_DIR'].'/../data/pivot.json')) {
+                $jsonContent = file_get_contents($filename);
+            }
+        }
 
         if (!$jsonContent) {
             return [];
@@ -99,6 +107,25 @@ class PivotRepository
         $jsonContent = Cache::getIfExists($cacheKey);
 
         if (!$jsonContent) {
+            $filename = $_ENV['APP_CACHE_DIR'].'/../data/pivot.json';
+
+            if (is_readable($filename)) {
+
+                $fileContent = file_get_contents($filename);
+                $data = json_decode($fileContent, associative: true, flags: JSON_THROW_ON_ERROR);
+
+                if (isset($data['offre'])) {
+                    foreach ($data['offre'] as $offre) {
+                        if (isset($offre['codeCgt']) && $offre['codeCgt'] === $codeCgt) {
+                            $jsonContent = json_encode($offre, JSON_THROW_ON_ERROR);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!$jsonContent) {
             return null;
         }
 
@@ -106,9 +133,32 @@ class PivotRepository
             return $jsonContent;
         }
 
-        $parser = new EventParser();
         $data = json_decode($jsonContent, associative: true, flags: JSON_THROW_ON_ERROR);
 
-        return $parser->parseEvent($data['offre'][0]);
+        if (!isset($data['codeCgt'])) {
+            if (!isset($data['offre'][0]['codeCgt'])) {
+                return null;
+            }
+            else {
+                $data = $data['offre'][0];
+            }
+        }
+
+        try {
+            $event = $this->parser->parseEvent($data);
+            $cacheKey = Cache::generateKey(PivotRepository::$keyAll).'-'.$codeCgt;
+            try {
+                Cache::get($cacheKey, function () use ($jsonContent) {
+                    return $jsonContent;
+                });
+            } catch (\Exception $e) {
+                return null;
+            } catch (InvalidArgumentException $e) {
+            }
+
+            return $event;
+        } catch (\Exception $exception) {
+            return null;
+        }
     }
 }
