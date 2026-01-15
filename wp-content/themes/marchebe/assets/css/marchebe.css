@@ -3055,11 +3055,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-body.admin-bar nav.fixed {
+#admin-bar nav.fixed {
   top: 34px;
 }
 @media screen and (max-width: 782px) {
-  body.admin-bar nav.fixed {
+  #admin-bar nav.fixed {
     top: 46px;
   }
 }
