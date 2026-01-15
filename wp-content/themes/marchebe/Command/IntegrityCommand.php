@@ -2,6 +2,9 @@
 
 namespace AcMarche\Theme\Command;
 
+use AcMarche\Theme\Inc\RouterBottin;
+use AcMarche\Theme\Inc\RouterEnquete;
+use AcMarche\Theme\Inc\RouterEvent;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Repository\WpRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -58,6 +61,15 @@ class IntegrityCommand extends Command
     }
     public function flushRoutes(): void
     {
+        $router = new RouterBottin();
+        $router->flush_rules();
+
+        $router = new RouterEvent();
+        $router->flush_rules();
+
+        $router = new RouterEnquete();
+        $router->flush_rules();
+
         if (is_multisite()) {
             $current = get_current_blog_id();
             foreach (Theme::SITES as $site) {
