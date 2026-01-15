@@ -10,7 +10,7 @@
         </div>
 
         <!-- Posts Grid -->
-        <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 ml-0 md:ml-4">
+        <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-8 ml-0 md:ml-4">
             <template x-for="post in filteredPosts" :key="post.id">
                 {% include '@AcMarche/category/_post_inline.html.twig' %}
             </template>

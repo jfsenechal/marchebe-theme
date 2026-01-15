@@ -1,18 +1,11 @@
-<li>
-    <a class="p-4 rounded-md shadow-sm flex items-center justify-between transition-colors duration-300  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-       :class="isSelected({{ item.term_id }}) ? 'bg-cta-dark text-white hover:text-grey-light' : 'bg-white text-black-base hover:text-cta-brown'"
+<li class="my-2">
+    <a class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cta-dark"
+       :class="isSelected({{ item.term_id }})
+           ? 'bg-cta-dark text-white border-cta-dark shadow-md'
+           : 'bg-white text-gray-700 border-gray-200 hover:border-cta-light hover:text-cta-dark'"
        href="{{ item.url }}"
        @click.prevent="selectCategory({{ item.term_id }},'{{ (name ?? item.slug)|escape }}')"
        :aria-current="isSelected({{ item.term_id }}) ? 'page' : null">
-        <h2 class="mr-2 font-medium text-inherit">{{ name ?? item.name }}</h2>
-        <svg class="w-5 h-5 flex-shrink-0"
-             xmlns="http://www.w3.org/2000/svg"
-             fill="none"
-             viewBox="0 0 24 24"
-             stroke-width="1.5"
-             stroke="currentColor"
-             aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
-        </svg>
+        {{ name ?? item.name }}
     </a>
 </li>
