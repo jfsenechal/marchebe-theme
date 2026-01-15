@@ -52,7 +52,7 @@ class PageSorting
     {
         $urlNews = admin_url('/admin.php?page=ac_marche_tri_news');
         Twig::rendPage(
-            'admin/menu.html.twig',
+            '@AcMarche/sort/menu.html.twig',
             [
                 'urlNews' => $urlNews,
             ]
@@ -65,7 +65,7 @@ class PageSorting
         $news = $wpRepository->getNews(30);
 
         Twig::rendPage(
-            'admin/tri_news.html.twig',
+            '@AcMarche/sort/tri_news.html.twig',
             [
                 'news' => $news,
             ]
@@ -81,7 +81,7 @@ class PageSorting
         $posts = AcSort::getSortedItems($cat_id, $posts);
 
         Twig::rendPage(
-            'admin/tri_articles.html.twig',
+            '@AcMarche/sort/tri_articles.html.twig',
             [
                 'category' => $category,
                 'posts' => $posts,
