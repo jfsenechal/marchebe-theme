@@ -50,6 +50,18 @@ body {
     @apply antialiased text-cta-dark;
 }
 
+/* WordPress admin bar fix for fixed navigation */
+body.admin-bar nav.fixed {
+    top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+    body.admin-bar nav.fixed {
+        top: 46px;
+    }
+}
+/* end admin bar */
+
 #homepage a, #main-header a, #desktop-menu a, #mobile-menu a, #shortcuts a, #widgets a, #category-filter-menu a {
     text-decoration: none;
 }
