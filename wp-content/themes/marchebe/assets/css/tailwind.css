@@ -51,12 +51,12 @@ body {
 }
 
 /* WordPress admin bar fix for fixed navigation */
-#admin-bar nav.fixed {
+#wpadminbar nav.fixed {
     top: 34px;
 }
 
 @media screen and (max-width: 782px) {
-    #admin-bar nav.fixed {
+    #wpadminbar nav.fixed {
         top: 46px;
     }
 }
