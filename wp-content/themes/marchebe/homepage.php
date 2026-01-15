@@ -7,6 +7,7 @@
 namespace AcMarche\Theme\Templates;
 
 use AcMarche\Theme\Data\Data;
+use AcMarche\Theme\Lib\Mailer;
 use AcMarche\Theme\Lib\Pivot\Repository\PivotRepository;
 use AcMarche\Theme\Lib\Twig;
 use AcMarche\Theme\Repository\WpRepository;
@@ -27,8 +28,9 @@ try {
     }
 } catch (\JsonException|\Throwable $e) {
     $events = [];
+    Mailer::sendError("pivot Error cache full json", $e->getMessage());
 }
-
+dump(count($events));
 $events = array_slice($events, 0, 8);
 $news = $wpRepository->getNews();
 $news = array_slice($news, 0, 6);
