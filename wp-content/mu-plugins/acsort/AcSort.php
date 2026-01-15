@@ -14,8 +14,6 @@
   Domain Path: /languages
  */
 
-use AcMarche\Common\SortUtil;
-
 require_once 'PageSorting.php';
 require_once 'CategoryMetaBox.php';
 require_once 'SortLink.php';
