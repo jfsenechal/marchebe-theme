@@ -6,7 +6,7 @@ use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Inc\Theme;
 use AcMarche\Theme\Lib\Helper\SortingHelper;
 use AcMarche\Theme\Lib\Search\Document;
-use AcSort;
+use AcMarche\Theme\Lib\Sort\AcSort;
 use WP_Post;
 use WP_Query;
 

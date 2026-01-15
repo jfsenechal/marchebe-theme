@@ -1,5 +1,9 @@
 <?php
 
+namespace AcMarche\Theme\Lib\Sort;
+
+use WP_Post;
+
 class SortUtil
 {
     /**
@@ -7,7 +11,7 @@ class SortUtil
      *
      * @return WP_Post[]
      */
-    public static function sortByPosition(array $posts):array
+    public static function sortByPosition(array $posts): array
     {
         usort(
             $posts,

@@ -1,8 +1,9 @@
 <?php
 
+namespace AcMarche\Theme\Lib\Sort;
 
 use AcMarche\Theme\Lib\Twig;
-use AcMarche\Theme\Lib\WpRepository;
+use AcMarche\Theme\Repository\WpRepository;
 
 class PageSorting
 {
@@ -60,7 +61,8 @@ class PageSorting
 
     static function renderPageNews()
     {
-        $news = WpRepository::getAllNews(60);
+        $wpRepository = new WpRepository();
+        $news = $wpRepository->getNews(30);
 
         Twig::rendPage(
             'admin/tri_news.html.twig',
@@ -72,17 +74,17 @@ class PageSorting
 
     static function renderPageCategory()
     {
-        $cat_id       = isset($_GET['cat_id']) ? intval($_GET['cat_id']) : 0;
-        $category     = get_category($cat_id);
+        $cat_id = isset($_GET['cat_id']) ? intval($_GET['cat_id']) : 0;
+        $category = get_category($cat_id);
         $wpRepository = new WpRepository();
-        $posts        = $wpRepository->getPostsAndFiches($cat_id);
-        $posts        = AcSort::getSortedItems($cat_id, $posts);
+        $posts = $wpRepository->getPostsAndFiches($cat_id);
+        $posts = AcSort::getSortedItems($cat_id, $posts);
 
         Twig::rendPage(
             'admin/tri_articles.html.twig',
             [
                 'category' => $category,
-                'posts'    => $posts,
+                'posts' => $posts,
             ]
         );
     }

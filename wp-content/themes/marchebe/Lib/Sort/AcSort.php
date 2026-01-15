@@ -14,6 +14,12 @@
   Domain Path: /languages
  */
 
+namespace AcMarche\Theme\Lib\Sort;
+
+use WP_Error;
+use WP_Post;
+use wpdb;
+
 require_once 'PageSorting.php';
 require_once 'CategoryMetaBox.php';
 require_once 'SortLink.php';
@@ -178,7 +184,7 @@ class AcSort
                         $wp_error = new WP_Error(200, $error);
                         echo $wp_error->get_error_message();
                     } else {
-                        $wpdb->insert_id;
+                       // $wpdb->insert_id;
                     }
                 }
             }
