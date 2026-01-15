@@ -9,15 +9,15 @@
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
      id="desktop-menu"
-     class="hidden md:block absolute top-16 left-0 w-full bg-white text-gray-900 shadow-lg z-30"
+     class="hidden md:block absolute top-16 left-0 w-full bg-white text-gray-900 shadow-xl z-30 border-t border-gray-100"
      style="display: none;"
      role="navigation"
      aria-label="Menu principal">
 
-    <div class="container mx-auto grid grid-cols-3 gap-8 p-8">
+    <div class="container mx-auto grid grid-cols-3 gap-12 p-10">
         {# Column 1: Parent Categories #}
         <div class="col-span-1 border-r border-gray-200 pr-8">
-            <ul class="mt-4 space-y-1" aria-label="Catégories">
+            <ul class="space-y-1" aria-label="Catégories">
                 <template x-for="(item, index) in menuData" :key="item.blogid">
                     <li>
                         <button
@@ -27,12 +27,16 @@
                                 :data-category-index="index"
                                 :tabindex="index === 0 ? 0 : -1"
                                 :aria-label="`Catégorie: ${item.name}`"
-                                class="cursor-pointer w-full text-left px-4 py-2 text-base rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="cursor-pointer w-full text-left px-4 py-3 text-base rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-between"
                                 :class="activeDesktopCategory?.blogid === item.blogid ?
-                                    `bg-gray-100 font-semibold ${item.color}` :
-                                    'hover:bg-gray-100'"
-                                x-html="item.name"
-                        ></button>
+                                    'bg-cta-light text-white font-semibold shadow-sm' :
+                                    'text-gray-700 hover:bg-blue-50 hover:text-blue-600'"
+                        >
+                            <span x-html="item.name"></span>
+                            <i x-show="activeDesktopCategory?.blogid === item.blogid"
+                               class="fas fa-chevron-right text-xs opacity-75"
+                               aria-hidden="true"></i>
+                        </button>
                     </li>
                 </template>
             </ul>
@@ -42,12 +46,12 @@
         <div class="col-span-2">
             <div x-show="activeDesktopCategory">
                 <p
-                        :class="`text-sm font-semibold ${activeDesktopCategory?.color} tracking-wider uppercase`"
+                        class="text-base font-bold text-cta-light tracking-widest uppercase mb-6 pb-2 border-b-2 border-blue-100"
                         x-text="activeDesktopCategory?.name ?? 'select a category'"
                         role="status"
                         aria-live="polite"
                 ></p>
-                <ul class="mt-4 grid grid-cols-2 gap-x-8 gap-y-4">
+                <ul class="grid grid-cols-2 gap-x-10 gap-y-1">
                     <template x-for="(child, index) in activeDesktopCategory?.items" :key="child.id">
                         <li>
                             <a
@@ -56,15 +60,15 @@
                                     @focus="focusContext = 'children'; focusedChildIndex = index;"
                                     :data-child-index="index"
                                     tabindex="-1"
-                                    class="block p-2 -mx-2 rounded-md hover:bg-gray-100 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="block py-3 px-3 -mx-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-150 text-sm font-medium border-l-2 border-transparent hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     x-html="child.title"
                             ></a>
                         </li>
                     </template>
                 </ul>
             </div>
-            <div x-show="!activeDesktopCategory" class="flex items-center justify-center h-full">
-                <p class="text-gray-500">Sélectionnez une catégorie sur la gauche</p>
+            <div x-show="!activeDesktopCategory" class="flex items-center justify-center h-full min-h-48">
+                <p class="text-gray-400 text-base">Sélectionnez une catégorie sur la gauche</p>
             </div>
         </div>
     </div>
