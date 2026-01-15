@@ -27,7 +27,7 @@ CookieHelper::createCookie([]);
         wp_head();
         ?>
     </head>
-    <body class="bg-white" id="app">
+    <body id="app" <?php body_class(); ?>
     <?php
 wp_body_open();
 
