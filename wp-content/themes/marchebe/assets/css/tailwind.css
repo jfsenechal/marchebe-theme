@@ -52,7 +52,7 @@ body {
 
 /* WordPress admin bar fix for fixed navigation */
 body.admin-bar nav.fixed {
-    top: 32px;
+    top: 34px;
 }
 
 @media screen and (max-width: 782px) {

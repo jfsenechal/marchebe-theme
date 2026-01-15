@@ -3056,7 +3056,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 body.admin-bar nav.fixed {
-  top: 32px;
+  top: 34px;
 }
 @media screen and (max-width: 782px) {
   body.admin-bar nav.fixed {
