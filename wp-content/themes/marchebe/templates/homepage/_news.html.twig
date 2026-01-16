@@ -1,30 +1,35 @@
 <section>
-    <h3 class="text-2xl md:text-3xl font-bold mb-6">Actualités</h3>
-    <ul class="grid md:grid-cols-2 gap-4 md:gap-8">
+    <h3 class="text-2xl md:text-3xl font-bold mb-6 text-slate-800 flex items-center gap-3">
+        <span class="w-1 h-8 bg-citoyen rounded-full"></span>
+        Actualités
+    </h3>
+    <ul class="grid md:grid-cols-2 gap-4 md:gap-6">
         {% for item in news %}
             <li class="{% if loop.index > 3 %}hidden md:block{% endif %}">
                 <a
-                        class="block bg-white shadow rounded-lg overflow-hidden  hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+                        class="block bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                         href="{{ item.link }}"
                 >
-                    <img
-                            src="{{ item.post_thumbnail_url }}"
-                            {% if item.post_thumbnail_srcset %}srcset="{{ item.post_thumbnail_srcset }}"{% endif %}
-                            {% if item.post_thumbnail_sizes %}sizes="{{ item.post_thumbnail_sizes }}"{% endif %}
-                            alt="{{ item.post_title }}"
-                            class="w-full h-48 object-cover"
-                            loading="lazy"
-                    />
-
+                    <div class="relative overflow-hidden">
+                        <img
+                                src="{{ item.post_thumbnail_url }}"
+                                {% if item.post_thumbnail_srcset %}srcset="{{ item.post_thumbnail_srcset }}"{% endif %}
+                                {% if item.post_thumbnail_sizes %}sizes="{{ item.post_thumbnail_sizes }}"{% endif %}
+                                alt="{{ item.post_title }}"
+                                class="w-full h-44 object-cover transition-transform duration-300 group-hover:scale-105"
+                                loading="lazy"
+                        />
+                    </div>
                     <div class="p-4">
-                        <h4 class="font-bold text-lg mb-2"> {{ item.post_title }}</h4>
+                        <h4 class="font-semibold text-base md:text-lg text-slate-800 leading-snug line-clamp-2">{{ item.post_title }}</h4>
                     </div>
                 </a>
             </li>
         {% endfor %}
     </ul>
     <a href="/actualites"
-       class="inline-block mt-8  bg-cta-dark text-white font-semibold py-2 px-5 rounded-lg hover:bg-cta-light transition-colors">
+       class="inline-flex items-center gap-2 mt-8 bg-cta-dark text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-cta-light transition-colors">
         Toutes les actualités
+        <i class="fas fa-arrow-right text-sm"></i>
     </a>
 </section>
