@@ -1,9 +1,9 @@
-<section class="bg-slate-50 rounded-2xl p-6">
+<section class="flex flex-col h-full bg-slate-50 rounded-2xl ">
     <h3 class="text-2xl md:text-3xl font-bold mb-6 text-slate-800 flex items-center gap-3">
         <span class="w-1 h-8 bg-cta-dark rounded-full"></span>
         Agenda
     </h3>
-    <ul class="space-y-3">
+    <ul class="space-y-3 flex-1">
         {% for event in events %}
             <li class="{% if loop.index > 3 %}hidden md:block{% endif %}">
                 <a
@@ -23,9 +23,11 @@
             </li>
         {% endfor %}
     </ul>
-    <a href="/tourisme/agenda-des-manifestations/"
-       class="inline-flex items-center gap-2 mt-6 bg-cta-dark text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-cta-light transition-colors">
-        Tout l'agenda
-        <i class="fas fa-arrow-right text-sm"></i>
-    </a>
+    <div class="mt-auto pt-6">
+        <a href="/tourisme/agenda-des-manifestations/"
+           class="inline-flex items-center gap-2 bg-cta-dark text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-cta-light transition-colors">
+            Tout l'agenda
+            <i class="fas fa-arrow-right text-sm"></i>
+        </a>
+    </div>
 </section>
