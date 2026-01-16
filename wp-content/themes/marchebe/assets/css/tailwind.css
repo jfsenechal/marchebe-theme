@@ -215,3 +215,41 @@ article h2:not(:has(a)), article h3 {
 .musshadow {
   box-shadow: 0 -0.125rem 0.45rem rgba(0, 0, 0, 0.75);
 }
+
+/**
+ * Article content styling
+ * Improves readability and visual hierarchy for long-form content
+ */
+
+/* Style date/event headers (bold text followed by content) */
+.article-content p > strong:first-child {
+    @apply inline-block bg-cta-dark/10 text-cta-dark px-3 py-1.5 rounded-md mb-2 text-base font-semibold border-l-4 border-cta-dark;
+}
+
+/* Add spacing between event sections */
+.article-content > p:has(> strong:first-child) {
+    @apply mt-8 first:mt-0;
+}
+
+/* Better list indentation and spacing */
+.article-content ul {
+    @apply pl-6 space-y-2;
+}
+
+.article-content ul li {
+    @apply text-slate-700 leading-relaxed;
+}
+
+/* Nested lists get slightly different styling */
+.article-content ul ul {
+    @apply mt-2 pl-4 border-l-2 border-slate-200;
+}
+
+/* Links within article content */
+.article-content a {
+    @apply text-blue-600 underline decoration-blue-300 underline-offset-2 transition-colors duration-200;
+}
+
+.article-content a:hover {
+    @apply text-blue-800 decoration-blue-500;
+}
