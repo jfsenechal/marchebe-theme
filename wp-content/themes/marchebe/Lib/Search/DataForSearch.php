@@ -43,10 +43,14 @@ class DataForSearch
             'orderby' => 'post_title',
             'order' => 'ASC',
             'post_status' => 'publish',
+            'suppress_filters' => true,
+            'no_found_rows' => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
         );
 
         if ($categoryId) {
-            $args ['category'] = $categoryId;
+            $args['category'] = $categoryId;
         }
 
         $posts = get_posts($args);
@@ -57,7 +61,46 @@ class DataForSearch
             $data[] = Document::documentFromPost($post, $idSite);
         }
 
+        // Free memory
+        unset($posts);
+
         return $data;
+    }
+
+    /**
+     * Lightweight method to get post content for category indexing
+     * Does not create Document objects to save memory
+     */
+    private function getPostContentForCategory(int $categoryId): string
+    {
+        global $wpdb;
+
+        $sql = $wpdb->prepare(
+            "SELECT p.post_title, p.post_excerpt
+             FROM {$wpdb->posts} p
+             INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+             INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+             WHERE tt.term_id = %d
+             AND tt.taxonomy = 'category'
+             AND p.post_status = 'publish'
+             AND p.post_type = 'post'
+             LIMIT 100",
+            $categoryId
+        );
+
+        $posts = $wpdb->get_results($sql);
+        $content = '';
+
+        foreach ($posts as $post) {
+            $content .= ' ' . Cleaner::cleandata($post->post_title);
+            if ($post->post_excerpt) {
+                $content .= ' ' . Cleaner::cleandata($post->post_excerpt);
+            }
+        }
+
+        unset($posts);
+
+        return $content;
     }
 
     /**
@@ -78,7 +121,7 @@ class DataForSearch
             'include' => '',
             'number' => '',
             'taxonomy' => 'category',
-            'pad_counts' => true,
+            'pad_counts' => false,
         );
 
         $categories = get_categories($args);
@@ -89,16 +132,10 @@ class DataForSearch
                 $category->description = Cleaner::cleandata($category->description);
             }
 
-            $content = $category->description;
-
-            foreach ($this->getPosts($idSite, $category->cat_ID) as $document) {
-                $content .= $document->name;
-                $content .= $document->excerpt;
-                $content .= $document->content;
-            }
-
+            // Use lightweight method - only titles and excerpts, limited to 100 posts
+            $content = $category->description ?? '';
+            $content .= $this->getPostContentForCategory($category->cat_ID);
             $content .= $this->getContentFichesBottin($category);
-            //$content .= $this->getContentEnquetes($category->cat_ID);
 
             $children = $this->wpRepository->getChildrenOfCategory($category->cat_ID);
             $tags = [];
@@ -117,7 +154,12 @@ class DataForSearch
             $category->paths = $path;
             $category->link = get_category_link($category);
             $data[] = Document::documentFromCategory($category, $idSite);
+
+            // Free memory after each category
+            unset($content, $children, $tags, $path);
         }
+
+        unset($categories);
 
         return $data;
     }

@@ -35,6 +35,7 @@ try {
     echo $twig->render('@AcMarche/search.html.twig', [
         'hits' => $hits,
         'count' => $count,
+        'keyword' => $keyword,
         'thumbnail' => $thumbnail,
         'thumbnail_srcset' => null,
         'thumbnail_sizes' => null,

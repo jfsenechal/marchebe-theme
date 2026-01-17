@@ -66,12 +66,31 @@ class MeiliCommand extends Command
 
         if ($update) {
             $this->dataForSearch = new DataForSearch();
-            $this->indexPosts();
-            $this->indexCategories();
-            $this->indexBottin();
-            $this->indexEnquetes();
-            $this->indexPublications();
-            $this->indexAdl();
+
+            $output->writeln('<info>Indexing posts...</info>');
+            $this->indexPosts($output);
+            $this->freeMemory();
+
+            $output->writeln('<info>Indexing categories...</info>');
+            $this->indexCategories($output);
+            $this->freeMemory();
+
+            $output->writeln('<info>Indexing bottin...</info>');
+            $this->indexBottin($output);
+            $this->freeMemory();
+
+            $output->writeln('<info>Indexing enquetes...</info>');
+            $this->indexEnquetes($output);
+            $this->freeMemory();
+
+            $output->writeln('<info>Indexing publications...</info>');
+            $this->indexPublications($output);
+            $this->freeMemory();
+
+            $output->writeln('<info>Indexing ADL...</info>');
+            $this->indexAdl($output);
+
+            $output->writeln('<comment>Indexation complete!</comment>');
 
             return Command::SUCCESS;
         }
@@ -83,43 +102,51 @@ class MeiliCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function indexPosts(): void
+    private function indexPosts(OutputInterface $output): void
     {
         $documents = [];
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
             $posts = $this->dataForSearch->getPosts($idSite);
+            $output->writeln(sprintf('  - %s: %d posts', $nom, count($posts)));
             foreach ($posts as $document) {
                 $documents[] = $document;
             }
+            unset($posts);
             restore_current_blog();
+            $this->freeMemory();
         }
 
-        $this->indexInBatches($documents);
+        $this->indexInBatches($documents, $output);
     }
 
-    private function indexCategories(): void
+    private function indexCategories(OutputInterface $output): void
     {
         $documents = [];
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
             $categories = $this->dataForSearch->getCategoriesBySite($idSite);
+            $output->writeln(sprintf('  - %s: %d categories', $nom, count($categories)));
             foreach ($categories as $document) {
                 $documents[] = $document;
             }
+            unset($categories);
             restore_current_blog();
+            $this->freeMemory();
         }
-        $this->indexInBatches($documents);
+        $this->indexInBatches($documents, $output);
     }
 
-    private function indexBottin(): void
+    private function indexBottin(OutputInterface $output): void
     {
         $documents = $this->dataForSearch->fiches();
+        $output->writeln(sprintf('  - %d fiches', count($documents)));
         $categories = $this->dataForSearch->indexCategoriesBottin();
-        $this->indexInBatches(array_merge($documents, $categories));
+        $output->writeln(sprintf('  - %d categories bottin', count($categories)));
+        $this->indexInBatches(array_merge($documents, $categories), $output);
     }
 
-    private function indexEnquetes(): void
+    private function indexEnquetes(OutputInterface $output): void
     {
         $documents = [];
         switch_to_blog(Theme::ADMINISTRATION);
@@ -127,10 +154,11 @@ class MeiliCommand extends Command
             $documents[] = $document;
         }
         restore_current_blog();
-        $this->indexInBatches($documents);
+        $output->writeln(sprintf('  - %d enquetes', count($documents)));
+        $this->indexInBatches($documents, $output);
     }
 
-    private function indexPublications(): void
+    private function indexPublications(OutputInterface $output): void
     {
         $documents = [];
         switch_to_blog(Theme::ADMINISTRATION);
@@ -138,10 +166,11 @@ class MeiliCommand extends Command
             $documents[] = $document;
         }
         restore_current_blog();
-        $this->indexInBatches($documents);
+        $output->writeln(sprintf('  - %d publications', count($documents)));
+        $this->indexInBatches($documents, $output);
     }
 
-    private function indexAdl(): void
+    private function indexAdl(OutputInterface $output): void
     {
         $documents = [];
         $adlIndexer = new AdlRepository();
@@ -152,13 +181,26 @@ class MeiliCommand extends Command
         foreach ($adlIndexer->getAllPosts() as $document) {
             $documents[] = $document;
         }
-        $this->indexInBatches($documents);
+        $output->writeln(sprintf('  - %d ADL documents', count($documents)));
+        $this->indexInBatches($documents, $output);
     }
 
-    private function indexInBatches(array $documents, int $batchSize = 1000): void
+    private function indexInBatches(array $documents, OutputInterface $output, int $batchSize = 500): void
     {
-        foreach (array_chunk($documents, $batchSize) as $batch) {
+        $chunks = array_chunk($documents, $batchSize);
+        foreach ($chunks as $i => $batch) {
             $this->meiliServer->index->addDocuments($batch, $this->meiliServer->primaryKey);
+        }
+        unset($documents, $chunks);
+    }
+
+    private function freeMemory(): void
+    {
+        if (function_exists('gc_collect_cycles')) {
+            gc_collect_cycles();
+        }
+        if (function_exists('wp_cache_flush')) {
+            wp_cache_flush();
         }
     }
 
