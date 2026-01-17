@@ -35,9 +35,18 @@ class MeiliServer
      */
     public function settings(): array
     {
-        $this->client->index($this->indexName)->updateFilterableAttributes($this->filterableAttributes);
+        $index = $this->client->index($this->indexName);
 
-        return $this->client->index($this->indexName)->updateSortableAttributes($this->sortableAttributes);
+        $index->updateSearchableAttributes([
+            'name',
+            'excerpt',
+            'content',
+            'tags.name',
+        ]);
+
+        $index->updateFilterableAttributes($this->filterableAttributes);
+
+        return $index->updateSortableAttributes($this->sortableAttributes);
     }
 
     public function createApiKey(): Keys

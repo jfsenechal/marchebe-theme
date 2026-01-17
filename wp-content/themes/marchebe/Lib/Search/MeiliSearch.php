@@ -17,15 +17,27 @@ class MeiliSearch
     /**
      * https://www.meilisearch.com/docs/learn/fine_tuning_results/filtering
      * @param string $keyword
-     * @return iterable|SearchResult
+     * @param array $filters Example: ['site.id = 1', 'type = "article"']
+     * @param int $limit
+     * @return SearchResult
      */
-    public function doSearch(string $keyword): iterable|SearchResult
+    public function doSearch(string $keyword, array $filters = [], int $limit = 100): SearchResult
     {
-        $limit = 100;
         $this->initClientAndIndex();
 
-        return $this->index->search($keyword, [
+        $options = [
             'limit' => $limit,
-        ]);
+            'attributesToHighlight' => ['name', 'excerpt', 'content'],
+            'highlightPreTag' => '<mark>',
+            'highlightPostTag' => '</mark>',
+            'attributesToCrop' => ['content'],
+            'cropLength' => 200,
+        ];
+
+        if (!empty($filters)) {
+            $options['filter'] = $filters;
+        }
+
+        return $this->index->search($keyword, $options);
     }
 }

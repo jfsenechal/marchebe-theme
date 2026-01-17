@@ -12,8 +12,8 @@ trait MeiliTrait
     public string $masterKey;
     public ?Indexes $index = null;
     public string $primaryKey = 'id';
-    private array $filterableAttributes = [];
-    private array $sortableAttributes = [];
+    private array $filterableAttributes = ['site.id', 'type', 'tags.id', 'date'];
+    private array $sortableAttributes = ['date', 'name'];
 
     public function initClientAndIndex(): void
     {

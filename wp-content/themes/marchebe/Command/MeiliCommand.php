@@ -88,13 +88,14 @@ class MeiliCommand extends Command
         $documents = [];
         foreach (Theme::SITES as $idSite => $nom) {
             switch_to_blog($idSite);
-            $documents = $this->dataForSearch->getPosts($idSite);
-            foreach ($documents as $document) {
+            $posts = $this->dataForSearch->getPosts($idSite);
+            foreach ($posts as $document) {
                 $documents[] = $document;
             }
+            restore_current_blog();
         }
 
-        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
+        $this->indexInBatches($documents);
     }
 
     private function indexCategories(): void
@@ -104,40 +105,40 @@ class MeiliCommand extends Command
             switch_to_blog($idSite);
             $categories = $this->dataForSearch->getCategoriesBySite($idSite);
             foreach ($categories as $document) {
-                $document->id = 'category-'.$document->id.'-'.$idSite;
                 $documents[] = $document;
             }
+            restore_current_blog();
         }
-        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
+        $this->indexInBatches($documents);
     }
 
     private function indexBottin(): void
     {
         $documents = $this->dataForSearch->fiches();
-        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
-        $documents = $this->dataForSearch->indexCategoriesBottin();
-        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
+        $categories = $this->dataForSearch->indexCategoriesBottin();
+        $this->indexInBatches(array_merge($documents, $categories));
     }
 
     private function indexEnquetes(): void
     {
         $documents = [];
         switch_to_blog(Theme::ADMINISTRATION);
-        foreach ($this->dataForSearch->getEnqueteDocuments() as $documentElastic) {
-            $documentElastic->id = 'enquete_'.$documentElastic->id;
-            $documents[] = $documentElastic;
+        foreach ($this->dataForSearch->getEnqueteDocuments() as $document) {
+            $documents[] = $document;
         }
-        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
+        restore_current_blog();
+        $this->indexInBatches($documents);
     }
 
     private function indexPublications(): void
     {
+        $documents = [];
         switch_to_blog(Theme::ADMINISTRATION);
         foreach ($this->dataForSearch->getAllPublications() as $document) {
-            $document->id = 'publication_'.$document->id;
             $documents[] = $document;
         }
-        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
+        restore_current_blog();
+        $this->indexInBatches($documents);
     }
 
     private function indexAdl(): void
@@ -145,15 +146,20 @@ class MeiliCommand extends Command
         $documents = [];
         $adlIndexer = new AdlRepository();
         foreach ($adlIndexer->getAllCategories() as $document) {
-            $document->id = 'adl_cat_'.$document->id;
             $documents[] = $document;
         }
 
         foreach ($adlIndexer->getAllPosts() as $document) {
-            $document->id = 'adl_post_'.$document->id;
             $documents[] = $document;
         }
-        $this->meiliServer->index->addDocuments($documents, $this->meiliServer->primaryKey);
+        $this->indexInBatches($documents);
+    }
+
+    private function indexInBatches(array $documents, int $batchSize = 1000): void
+    {
+        foreach (array_chunk($documents, $batchSize) as $batch) {
+            $this->meiliServer->index->addDocuments($batch, $this->meiliServer->primaryKey);
+        }
     }
 
     private function tasks(OutputInterface $output): void
