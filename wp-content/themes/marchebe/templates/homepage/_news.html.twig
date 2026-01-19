@@ -5,9 +5,9 @@
     </h3>
     <ul class="grid md:grid-cols-2 gap-3 flex-1">
         {% for item in news %}
-            <li class="{% if loop.index > 3 %}hidden md:block{% endif %}">
+            <li class="h-full {% if loop.index > 3 %}hidden md:block{% endif %}">
                 <a
-                        class="block bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                        class="h-full flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                         href="{{ item.link }}"
                 >
                     <div class="relative overflow-hidden">
@@ -20,7 +20,7 @@
                                 loading="lazy"
                         />
                     </div>
-                    <div class="p-4">
+                    <div class="p-4 flex-1">
                         <h4 class="font-semibold text-base md:text-lg text-slate-800 leading-snug line-clamp-2">{{ item.post_title }}</h4>
                     </div>
                 </a>
