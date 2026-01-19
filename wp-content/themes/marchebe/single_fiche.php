@@ -46,7 +46,7 @@ array_map(
 );
 $paths = $tags = [];
 $twig = Twig::loadTwig();
-$post = Document::documentFromFiche($fiche, $bottinRepository->findSiteFiche($fiche));
+$post = Document::documentFromFiche($fiche, $bottinRepository->findByFicheIdWpSite($fiche), 'bottin');
 
 $content = $twig->render('@AcMarche/bottin/_body.html.twig', [
     'fiche' => $fiche,
@@ -60,7 +60,7 @@ $content = $twig->render('@AcMarche/bottin/_body.html.twig', [
 
 $pivotRepository = new PivotRepository();
 try {
-    $events = $pivotRepository->loadEvents(skip:true);
+    $events = $pivotRepository->loadEvents(skip: true);
     $events = array_slice($events, 0, 3);
 } catch (\Exception|\Throwable  $e) {
     $events = [];
