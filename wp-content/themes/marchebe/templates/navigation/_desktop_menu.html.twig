@@ -27,10 +27,10 @@
                                 :data-category-index="index"
                                 :tabindex="index === 0 ? 0 : -1"
                                 :aria-label="`Catégorie: ${item.name}`"
-                                class="cursor-pointer w-full text-left px-4 py-3 text-base rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-between"
+                                class="cursor-pointer w-full text-left px-4 py-3 text-base rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-cta-dark flex items-center justify-between"
                                 :class="activeDesktopCategory?.blogid === item.blogid ?
                                     'bg-cta-light text-white font-semibold shadow-sm' :
-                                    'text-gray-700 hover:bg-blue-50 hover:text-blue-600'"
+                                    'text-gray-700 hover:bg-slate-50 hover:text-cta-dark'"
                         >
                             <span x-html="item.name"></span>
                             <i x-show="activeDesktopCategory?.blogid === item.blogid"
@@ -46,7 +46,7 @@
         <div class="col-span-2">
             <div x-show="activeDesktopCategory">
                 <p
-                        class="text-base font-bold text-cta-light tracking-widest uppercase mb-6 pb-2 border-b-2 border-blue-100"
+                        class="text-base font-bold text-cta-light tracking-widest uppercase mb-6 pb-2 border-b-2 border-slate-200"
                         x-text="activeDesktopCategory?.name ?? 'select a category'"
                         role="status"
                         aria-live="polite"
@@ -60,7 +60,7 @@
                                     @focus="focusContext = 'children'; focusedChildIndex = index;"
                                     :data-child-index="index"
                                     tabindex="-1"
-                                    class="block py-3 px-3 -mx-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-150 text-sm font-medium border-l-2 border-transparent hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="block py-3 px-3 -mx-3 rounded-lg text-gray-700 hover:bg-slate-50 hover:text-cta-dark transition-colors duration-150 text-sm font-medium border-l-2 border-transparent hover:border-cta-light focus:outline-none focus:ring-2 focus:ring-cta-dark"
                                     x-html="child.title"
                             ></a>
                         </li>

@@ -96,7 +96,7 @@ x-init="initSpeech()">
             @click="toggleSpeech()"
             type="button"
             class="cursor-pointer flex flex-row items-center gap-2 px-4 py-2 bg-slate-100 text-slate-800 font-semibold text-sm rounded-lg hover:bg-slate-200 transition-colors border border-slate-200"
-            :class="{ 'bg-blue-100 border-blue-300': isPlaying }"
+            :class="{ 'bg-cta-light/20 border-cta-light': isPlaying }"
             :aria-label="isPlaying ? (isPaused ? 'Reprendre la lecture' : 'Mettre en pause') : 'Écouter l\'article'">
         <!-- Play Icon -->
         <svg x-show="!isPlaying || isPaused" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
