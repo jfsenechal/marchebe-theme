@@ -4,7 +4,7 @@ namespace AcMarche\Theme\Lib\Search;
 
 use AcMarche\Theme\Inc\BottinCategoryMetaBox;
 use AcMarche\Theme\Inc\Theme;
-use AcMarche\Theme\Lib\Helper\BreadcrumbHelper;
+use AcMarche\Theme\Lib\Bottin\Bottin;
 use AcMarche\Theme\Repository\ApiRepository;
 use AcMarche\Theme\Repository\BottinRepository;
 use AcMarche\Theme\Repository\WpRepository;
@@ -58,7 +58,7 @@ class DataForSearch
 
         foreach ($posts as $post) {
             $this->wpRepository->preparePost($post);
-            $data[] = Document::documentFromPost($post, $idSite);
+            $data[] = Document::documentFromPost($post, $idSite, 'local');
         }
 
         // Free memory
@@ -92,9 +92,9 @@ class DataForSearch
         $content = '';
 
         foreach ($posts as $post) {
-            $content .= ' ' . Cleaner::cleandata($post->post_title);
+            $content .= ' '.Cleaner::cleandata($post->post_title);
             if ($post->post_excerpt) {
-                $content .= ' ' . Cleaner::cleandata($post->post_excerpt);
+                $content .= ' '.Cleaner::cleandata($post->post_excerpt);
             }
         }
 
@@ -139,24 +139,17 @@ class DataForSearch
 
             $children = $this->wpRepository->getChildrenOfCategory($category->cat_ID);
             $tags = [];
-            foreach ($children as $child) {
-                $tags[] = ['id' => $child->term_id, 'name' => $child->name];
-            }
             $parent = $this->wpRepository->getParentCategory($category->cat_ID);
             if ($parent) {
                 $tags[] = ['id' => $parent->term_id, 'name' => $parent->name];
             }
-
-            $path = BreadcrumbHelper::category($category->cat_ID);
-
             $category->content = $content;
             $category->tags = $tags;
-            $category->paths = $path;
             $category->link = get_category_link($category);
-            $data[] = Document::documentFromCategory($category, $idSite);
+            $data[] = Document::documentFromCategory($category, $idSite, 'local');
 
             // Free memory after each category
-            unset($content, $children, $tags, $path);
+            unset($content, $children, $tags);
         }
 
         unset($categories);
@@ -218,8 +211,13 @@ class DataForSearch
         $documents = [];
 
         foreach ($this->bottinRepository->getFiches() as $fiche) {
-            $idSite = $this->bottinRepository->findSiteFiche($fiche);
-            $documents[] = Document::documentFromFiche($fiche, $idSite);
+            $idWpSite = $this->bottinRepository->findByFicheIdWpSite($fiche);
+            $root = $this->bottinRepository->findRootOfBottinFiche($fiche);
+            $source = 'local';
+            if (in_array($root, [Bottin::COMMERCES, Bottin::SANTECO])) {
+                $source = 'https://cap.marche.be';
+            }
+            $documents[] = Document::documentFromFiche($fiche, $idWpSite, $source);
         }
 
         $data = [];
@@ -281,7 +279,7 @@ class DataForSearch
             }
             $category->tags = [];
             $category->paths = $paths;
-            $documents[] = Document::documentFromCategoryBottin($category);
+            $documents[] = Document::documentFromCategoryBottin($category, 'https://cap.marche.be');
         }
 
         return $documents;
@@ -302,7 +300,7 @@ class DataForSearch
         }
         foreach ($enquetes as $enquete) {
             $enquete->paths = $paths;
-            $documents[] = Document::documentFromEnquete($enquete);
+            $documents[] = Document::documentFromEnquete($enquete, 'Enquêtes publiques');
         }
 
         return $documents;
@@ -323,7 +321,7 @@ class DataForSearch
             if ($category) {
                 $publication->paths = [['id' => $category->term_id, 'name' => $category->name]];
             }
-            $documents[] = Document::documentFromPublication($publication);
+            $documents[] = Document::documentFromPublication($publication, 'Publications communales');
         }
 
         return $documents;

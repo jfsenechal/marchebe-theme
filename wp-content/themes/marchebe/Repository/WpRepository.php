@@ -103,7 +103,7 @@ class WpRepository
         $posts = $this->getPostsByCategory($categoryIdSelected);
         foreach ($posts as $post) {
             $this->preparePost($post);
-            $document = Document::documentFromPost($post, $currentSite);
+            $document = Document::documentFromPost($post, $currentSite, 'local');
             $documents[] = $document;
         }
 
@@ -114,8 +114,8 @@ class WpRepository
             $fiches = $bottinRepository->getFichesByCategory($categoryBottinId);
 
             foreach ($fiches as $fiche) {
-                $idSite = $bottinRepository->findSiteFiche($fiche);
-                $documents[] = Document::documentFromFiche($fiche, $idSite);
+                $idSite = $bottinRepository->findByFicheIdWpSite($fiche);
+                $documents[] = Document::documentFromFiche($fiche, $idSite,'bottin');
             }
         }
 
@@ -148,7 +148,6 @@ class WpRepository
         $post->tags = $categories;
         $content = get_the_content(null, null, $post);
         $post->content = apply_filters('the_content', $content);
-        $post->paths = WpRepository::instance()->getAncestorsOfPost($post->ID);
         $post->link = get_permalink($post);
     }
 

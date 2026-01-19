@@ -34,7 +34,7 @@ class AdlRepository
         $documents = [];
         foreach ($posts as $post) {
             $this->preparePost($post);
-            $documents[] = Document::documentFromPost($post, Theme::ECONOMIE);
+            $documents[] = Document::documentFromPost($post, Theme::ECONOMIE, 'https://adl.marche.be');
         }
 
         return $documents;
@@ -67,10 +67,9 @@ class AdlRepository
             $category->description = $description;
             $category->content = $content;
             $category->created_at = $date;
-            $category->paths = [];
             $category->tags = [];
 
-            $data[] = Document::documentFromCategory($category, Theme::ECONOMIE);
+            $data[] = Document::documentFromCategory($category, Theme::ECONOMIE,'https://adl.marche.be');
         }
 
         return $data;
@@ -90,7 +89,7 @@ class AdlRepository
 
         foreach ($posts as $post) {
             $this->preparePost($post);
-            $data[] = Document::documentFromPost($post, Theme::ECONOMIE);
+            $data[] = Document::documentFromPost($post, Theme::ECONOMIE, 'https://adl.marche.be');
         }
 
         return $data;

@@ -67,11 +67,10 @@ class MeiliServer
     public function addPost(array|\WP_Post|null $post): void
     {
         WpRepository::instance()->preparePost($post);
-        $document = Document::documentFromPost($post, get_current_blog_id());
+        $document = Document::documentFromPost($post, get_current_blog_id(),'local');
         $this->initClientAndIndex();
         $this->index->addDocuments([$document], $this->primaryKey);
     }
-
 
     public function deleteDocument(int $postId, string $type, int $siteId): void
     {

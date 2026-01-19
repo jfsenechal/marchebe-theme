@@ -315,7 +315,7 @@ class BottinRepository
         return null;
     }
 
-    public function findSiteFiche(object $fiche): int
+    public function findByFicheIdWpSite(object $fiche): int
     {
         if ($classementPrincipal = $this->getCategoriePrincipale($fiche)) {
             list($vide, $root) = explode('/', $classementPrincipal->materialized_path);
@@ -335,6 +335,18 @@ class BottinRepository
         }
 
         return Theme::CITOYEN;
+    }
+
+    public function findRootOfBottinFiche(object $fiche): int
+    {
+        if ($classementPrincipal = $this->getCategoriePrincipale($fiche)) {
+            list($vide, $root) = explode('/', $classementPrincipal->materialized_path);
+            if ($root) {
+                return $root;
+            }
+        }
+
+        return 0;
     }
 
     private function sortFiches(array $fiches): array

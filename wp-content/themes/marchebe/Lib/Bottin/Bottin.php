@@ -40,4 +40,9 @@ class Bottin
             ]
         );
     }
+
+    public static function isEconomic()
+    {
+
+    }
 }
