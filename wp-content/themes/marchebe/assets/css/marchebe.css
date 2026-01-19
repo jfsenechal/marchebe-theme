@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.16 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.14 | MIT License | https://tailwindcss.com */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @layer properties;
 @layer theme, base, components, utilities;
@@ -20,14 +20,9 @@
     --color-teal-400: oklch(77.7% 0.152 181.912);
     --color-teal-500: oklch(70.4% 0.14 182.503);
     --color-teal-600: oklch(60% 0.118 184.704);
-    --color-blue-50: oklch(97% 0.014 254.604);
-    --color-blue-100: oklch(93.2% 0.032 255.585);
-    --color-blue-200: oklch(88.2% 0.059 254.128);
     --color-blue-300: oklch(80.9% 0.105 251.813);
-    --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-blue-600: oklch(54.6% 0.245 262.881);
-    --color-blue-700: oklch(48.8% 0.243 264.376);
     --color-blue-800: oklch(42.4% 0.199 265.638);
     --color-slate-50: oklch(98.4% 0.003 247.858);
     --color-slate-100: oklch(96.8% 0.007 247.896);
@@ -1805,12 +1800,6 @@
     border-left-style: var(--tw-border-style);
     border-left-width: 4px;
   }
-  .border-blue-100 {
-    border-color: var(--color-blue-100);
-  }
-  .border-blue-300 {
-    border-color: var(--color-blue-300);
-  }
   .border-cta-dark {
     border-color: var(--color-cta-dark);
   }
@@ -1868,12 +1857,6 @@
       background-color: color-mix(in oklab, var(--color-black) 50%, transparent);
     }
   }
-  .bg-blue-50 {
-    background-color: var(--color-blue-50);
-  }
-  .bg-blue-100 {
-    background-color: var(--color-blue-100);
-  }
   .bg-citoyen {
     background-color: var(--color-citoyen);
   }
@@ -1886,6 +1869,9 @@
       background-color: color-mix(in oklab, var(--color-citoyen) 10%, transparent);
     }
   }
+  .bg-cta-brown {
+    background-color: var(--color-cta-brown);
+  }
   .bg-cta-dark {
     background-color: var(--color-cta-dark);
   }
@@ -1897,6 +1883,12 @@
   }
   .bg-cta-light {
     background-color: var(--color-cta-light);
+  }
+  .bg-cta-light\/20 {
+    background-color: color-mix(in srgb, #6B9CA5 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-cta-light) 20%, transparent);
+    }
   }
   .bg-economie {
     background-color: var(--color-economie);
@@ -2224,12 +2216,6 @@
   }
   .text-black-base {
     color: var(--color-black-base);
-  }
-  .text-blue-400 {
-    color: var(--color-blue-400);
-  }
-  .text-blue-600 {
-    color: var(--color-blue-600);
   }
   .text-citoyen {
     color: var(--color-citoyen);
@@ -2574,13 +2560,6 @@
       }
     }
   }
-  .group-hover\:text-blue-600 {
-    &:is(:where(.group):hover *) {
-      @media (hover: hover) {
-        color: var(--color-blue-600);
-      }
-    }
-  }
   .group-hover\:text-citoyen {
     &:is(:where(.group):hover *) {
       @media (hover: hover) {
@@ -2668,38 +2647,10 @@
       }
     }
   }
-  .hover\:border-blue-500 {
-    &:hover {
-      @media (hover: hover) {
-        border-color: var(--color-blue-500);
-      }
-    }
-  }
   .hover\:border-cta-light {
     &:hover {
       @media (hover: hover) {
         border-color: var(--color-cta-light);
-      }
-    }
-  }
-  .hover\:bg-blue-50 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-blue-50);
-      }
-    }
-  }
-  .hover\:bg-blue-200 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-blue-200);
-      }
-    }
-  }
-  .hover\:bg-citoyen {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-citoyen);
       }
     }
   }
@@ -2787,27 +2738,6 @@
     &:hover {
       @media (hover: hover) {
         color: var(--color-black);
-      }
-    }
-  }
-  .hover\:text-blue-400 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-blue-400);
-      }
-    }
-  }
-  .hover\:text-blue-600 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-blue-600);
-      }
-    }
-  }
-  .hover\:text-blue-700 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-blue-700);
       }
     }
   }
@@ -3023,9 +2953,9 @@
       border-color: var(--color-cta-dark);
     }
   }
-  .focus\:bg-blue-600 {
+  .focus\:bg-cta-dark {
     &:focus {
-      background-color: var(--color-blue-600);
+      background-color: var(--color-cta-dark);
     }
   }
   .focus\:bg-white {
@@ -3047,16 +2977,6 @@
     &:focus {
       --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-    }
-  }
-  .focus\:ring-blue-500 {
-    &:focus {
-      --tw-ring-color: var(--color-blue-500);
-    }
-  }
-  .focus\:ring-blue-600 {
-    &:focus {
-      --tw-ring-color: var(--color-blue-600);
     }
   }
   .focus\:ring-citoyen {
@@ -3584,9 +3504,9 @@
       color: var(--color-slate-700);
     }
   }
-  .prose-a\:text-blue-600 {
+  .prose-a\:text-cta-dark {
     & :is(:where(a):not(:where([class~="not-prose"],[class~="not-prose"] *))) {
-      color: var(--color-blue-600);
+      color: var(--color-cta-dark);
     }
   }
   .prose-a\:underline-offset-2 {
@@ -3594,11 +3514,11 @@
       text-underline-offset: 2px;
     }
   }
-  .hover\:prose-a\:text-blue-800 {
+  .hover\:prose-a\:text-cta-light {
     &:hover {
       @media (hover: hover) {
         & :is(:where(a):not(:where([class~="not-prose"],[class~="not-prose"] *))) {
-          color: var(--color-blue-800);
+          color: var(--color-cta-light);
         }
       }
     }
