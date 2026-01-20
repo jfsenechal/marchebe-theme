@@ -73,15 +73,13 @@ class PivotCommand extends Command
         }
 
         if ($all) {
+
+            $this->pivotApi = new PivotApi();
+            $this->parser = new EventParser();
             $this->cacheAll($this->purge);
 
             return Command::SUCCESS;
         }
-
-        $this->pivotApi = new PivotApi();
-        $this->parser = new EventParser();
-
-        $this->cacheAll($purge);
 
         return Command::SUCCESS;
     }
@@ -95,15 +93,16 @@ class PivotCommand extends Command
             $response = $this->pivotApi->query($level);
             $content = $response?->getContent();
         } catch (\Exception|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $e) {
-            $this->io->error('No content returned from Pivot API' . $e->getMessage());
+            $this->io->error('No content returned from Pivot API'.$e->getMessage());
             Mailer::sendError("pivot api", $e->getMessage());
             $content = null;
         }
 
         if ($content === null) {
             $content = $this->readFile();
-            if (!$content)
+            if (!$content) {
                 return;
+            }
         }
 
         if ($purge) {
@@ -113,7 +112,7 @@ class PivotCommand extends Command
         try {
             $events = $this->parser->parseJsonFile($content);
         } catch (\JsonException|\Throwable $e) {
-            $this->io->error('Parse error ' . $e->getMessage());
+            $this->io->error('Parse error '.$e->getMessage());
             Mailer::sendError("pivot parse full json", $e->getMessage());
 
             return;
@@ -126,7 +125,7 @@ class PivotCommand extends Command
                 return $content;
             });
         } catch (\Exception|InvalidArgumentException $e) {
-            $this->io->error('Error cache' . $e->getMessage());
+            $this->io->error('Error cache'.$e->getMessage());
             Mailer::sendError("pivot Error cache full json", $e->getMessage());
 
             return;
@@ -143,7 +142,7 @@ class PivotCommand extends Command
         try {
             $response = $this->pivotApi->loadEvent($codeCgt, $level);
         } catch (TransportExceptionInterface $e) {
-            $this->io->error('No content returned from Pivot API' . $e->getMessage());
+            $this->io->error('No content returned from Pivot API'.$e->getMessage());
             Mailer::sendError("Pivot API get $codeCgt ", $e->getMessage());
 
             return;
@@ -151,7 +150,7 @@ class PivotCommand extends Command
         try {
             $content = $response?->getContent();
         } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $e) {
-            $this->io->error('No content returned from Pivot API' . $e->getMessage());
+            $this->io->error('No content returned from Pivot API'.$e->getMessage());
 
             return;
         }
@@ -165,24 +164,24 @@ class PivotCommand extends Command
         try {
             $data = json_decode($content, associative: true, flags: JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            $this->io->error('Error json_decode code ' . $codeCgt . ' error ' . $e->getMessage());
+            $this->io->error('Error json_decode code '.$codeCgt.' error '.$e->getMessage());
             Mailer::sendError("Error json_decode code $codeCgt ", $e->getMessage());
         }
 
         try {
             $this->parser->parseEvent($data['offre'][0]);
         } catch (\Exception $exception) {
-            $this->io->error('Error parse event code ' . $codeCgt . ' ' . $exception->getMessage());
+            $this->io->error('Error parse event code '.$codeCgt.' '.$exception->getMessage());
             Mailer::sendError("Error parse event code $codeCgt ", $e->getMessage());
         }
 
-        $cacheKey = Cache::generateKey(PivotRepository::$keyAll) . '-' . $codeCgt;
+        $cacheKey = Cache::generateKey(PivotRepository::$keyAll).'-'.$codeCgt;
         try {
             Cache::get($cacheKey, function () use ($content) {
                 return $content;
             });
         } catch (\Exception $e) {
-            $this->io->error('Event Error cache' . $codeCgt . ' ' . $e->getMessage());
+            $this->io->error('Event Error cache'.$codeCgt.' '.$e->getMessage());
 
             return;
         }
@@ -191,26 +190,29 @@ class PivotCommand extends Command
 
     private function saveToFile(string $content): void
     {
-        $dataDir = $_ENV['APP_CACHE_DIR'] . '/../data';
+        $dataDir = $_ENV['APP_CACHE_DIR'].'/../data';
 
         if (!is_dir($dataDir)) {
             if (!mkdir($dataDir, 0755, true)) {
-                $this->io->error('Failed to create directory: ' . $dataDir);
+                $this->io->error('Failed to create directory: '.$dataDir);
+
                 return;
             }
         }
 
-        $filename = $dataDir . '/pivot.json';
+        $filename = $dataDir.'/pivot.json';
         $handle = fopen($filename, 'w');
 
         if ($handle === false) {
-            $this->io->error('Failed to open file for writing: ' . $filename);
+            $this->io->error('Failed to open file for writing: '.$filename);
+
             return;
         }
 
         if (!flock($handle, LOCK_EX)) {
-            $this->io->error('Failed to acquire lock on file: ' . $filename);
+            $this->io->error('Failed to acquire lock on file: '.$filename);
             fclose($handle);
+
             return;
         }
 
@@ -221,27 +223,32 @@ class PivotCommand extends Command
         fclose($handle);
 
         if ($bytesWritten === false) {
-            $this->io->error('Failed to write to file: ' . $filename);
+            $this->io->error('Failed to write to file: '.$filename);
+
             return;
         }
 
         if ($bytesWritten !== $bytesToWrite) {
-            $this->io->error(sprintf(
-                'Incomplete write to %s: %d of %d bytes written',
-                $filename,
-                $bytesWritten,
-                $bytesToWrite
-            ));
+            $this->io->error(
+                sprintf(
+                    'Incomplete write to %s: %d of %d bytes written',
+                    $filename,
+                    $bytesWritten,
+                    $bytesToWrite
+                )
+            );
+
             return;
         }
     }
 
     private function readFile(): ?string
     {
-        if (is_readable($filename = $_ENV['APP_CACHE_DIR'] . '/../data/pivot.json')) {
+        if (is_readable($filename = $_ENV['APP_CACHE_DIR'].'/../data/pivot.json')) {
             return file_get_contents($filename);
         }
-        $this->io->error('File ' . $filename . ' not found');
+        $this->io->error('File '.$filename.' not found');
+
         return null;
     }
 
