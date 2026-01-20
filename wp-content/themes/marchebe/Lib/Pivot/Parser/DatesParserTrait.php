@@ -57,7 +57,9 @@ trait DatesParserTrait
                     $dateEvent->dateRange = $data;
                 }
             }
-            $allDates[] = $dateEvent;
+            if ($dateEvent->dateEnd->format('Y-m-d') > $today->format('Y-m-d')) {
+                $allDates[] = $dateEvent;
+            }
         }
 
         $allDates = SortHelper::sortDatesEvent($allDates);
